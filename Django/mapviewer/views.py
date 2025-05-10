@@ -1,8 +1,6 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def inicio(request):
-    return HttpResponse("Hola, esta es mi primera vista Django. \n"
-                        "Este valor se esta presentando en el apartado de Maps")
+    return render(request, 'inicio.html')
