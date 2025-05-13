@@ -55,7 +55,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'templates')], # Cambio para lectura correcta de templates
+        "DIRS": [os.path.join(BASE_DIR, 'mapviewer', 'templates')], # Cambio para lectura correcta de templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
