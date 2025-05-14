@@ -1,7 +1,10 @@
-<!-- catalogo.html -->
 {% extends 'mapviewer/base.html' %}
 
 {% block content %}
-<h2>Inventario Nacional de emisiones de CO₂</h2>
-<p>Aquí va el contenido principal...</p>
+{% block content %}
+<h2>Mapa: Inventario Nacional</h2>
+<div class="map-container">
+    {{ mapa|safe }}
+</div>
+{% endblock %}
 {% endblock %}

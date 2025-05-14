@@ -1,8 +1,12 @@
+/* Estructura general */
 body {
     display: flex;
+    flex-direction: column;
     height: 100vh;
     margin: 0;
-    flex-direction: column;
+    background-color: #1E1E2F;
+    color: #E0E0E0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .page-wrapper {
@@ -11,65 +15,47 @@ body {
     overflow: hidden;
 }
 
+/* Sidebar */
 .sidebar {
-    width: 250px; /* Barra lateral */
-    background-color: #f8f9fa;
+    width: 250px;
+    background-color: #2C2C3E;
+    color: #E0E0E0;
     padding: 1rem;
-    border-right: 1px solid #dee2e6;
+    border-right: 1px solid #3C3C4F;
 }
 
+/* Contenido principal */
 .main-content {
-    position: relative; /* Necesario para ubicar imágenes con position absolute */
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
     padding: 2rem;
-    overflow-y: auto;
-    background-color: #ffffff;
+    overflow: hidden;
+    background-color: #1E1E2F;
+    color: #E0E0E0;
 }
 
-.img-top-right {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px; /* Ajusta el tamaño que necesites */
-    margin: 10px;
+/* Contenedor de mapa con altura forzada */
+.map-container {
+    flex: 1;
+    overflow: hidden;
+    border: 1px solid #3C3C4F;
+    border-radius: 8px;
 }
 
-.img-bottom-left {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100px;
-    margin: 10px;
+/* Asegurar que el iframe de Folium ocupa todo */
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
-footer {
-    background-color: #f1f1f1;
-    text-align: center;
-    padding: 0.5rem;
-    font-size: 0.9rem;
-    color: #555;
-    border-top: 1px solid #ccc;
-}
-
-/* Cambia el fondo general de la página */
-body {
-    background-color: #1E1E2F; /* Fondo oscuro elegante */
-    color: #E0E0E0;            /* Texto gris claro para buena visibilidad */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Títulos en blanco para mayor contraste */
+/* Títulos */
 h1, h2, h3, h4 {
     color: #FFFFFF;
 }
 
-/* Sidebar o navegación lateral si usas una clase específica */
-.sidebar {
-    background-color: #2C2C3E; /* Un tono ligeramente diferente para diferenciar */
-    color: #E0E0E0;
-}
-
-/* Botones con color oscuro suave y borde claro al pasar el mouse */
+/* Botones */
 button, .btn {
     background-color: #2C2C3E;
     color: #E0E0E0;
@@ -81,19 +67,39 @@ button:hover, .btn:hover {
     color: #FFFFFF;
 }
 
-/* Para secciones principales del contenido */
-.main-content {
-    background-color: #1E1E2F; /* Mismo fondo que el body */
-    color: #E0E0E0;
-    padding: 2rem;
-    border-radius: 8px;
-}
-
 /* Enlaces */
 a {
-    color: #82AAFF; /* Azul claro para contraste sobre fondo oscuro */
+    color: #82AAFF;
+    text-decoration: none;
 }
 
 a:hover {
     color: #A0CFFF;
+}
+
+/* Footer */
+footer {
+    background-color: #1E1E2F;
+    color: #AAA;
+    padding: 10px;
+    font-size: 0.8rem;
+    border-top: 1px solid #3C3C4F;
+    text-align: center;
+}
+
+/* Imágenes posicionadas */
+.img-top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    margin: 10px;
+}
+
+.img-bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    margin: 10px;
 }
