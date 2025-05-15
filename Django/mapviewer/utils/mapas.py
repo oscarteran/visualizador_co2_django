@@ -74,7 +74,7 @@ def generar_mapa_html_v2(file_path: str):
 
     return mapa
 
-def generar_mapa_html(file_path: str):
+def generar_mapa_html(file_path: str, tipo_mapa: str = "División Política"):
     with open(file_path, 'r') as f:
         data = json.load(f)
 
@@ -94,8 +94,27 @@ def generar_mapa_html(file_path: str):
 
     if df.empty:
         return None
+    
+    # Opciones de mapas con sus atribuciones correspondientes
+    opciones_mapa = {
+        "División Política": {
+            "tiles": "OpenStreetMap",
+            "attr": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        },
+        "Satelital": {
+            "tiles": "Esri.WorldImagery",
+            "attr": '&copy; <a href="https://www.esri.com/">Esri</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        },
+        "Relieve": {
+            "tiles": "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",  # URL de OpenTopoMap
+            "attr": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://opentopomap.org/">OpenTopoMap</a>'
+        }
+    }
+    
+    # Usar los valores predeterminados si el tipo de mapa no está en las opciones
+    opcion = opciones_mapa.get(tipo_mapa, opciones_mapa["División Política"])
 
-    mapa = folium.Map(location=[23.5, -100], tiles='OpenStreetMap', zoom_start=5)
+    mapa = folium.Map(location=[18.5, -100], tiles=opcion["tiles"], zoom_start=5, attr=opcion["attr"])
 
     for _, row in df.iterrows():
         folium.Marker(
