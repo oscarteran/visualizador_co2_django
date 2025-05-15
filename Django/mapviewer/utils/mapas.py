@@ -126,3 +126,30 @@ def generar_mapa_html(file_path: str, tipo_mapa: str = "División Política"):
     # En lugar de guardar el mapa, devolvemos el HTML del mapa directamente
     mapa_html = mapa._repr_html_()
     return mapa_html
+
+
+def generar_mapas_individuales(file):
+    
+    # Creacion de ruta completa de archivo
+    ruta = f"data/processed/P_{file}LatLon.csv"
+    # Formateo de ruta para actualizarse a sistema operativo
+    #ruta_formateada = Path(ruta)
+    # Lectura de csv de mapa
+    df = pd.read_csv(ruta) 
+    
+    # Opciones de mapas con sus atribuciones correspondientes
+    opciones_mapa = {
+        "División Política": {
+            "tiles": "OpenStreetMap",
+            "attr": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        },
+        "Satelital": {
+            "tiles": "Esri.WorldImagery",
+            "attr": '&copy; <a href="https://www.esri.com/">Esri</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        },
+        "Relieve": {
+            "tiles": "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",  # URL de OpenTopoMap
+            "attr": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://opentopomap.org/">OpenTopoMap</a>'
+        }
+    }
+    
