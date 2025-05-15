@@ -35,7 +35,7 @@ def generar_mapa_html_v1(file_path):
 
 
 
-def generar_mapa_html(file_path: str):
+def generar_mapa_html_v2(file_path: str):
     #file_path = os.path.join(settings.BASE_DIR, 'data', 'processed', 'nombres_unicos.json')
 
     with open(file_path, 'r') as f:
@@ -72,4 +72,38 @@ def generar_mapa_html(file_path: str):
     output_path = "C:/Users/Oscar/OneDrive/Escritorio/visualizador_co2_django/Django/mapviewer/templates/mapviewer/mapa_render.html"
     mapa.save(output_path)
 
-    return 'mapviewer/mapa_render.html'
+    return mapa
+
+def generar_mapa_html(file_path: str):
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+    nombres, lat, lon = [], [], []
+
+    for k, v in data.items():
+        try:
+            lat_val = float(v[0])
+            lon_val = float(v[1])
+            nombres.append(k)
+            lat.append(lat_val)
+            lon.append(lon_val)
+        except (ValueError, TypeError):
+            continue
+
+    df = pd.DataFrame({'ubi': nombres, 'Lat': lat, 'Lon': lon})
+
+    if df.empty:
+        return None
+
+    mapa = folium.Map(location=[23.5, -100], tiles='OpenStreetMap', zoom_start=5)
+
+    for _, row in df.iterrows():
+        folium.Marker(
+            location=[row['Lat'], row['Lon']],
+            popup=row['ubi'],
+            icon=folium.Icon(color='red')
+        ).add_to(mapa)
+
+    # En lugar de guardar el mapa, devolvemos el HTML del mapa directamente
+    mapa_html = mapa._repr_html_()
+    return mapa_html
