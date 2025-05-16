@@ -36,7 +36,7 @@ def inventario_nacional(request):
     
     return render(request, 'mapviewer/inventario_nacional.html', context)
 
-def ficha_tec(request):
+def ficha_tecnica(request):
     # Obtener el tipo de mapa seleccionado del parámetro GET
     tipo_mapa = request.GET.get('tipo_mapa', 'División Política')
     

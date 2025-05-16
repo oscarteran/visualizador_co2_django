@@ -109,7 +109,7 @@ document.getElementById('tipo_mapa').addEventListener('change', function() {
     formData.append('tipo_mapa', this.value);
     
     // Construir la URL con los parámetros
-    const url = '{% url "inventario_nacional" %}?tipo_mapa=' + encodeURIComponent(this.value);
+    const url = '{% url "ficha_tecnica" %}?tipo_mapa=' + encodeURIComponent(this.value);
     window.location.href = url;
 });
 </script>
