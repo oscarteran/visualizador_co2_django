@@ -128,20 +128,34 @@ def generar_mapa_html(file_path: str, tipo_mapa: str = "División Política"):
     return mapa_html
 
 
-def generar_mapas_individuales(tipo_mapa: str):
-    logger.info('-'*50)
-    logger.info(tipo_mapa)
-    
+def generar_mapas_individuales(ubicacion: str, tipo_mapa: str):
     opciones_localizaciones = {"Acoculco": "data/processed/P_AcoculcoLatLon.csv", "Alcaparrosa": "data/processed/P_AlcaparrosaLatLon.csv", "Azufres": "data/processed/P_AzufresLatLon.csv", "Chichinautzin": "data/processed/P_ChichinautzinLatLon.csv", "Escalera": "data/processed/P_EscaleraLatLon.csv", "Michoa": "data/processed/P_MichoaLatLon.csv", "Puruandiro": "data/processed/P_PuruandiroLatLon.csv"}
 
     # Usar los valores predeterminados si el tipo de mapa no está en las opciones
-    opcion = opciones_localizaciones.get(tipo_mapa, opciones_localizaciones["Michoa"])
-    logger.info(opcion)
+    opcion = opciones_localizaciones.get(ubicacion, opciones_localizaciones["Michoa"])
 
     df = pd.read_csv(opcion) 
-    logger.info(df.head())
+    
+        # Opciones de mapas con sus atribuciones correspondientes
+    opciones_mapa = {
+        "División Política": {
+            "tiles": "OpenStreetMap",
+            "attr": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        },
+        "Satelital": {
+            "tiles": "Esri.WorldImagery",
+            "attr": '&copy; <a href="https://www.esri.com/">Esri</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        },
+        "Relieve": {
+            "tiles": "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",  # URL de OpenTopoMap
+            "attr": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://opentopomap.org/">OpenTopoMap</a>'
+        }
+    }
+    
+    # Usar los valores predeterminados si el tipo de mapa no está en las opciones
+    opcion = opciones_mapa.get(tipo_mapa, opciones_mapa["División Política"])
 
-    mapa = folium.Map(location=[18.5, -100], tiles="OpenStreetMap", zoom_start=5, attr='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors')
+    mapa = folium.Map(location=[18.5, -100], tiles=opcion["tiles"], zoom_start=5, attr=opcion["attr"])
 
     for _, row in df.iterrows():
         folium.Marker(

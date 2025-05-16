@@ -39,20 +39,24 @@ def inventario_nacional(request):
 def ficha_tecnica(request):
     # Obtener el tipo de mapa seleccionado del parámetro GET
     tipo_mapa = request.GET.get('tipo_mapa', 'División Política')
+    ubicacion = request.GET.get('ubicacion', 'Alcaparrosa')
     
     # Generar el mapa con el tipo seleccionado
-    mapa_html = generar_mapas_individuales('Alcaparrosa')
+    mapa_html = generar_mapas_individuales(ubicacion, tipo_mapa)
     
     if not mapa_html:
         return render(request, 'mapviewer/error.html', {'error': 'No se pudo generar el mapa.'})
     
     # Obtener las opciones de mapa para el dropdown
     opciones_mapa = ["División Política", "Satelital", "Relieve"]
+    opciones_ubicacion = ["Acoculco", "Alcaparrosa", "Azufres", "Chichinautzin", "Escalera", "Michoa", "Puruandiro"]
     
     context = {
         'mapa': mapa_html,
-        'tipo_mapa_seleccionado': 'tipo_mapa',
-        'opciones_mapa': opciones_mapa
+        'tipo_mapa_seleccionado': tipo_mapa,
+        'ubicacion_seleccionada': ubicacion,
+        'opciones_mapa': opciones_mapa,
+        'opciones_ubicacion': opciones_ubicacion,
     }
     
     return render(request, 'mapviewer/ficha_tecnica.html', context)

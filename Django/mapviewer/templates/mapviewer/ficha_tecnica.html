@@ -9,11 +9,23 @@
 
 <div class="controls-container">
     <div class="select-wrapper">
+        <!-- Primer dropdown -->
         <label for="tipo_mapa">Localizaciones:</label>
         <div class="custom-select">
             <select name="tipo_mapa" id="tipo_mapa" class="custom-select-input" onchange="this.form.submit()">
                 {% for opcion in opciones_mapa %}
                     <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
+                {% endfor %}
+            </select>
+            <div class="select-arrow">▼</div>
+        </div>
+
+        <!-- Segundo dropdown -->
+        <label for="ubicacion" style="margin-left: 20px;">Ubicación:</label>
+        <div class="custom-select">
+            <select name="ubicacion" id="ubicacion" class="custom-select-input">
+                {% for sitio in opciones_ubicacion %}
+                    <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>
                 {% endfor %}
             </select>
             <div class="select-arrow">▼</div>
@@ -103,15 +115,15 @@
 </style>
 
 <script>
-document.getElementById('tipo_mapa').addEventListener('change', function() {
-    // Enviar el formulario cuando cambie la selección
-    const formData = new FormData();
-    formData.append('tipo_mapa', this.value);
-    
-    // Construir la URL con los parámetros
-    const url = '{% url "ficha_tecnica" %}?tipo_mapa=' + encodeURIComponent(this.value);
+document.getElementById('tipo_mapa').addEventListener('change', actualizarURL);
+document.getElementById('ubicacion').addEventListener('change', actualizarURL);
+
+function actualizarURL() {
+    const tipoMapa = document.getElementById('tipo_mapa').value;
+    const ubicacion = document.getElementById('ubicacion').value;
+    const url = '{% url "ficha_tecnica" %}?tipo_mapa=' + encodeURIComponent(tipoMapa) + '&ubicacion=' + encodeURIComponent(ubicacion);
     window.location.href = url;
-});
+}
 </script>
 
 
