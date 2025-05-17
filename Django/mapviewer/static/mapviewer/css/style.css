@@ -9,11 +9,24 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;  /* Evita desplazamiento horizontal */
+    overflow-y: auto;    /* Activa desplazamiento vertical si es necesario */
+}
 
 .page-wrapper {
     display: flex;
     flex: 1;
+    height: 100vh; /* Asegura que tome toda la altura visible */
     overflow: hidden;
+}
+
+.scrollable-content {
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 /* Sidebar */
@@ -31,15 +44,17 @@ body {
     display: flex;
     flex-direction: column;
     padding: 2rem;
-    overflow: hidden;
+    overflow-y: auto; /* Activar scroll vertical */
+    overflow-x: hidden;
     background-color: #1E1E2F;
     color: #E0E0E0;
+    max-height: 100vh; /* Limita la altura para que se active el scroll si se excede */
 }
 
 /* Contenedor de mapa con altura forzada */
 .map-container {
     flex: 1;
-    overflow: hidden;
+    overflow: auto;
     border: 1px solid #3C3C4F;
     border-radius: 8px;
 }

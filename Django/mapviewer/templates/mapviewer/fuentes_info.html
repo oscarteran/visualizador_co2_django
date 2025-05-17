@@ -2,6 +2,135 @@
 {% extends 'mapviewer/base.html' %}
 
 {% block content %}
-<h2>Fuentes de Información</h2>
-<p>Aquí va el contenido principal...</p>
+
+<div class="main-content" style="text-align: center; max-width: 90%; margin: 0 auto; ">
+    <h1 style="margin-bottom: 20px;">Catálogo Nacional de Emisiones de CO2</h1>
+    <h2 style="margin-bottom: 10px;">UNAM: Universidad Nacional Autónoma de México.</h2>
+    <h3 style="margin-bottom: 10px;">Instituto de Geofísica. Departamento de Recursos Nacionales.</h3>
+</div>
+
+<div class="main-content">
+    <p>En este apartado puedes encontrar recursos bibliográficos y artículos relacionados a la toma de muestras, el proyecto en general e investigación científica relevante.</p>
+</div>
+
+<div class="main-content">
+    <h3>Información de Usuarios</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+                <th>Archivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in tabla_info %}
+            <tr>
+                <td>{{ fila.Nombre }}</td>
+                <td>
+                    <span class="latlon">{{ fila.Ubicacion.0 }}</span>,
+                    <span class="latlon">{{ fila.Ubicacion.1 }}</span>
+                </td>
+                <td>{{ fila.Estado }}</td>
+                <td>{{ fila.Descripción }}</td>
+                <td>{{ fila.Archivo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="main-content" class="downloads-container">
+    <h3>Descarga de archivos con datos crudos</h3>
+    <div class="button-container">
+        {% for boton in botones %}
+            <a href="{{ boton.url }}" class="download-button">{{ boton.nombre }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.header-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+html, body {
+        height: 100%;
+        overflow-y: auto;
+    }
+
+.info-text {
+    margin: 0 20px 30px 20px;
+    color: #e5e7eb;
+    font-size: 1rem;
+}
+
+.table-container {
+    padding: 0 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #111827;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #374151;
+}
+
+th {
+    background-color: #1f2937;
+    color: #d1d5db;
+}
+
+td {
+    color: #f9fafb;
+}
+
+.latlon {
+    background-color: #374151;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.downloads-container {
+    margin-top: 40px;
+    padding: 0 20px;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.download-button {
+    background-color: transparent;
+    border: 1px solid #9ca3af;
+    color: #f9fafb;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.download-button:hover {
+    background-color: #374151;
+    color: #93c5fd;
+    border-color: #60a5fa;
+}
+</style>
 {% endblock %}

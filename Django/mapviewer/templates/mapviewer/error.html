@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        body {
+            background-color: #1f2937;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .error-container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 72px;
+            margin-bottom: 10px;
+            color: #ef4444;
+        }
+
+        p {
+            font-size: 20px;
+            color: #d1d5db;
+        }
+
+        a {
+            color: #60a5fa;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>{{ codigo_error }}</h1>
+        <p>{{ mensaje_error }}</p>
+        <p><a href="{% url 'ficha_tecnica' %}">Volver al inicio</a></p>
+    </div>
+</body>
+</html>

@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .utils.mapas import generar_mapa_html, generar_mapas_individuales
+from .utils.tablas import tabla_resumen_info
 import logging
 
 logger = logging.getLogger(__name__)
@@ -62,5 +63,22 @@ def ficha_tecnica(request):
     return render(request, 'mapviewer/ficha_tecnica.html', context)
 
 def fuentes_info(request):
-    return render(request, 'mapviewer/fuentes_info.html')
+    tabla_info = tabla_resumen_info()
+    context = {
+        'tabla_info': tabla_info,
+    }
+    return render(request, 'mapviewer/fuentes_info.html', context)
+
+def error_404_view(request, exception):
+    return render(request, 'mapviewer/error.html', {
+        'codigo_error': 404,
+        'mensaje_error': 'Página no encontrada.'
+    }, status=404)
+
+def error_500_view(request):
+    return render(request, 'mapviewer/error.html', {
+        'codigo_error': 500,
+        'mensaje_error': 'Error interno del servidor.'
+    }, status=500)
+
 
