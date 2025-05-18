@@ -9,46 +9,39 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Para asegurar que el cuerpo y el HTML ocupen toda la altura */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;  /* Evita desplazamiento horizontal */
-    overflow-y: auto;    /* Activa desplazamiento vertical si es necesario */
+    overflow: hidden; /* Evita scroll innecesario en body */
 }
 
+/* Envoltorio principal */
 .page-wrapper {
     display: flex;
-    flex: 1;
-    height: 100vh; /* Asegura que tome toda la altura visible */
-    overflow: hidden;
+    height: 100vh; /* Altura total del viewport */
+    overflow: hidden; /* Oculta scroll aquí también */
 }
 
-.scrollable-content {
-    overflow-y: auto;
-    max-height: 100%;
-}
-
-/* Sidebar */
+/* Barra lateral */
 .sidebar {
     width: 250px;
-    background-color: #2C2C3E;
-    color: #E0E0E0;
-    padding: 1rem;
-    border-right: 1px solid #3C3C4F;
+    background-color: #1e1e2f;
+    color: white;
+    padding: 20px;
+    height: 100vh; /* Altura completa */
+    flex-shrink: 0;
+    overflow-y: auto; /* Scroll si el contenido es muy largo */
 }
 
 /* Contenido principal */
 .main-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-    overflow-y: auto; /* Activar scroll vertical */
-    overflow-x: hidden;
-    background-color: #1E1E2F;
-    color: #E0E0E0;
-    max-height: 100vh; /* Limita la altura para que se active el scroll si se excede */
+    flex: 1;
+    overflow-y: auto; /* Este es el que va a tener el scroll */
+    padding: 20px;
+    background-color: #1a1a2e;
+    color: white;
 }
 
 /* Contenedor de mapa con altura forzada */

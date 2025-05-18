@@ -3,18 +3,19 @@
 
 {% block content %}
 
-<div class="main-content" style="text-align: center; max-width: 90%; margin: 0 auto; ">
+<div style="text-align: center; max-width: 90%; margin: 0 auto; ">
     <h1 style="margin-bottom: 20px;">Catálogo Nacional de Emisiones de CO2</h1>
     <h2 style="margin-bottom: 10px;">UNAM: Universidad Nacional Autónoma de México.</h2>
-    <h3 style="margin-bottom: 10px;">Instituto de Geofísica. Departamento de Recursos Nacionales.</h3>
+    <h3 style="margin-bottom: 10px;">Instituto de Geofísica. Departamento de Recursos Nacionales.</h3> <br><br>
+    
 </div>
 
-<div class="main-content">
-    <p>En este apartado puedes encontrar recursos bibliográficos y artículos relacionados a la toma de muestras, el proyecto en general e investigación científica relevante.</p>
+<div>
+    <p>En este apartado puedes encontrar recursos bibliográficos y artículos relacionados a la toma de muestras, el proyecto en general e investigación científica relevante.</p><br>
 </div>
 
-<div class="main-content">
-    <h3>Información de Usuarios</h3>
+<div>
+    <h3>Información específica de los datos:</h3> <br>
     <table>
         <thead>
             <tr>
@@ -35,43 +36,24 @@
                 </td>
                 <td>{{ fila.Estado }}</td>
                 <td>{{ fila.Descripción }}</td>
-                <td>{{ fila.Archivo }}</td>
+                <td>{{ fila.Archivo }}</td> 
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+    </table> <br><br><br>
 </div>
 
-<div class="main-content" class="downloads-container">
-    <h3>Descarga de archivos con datos crudos</h3>
+<div>
+    <h3>Descarga de archivos con datos crudos</h3> <br><br><br>
     <div class="button-container">
         {% for boton in botones %}
             <a href="{{ boton.url }}" class="download-button">{{ boton.nombre }}</a>
         {% endfor %}
     </div>
+
 </div>
 
 <style>
-.header-container {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-html, body {
-        height: 100%;
-        overflow-y: auto;
-    }
-
-.info-text {
-    margin: 0 20px 30px 20px;
-    color: #e5e7eb;
-    font-size: 1rem;
-}
-
-.table-container {
-    padding: 0 20px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -102,35 +84,6 @@ td {
     border-radius: 4px;
     font-family: monospace;
     font-size: 0.9em;
-}
-
-.downloads-container {
-    margin-top: 40px;
-    padding: 0 20px;
-}
-
-.button-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.download-button {
-    background-color: transparent;
-    border: 1px solid #9ca3af;
-    color: #f9fafb;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.download-button:hover {
-    background-color: #374151;
-    color: #93c5fd;
-    border-color: #60a5fa;
 }
 </style>
 {% endblock %}
