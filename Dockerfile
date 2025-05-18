@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copia los archivos de tu proyecto
-COPY . /app/
+COPY . .
 
 # Instala las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=mi_app.settings
 
 # Comando para correr el servidor
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:"]
