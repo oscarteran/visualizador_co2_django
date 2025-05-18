@@ -13,5 +13,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expone el puerto que usará Django (8000 por defecto)
 EXPOSE 8000
 
+ENV PYTHONUNBUFFERED=1
+
 # Comando para correr el servidor
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:"]
+
+# Comando para correr en productivo GCP Cloud Run
+CMD ["gunicorn", "mi_app.wsgi:application", "--bind", "0.0.0.0:${PORT}"]
