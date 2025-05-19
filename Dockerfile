@@ -20,4 +20,4 @@ ENV DJANGO_SETTINGS_MODULE=mapviewer.settings
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:${PORT}"]
 
 # Comando para correr en productivo GCP Cloud Run
-CMD ["gunicorn", "mapviewer.wsgi:application", "--bind", "0.0.0.0:${PORT}"]
+CMD ["gunicorn", "mapviewer.wsgi:application", "--bind", "0.0.0.0:8080"]
