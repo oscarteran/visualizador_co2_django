@@ -29,7 +29,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = []
 
 # Usa el puerto del entorno
-PORT = os.environ.get("PORT", 8000)
+PORT = os.environ.get("PORT", 8080)
 
 
 # Application definition
