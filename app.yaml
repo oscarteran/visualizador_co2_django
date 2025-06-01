@@ -1,0 +1,23 @@
+runtime: python
+env: flex
+
+entrypoint: gunicorn config.wsgi:application
+
+runtime_config:
+  python_version: 3.11
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 1
+  cpu_utilization:
+    target_utilization: 0.6
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: "config.settings"
+  SECRET_KEY: "cambia_esto"
+  DEBUG: "False"
+
+resources:
+  cpu: 1
+  memory_gb: 1
+  disk_size_gb: 10
