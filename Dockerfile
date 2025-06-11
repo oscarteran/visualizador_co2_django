@@ -12,14 +12,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Recolecta los archivos estáticos (importante para Django)
 # Si no usas archivos estáticos, puedes omitir esta línea
-#RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
 
 # Expone el puerto que usará Django (8000 por defecto)
-#EXPOSE 8000
+EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=mapviewer.settings
-#ENV PORT 8000
+ENV PORT 8000
 
 # Comando para correr el servidor
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:${PORT}"]

@@ -117,7 +117,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_collected') # Puedes llamarle 
 
 # Esto es necesario si usas archivos estáticos durante desarrollo
 STATICFILES_DIRS = [
-    BASE_DIR / "mapviewer" / "static",
+    BASE_DIR / "mapviewer" / "static" / "mapviewer",
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
