@@ -18,12 +18,11 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8080
 
 ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=mapviewer.settings
+ENV DJANGO_SETTINGS_MODULE=config.settings
 ENV PORT 8080
 
 # Comando para correr el servidor
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:${PORT}"]
 
 # Comando para correr en productivo GCP Cloud Run
-#CMD ["gunicorn", "mapviewer.wsgi:application", "--bind", "0.0.0.0:8080"]
-CMD ["gunicorn",  "--bind", "0.0.0.0:${PORT}", "mapviewer.wsgi:application",]
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:${PORT}"]
