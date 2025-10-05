@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=co2_visualizador
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  web:
+    build: .
+    ports:
+      - "8000:8080"
+    volumes:
+      - .:/app
+      - /app/venv  # Excluir el directorio venv del volumen
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - DEBUG=True
+      - PORT=8080
+      - DB_NAME=co2_visualizador
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123
+      - DB_HOST=db
+      - DB_PORT=5432
+    command: /usr/local/bin/entrypoint.sh python manage.py runserver 0.0.0.0:8080
+    restart: unless-stopped
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+
