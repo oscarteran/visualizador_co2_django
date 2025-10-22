@@ -13,6 +13,6 @@ while ! nc -z $DB_HOST $DB_PORT; do
 done
 
 echo "PostgreSQL started!"
-
+]
 # Ejecutar el comando principal (el que estaba en docker-compose)
 exec "$@"
