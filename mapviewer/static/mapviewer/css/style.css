@@ -4,8 +4,8 @@ body {
     flex-direction: column;
     height: 100vh;
     margin: 0;
-    background-color: #1E1E2F;
-    color: #E0E0E0;
+    background-color: #F4F4F4;
+    color: #333333;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -27,7 +27,7 @@ html, body {
 /* Barra lateral */
 .sidebar {
     width: 250px;
-    background-color: #1e1e2f;
+    background-color: #E9ECEF;
     color: white;
     padding: 20px;
     height: 100vh; /* Altura completa */
@@ -35,13 +35,97 @@ html, body {
     overflow-y: auto; /* Scroll si el contenido es muy largo */
 }
 
+.sidebar .nav-link {
+    color: #495057; /* Gris oscuro para el texto normal */
+    padding: 8px 15px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #DEE2E6; /* Gris más claro al pasar el ratón */
+    color: #000000; /* Negro al pasar el ratón */
+}
+
+/* Color del enlace activo (Seleccionado) */
+.sidebar .nav-link.active {
+    background-color: #388E3C; /* Verde UNAM / Ambiental */
+    color: #FFFFFF !important; 
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* Estilos para el ícono de la barra lateral (Logo de Geotermia) */
+.sidebar-icon {
+    /* EDITA ESTE VALOR PARA CAMBIAR EL COLOR DEL ÍCONO (Logo) */
+    color: #FF7F50; /* Por ejemplo: Naranja Coral */
+    
+    font-size: 3em; 
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Tip: Para un color asociado al calor o la energía, considera tonos como:
+
+#FFD700 (Dorado/Amarillo)
+
+#DC3545 (Rojo, para advertencia/calor)
+
+#FF8C00 (Naranja Oscuro) */
+
+/* --- ESTILOS PARA LOS RECUADROS (CARDS) --- */
+
+/* Estilo para el enlace que envuelve la tarjeta */
+.app-card-link {
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: inherit; /* Hereda el color del texto */
+}
+
+/* Estilo base de la tarjeta */
+.app-card {
+    border: 1px solid #E9ECEF; /* Borde sutil */
+    border-radius: 12px;
+    transition: all 0.3s ease; /* Transición para el efecto hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Sombra muy suave */
+    background-color: #FFFFFF;
+}
+
+/* Efecto al pasar el ratón (Hover) */
+.app-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+    transform: translateY(-3px); /* Pequeño desplazamiento hacia arriba */
+    border-color: #388E3C; /* Borde verde al hacer hover (opcional) */
+}
+
+/* Estilo de los iconos dentro de la tarjeta */
+.app-card .card-icon {
+    /* Color verde para el branding/ambiental */
+    color: #388E3C; 
+    margin-bottom: 10px;
+}
+
+/* Estilo del título dentro de la tarjeta */
+.app-card .card-title {
+    color: #333333;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Ajuste al cuerpo principal para que las tarjetas queden bien */
+.main-content-body {
+    /* Asegura que haya suficiente espacio alrededor del contenido */
+    padding: 20px 40px !important; 
+}
+
+/* --- ESTILOS PARA LOS RECUADROS (CARDS) --- */
+
 /* Contenido principal */
 .main-content {
     flex: 1;
     overflow-y: auto; /* Este es el que va a tener el scroll */
     padding: 20px;
-    background-color: #1a1a2e;
-    color: white;
+    background-color: #FFFFFF;
+    color: #333333;
 }
 
 /* Contenedor de mapa con altura forzada */
@@ -61,13 +145,13 @@ html, body {
 
 /* Títulos */
 h1, h2, h3, h4 {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 /* Botones */
 button, .btn {
     background-color: #2C2C3E;
-    color: #E0E0E0;
+    color: #333333;
     border: 1px solid #3C3C4F;
 }
 
@@ -88,8 +172,8 @@ a:hover {
 
 /* Footer */
 footer {
-    background-color: #1E1E2F;
-    color: #AAA;
+    background-color: #E9ECEF;
+    color: #161414;
     padding: 10px;
     font-size: 0.8rem;
     border-top: 1px solid #3C3C4F;
@@ -111,4 +195,62 @@ footer {
     left: 0;
     width: 100px;
     margin: 10px;
+}
+
+
+
+
+/* Estilos para el contenedor de la vista de inicio */
+.content-flex-container {
+    height: 100%; /* CLAVE: Ocupa toda la altura disponible del padre (.main-content) */
+    width: 100%;
+    
+    /* 1. DISTRIBUIR EL ESPACIO EQUITATIVAMENTE (Recomendado) */
+    display: flex;
+    flex-direction: column; /* Apila los elementos verticalmente */
+    justify-content: space-around; /* Distribuye el espacio entre los bloques (headers, texto, cards) */
+    
+    /* Alternativa para CENTRAR COMPLETAMENTE: usar justify-content: center; */
+    /* justify-content: center; 
+       align-items: center; */
+}
+
+/* Ajuste de márgenes para los bloques internos, si es necesario */
+.header-block, .text-block {
+    margin: 20px 0;
+    width: 100%;
+    /* max-width: 800px; Opcional: limita el ancho del texto para mejor lectura */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
+.header-block {
+    text-align: center; /* Mantener encabezados centrados */
+}
+
+.text-block {
+    text-align: left; /* Mantener párrafos alineados a la izquierda */
+}
+
+.card-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+
+
+/* SOMBREADO */
+
+.main-area-wrapper {
+    /* ... otros estilos ... */
+    
+    /* AÑADIR O AJUSTAR ESTA LÍNEA */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    
+    /* Nota: box-shadow se define como:
+       (Offset-X) (Offset-Y) (Blur-Radius) (Spread-Radius) (Color)
+    */
+    /* Un sombreado suave y sutil es clave: */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); 
 }

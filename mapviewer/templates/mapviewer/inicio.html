@@ -3,21 +3,57 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-<div class="main-content" style="text-align: center; max-width: 1000px; margin: 0 auto;">
-    <h1 style="margin-bottom: 30px;">Catálogo Nacional de Emisiones de CO2</h1>
-    <h2 style="margin-bottom: 25px;">UNAM: Universidad Nacional Autónoma de México.</h2>
-    <h3 style="margin-bottom: 25px;">Instituto de Geofísica. Departamento de Recursos Nacionales.</h3>
-    <p style="margin-bottom: 25px;">
-        Este proyecto es un esfuerzo colectivo por recolectar datos y generar datos geolocalizados 
-        con el fin de generar un inventario nacional de emisiones de CO2. 
-        A través de la barra de navegación lateral es posible acceder a las diferentes páginas, mapas y contenido relacionado.
-    </p>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+<div class="content-flex-container"> 
+    
+    <div class="header-block">
+        <h1 style="margin-bottom: 30px;">Catálogo Nacional de Emisiones de CO2</h1>
+        <h2 style="margin-bottom: 25px;">UNAM: Universidad Nacional Autónoma de México.</h2>
+        <h3 style="margin-bottom: 25px;">Instituto de Geofísica. Departamento de Recursos Nacionales.</h3>
+    </div>
+
+    <div class="text-block  left">
+        <p style="margin-bottom: 25px;">
+            Este proyecto es un esfuerzo colectivo por recolectar datos y generar datos geolocalizados 
+            con el fin de generar un inventario nacional de emisiones de CO2. 
+            A través de la barra de navegación lateral es posible acceder a las diferentes páginas, mapas y contenido relacionado.
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+    </div>
+
+    <div class="row card-row justify-content-center"> <div class="col-md-4 mb-4">
+            <a href="/catalogo/" class="app-card-link">
+                <div class="card app-card text-center h-100">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <i class="fas fa-globe-americas fa-3x card-icon"></i> <h5 class="card-title mt-3">Ver Mapa Interactivo</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <a href="/inventario_nacional/" class="app-card-link">
+                <div class="card app-card text-center h-100">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <i class="fas fa-chart-bar fa-3x card-icon"></i> <h5 class="card-title mt-3">Explorar Datos Detallados</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="/ficha_tecnica/" class="app-card-link">
+                <div class="card app-card text-center h-100">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <i class="fas fa-file-alt fa-3x card-icon"></i> <h5 class="card-title mt-3">Documentación Técnica</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+    </div> 
 </div>
 {% endblock %}
-
