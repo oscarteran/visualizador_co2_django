@@ -21,8 +21,10 @@ html, body {
 /* Envoltorio principal */
 .page-wrapper {
     display: flex;
+    flex: 1;
     height: 100vh; /* Altura total del viewport */
     overflow: hidden; /* Oculta scroll aquí también */
+    overflow-x: hidden;
 }
 
 /* Barra lateral */
@@ -32,9 +34,17 @@ html, body {
     border-right: 1px solid #E2E8F0;
     color: white;
     padding: 20px;
-    height: 100vh; /* Altura completa */
+    height: 100%; /* Altura completa */
     flex-shrink: 0;
     overflow-y: auto; /* Scroll si el contenido es muy largo */
+    position: relative;
+}
+
+.nav-group-bottom {
+    /* El border-top de Bootstrap crea la línea. Este es un ejemplo de ajuste: */
+    border-top: 1px solid #E2E8F0; /* Usar un color suave para el separador */
+    padding-top: 15px; /* Espacio por encima de la nueva opción */
+    margin-top: auto !important; /* Asegurar que el margen automático se aplique (Bootstrap: mt-auto) */
 }
 
 .sidebar .nav-link {
@@ -258,6 +268,7 @@ footer {
     font-size: 0.8rem;
     border-top: 1px solid #3C3C4F;
     text-align: center;
+    flex-shrink: 0;
 }
 
 /* Imágenes posicionadas */
@@ -333,4 +344,60 @@ footer {
     */
     /* Un sombreado suave y sutil es clave: */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); 
+    flex-grow: 1;
 }
+
+
+/* --- 1. Estilos del Botón Toggle --- */
+.toggle-sidebar {
+    position: fixed; /* CLAVE: Permanece en el viewport */
+    top: 50%;
+    
+    /* Posición Inicial (barra expandida): 
+       250px (ancho de sidebar) - 15px (aprox. la mitad del ancho del botón) */
+    left: 235px; 
+    
+    transform: translateY(-50%);
+    z-index: 1000; /* Siempre visible por encima de todo */
+    background-color: #FFFFFF; /* Usa el color de fondo que hayas elegido */
+    border: 1px solid #E2E8F0;
+    border-radius: 0 5px 5px 0;
+    padding: 5px 8px;
+    cursor: pointer;
+    
+    /* Animación del movimiento */
+    transition: left 0.3s ease-in-out, transform 0.3s; 
+}
+
+.toggle-sidebar.sidebar-collapsed {
+    /* Posición Final: Al lado izquierdo de la pantalla (left: 0) */
+    left: 0; 
+    border-radius: 0 5px 5px 0;
+}
+
+/* --- 2. Definición del Estado Colapsado --- */
+.sidebar.collapsed {
+    width: 0; /* Oculta la barra (o un valor muy pequeño como 50px si quieres solo íconos) */
+    padding: 0; /* Elimina el padding para que no haya espacio vacío */
+    overflow: hidden; /* Esconde el contenido de la barra */
+    /* Mueve el botón de toggle junto al borde */
+    /* Nota: El botón está posicionado absolutamente dentro de .sidebar */
+}
+
+/* --- 3. Animación del Contenedor Principal y la Barra --- */
+.sidebar, .main-area-wrapper {
+    transition: width 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+}
+
+/* --- 4. Rotar el ícono del botón cuando está colapsado --- */
+.sidebar.collapsed .toggle-sidebar .fa-chevron-left {
+    transform: rotate(180deg); /* La flecha mira hacia afuera/derecha */
+}
+
+/* Ocultar contenido interno de la barra colapsada */
+.sidebar.collapsed .logo-area, 
+.sidebar.collapsed h5,
+.sidebar.collapsed .nav {
+    display: none;
+}
+
