@@ -19,8 +19,8 @@
     <div class="page-wrapper ">
         <!-- Barra lateral -->
         <div class="sidebar d-flex flex-column align-items-center">
-            <div class="logo-container mb-4 text-center">
-                <i class="fas fa-fire fa-3x sidebar-icon"></i> 
+            <div class="logo-area mb-5 text-center">
+                <i class="fas fa-cloud fa-3x sidebar-icon"></i> 
             </div>
             <h5 class="mb-4" style="color: #000000;">Inventario nacional de emisiones de CO₂</h5>
 
@@ -43,6 +43,18 @@
     <footer>
         &copy; {{ now.year }} Universidad Nacional Autónoma de México. Instituto de Geofísica. Todos los derechos reservados.
     </footer>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                // Esta configuración es clave para habilitar el uso de un solo signo de dólar ($) 
+                // para fórmulas en línea (inlineMath)
+                inlineMath: [['$', '$'], ['\\(', '\\)']] 
+            }
+        };
+    </script>
+
 </body>
 
 </html>

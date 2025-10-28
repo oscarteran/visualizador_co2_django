@@ -59,14 +59,44 @@ html, body {
 
 /* Estilos para el ícono de la barra lateral (Logo de Geotermia) */
 .sidebar-icon {
-    /* EDITA ESTE VALOR PARA CAMBIAR EL COLOR DEL ÍCONO (Logo) */
-    color: #FF7F50; /* Por ejemplo: Naranja Coral */
-    
-    font-size: 3em; 
-    margin-bottom: 10px;
+    /* Color de acento Verde Menta */
+    color: #38B2AC; 
+    font-size: 8em; 
+    margin-bottom: 50px;
     display: block;
 }
 
+/* mapviewer/static/mapviewer/css/style.css */
+
+/* --- Estilos de Logo en Esquina --- */
+
+/* Estilo base para todos los logos de esquina */
+.logo-corner {
+    position: absolute; /* Permite posicionar el elemento respecto a .main-content */
+    z-index: 10; /* Asegura que esté por encima de cualquier otro contenido */
+    height: 70px; /* Tamaño del logo para que sea visible, pero no abrumador */
+    width: auto;
+}
+
+/* Posición específica: Logo Geofísica */
+.logo-top-left {
+    top: 30px;
+    left: 30px;
+}
+
+/* Posición específica: Logo UNAM */
+.logo-top-right {
+    top: 30px;
+    right: 30px;
+}
+
+/* Ajustar el padding del contenido para que los logos no se superpongan con el texto */
+.header-group {
+    /* El logo mide 70px + 20px de top, por seguridad, empujamos el header 100px. */
+    padding-top: 100px; 
+    padding-bottom: 20px;
+    width: 100%;
+}
 /* Tip: Para un color asociado al calor o la energía, considera tonos como:
 
 #FFD700 (Dorado/Amarillo)
@@ -126,8 +156,9 @@ html, body {
     flex: 1;
     overflow-y: auto; /* Este es el que va a tener el scroll */
     padding: 20px;
-    background-color: #FFFFFF;
-    color: #333333;
+    background-color: #FFFFFF;   
+    color: #2D3748; /* #333333; */
+    position: relative;
 }
 
 /* Contenedor de mapa con altura forzada */

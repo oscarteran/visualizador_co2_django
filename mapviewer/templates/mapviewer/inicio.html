@@ -1,9 +1,13 @@
 {% extends 'mapviewer/base.html' %}
+{% load static %}
 
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
 <div class="content-flex-container"> 
+
+    <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logo Geofísica UNAM" class="logo-corner logo-top-left">
+    <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo UNAM" class="logo-corner logo-top-right">
     
     <div class="header-group text-center">
         <h1 class="main-page-title">Catálogo Nacional de Emisiones de CO₂</h1>
@@ -22,7 +26,7 @@
         </p>
 
         <p class="importance-paragraph">
-            El conocimiento preciso y actualizado de las emisiones de dióxido de carbono ( $ \text{CO}_2$ ) es fundamental 
+            El conocimiento preciso y actualizado de las emisiones de dióxido de carbono ( $\text{CO}_2$ ) es fundamental 
             para la toma de decisiones climáticas a nivel nacional e internacional. Al mapear y cuantificar estas emisiones, 
             la comunidad científica y los responsables políticos pueden identificar las principales fuentes de contaminación, 
             evaluar la efectividad de las políticas de mitigación implementadas y cumplir con los compromisos establecidos 
@@ -34,13 +38,6 @@
             La concentración de gases de efecto invernadero está intrínsecamente ligada a la calidad del aire y a los patrones climáticos extremos. 
             Disponer de datos geolocalizados y precisos permite a las autoridades planificar mejor la infraestructura energética, 
             promover tecnologías limpias y proteger a las poblaciones vulnerables, optimizando la inversión y fomentando un desarrollo económico resiliente y bajo en carbono.
-        </p>
-        
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
     </div>
 
