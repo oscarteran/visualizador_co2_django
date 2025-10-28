@@ -4,9 +4,10 @@ body {
     flex-direction: column;
     height: 100vh;
     margin: 0;
-    background-color: #F4F4F4;
-    color: #333333;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F9FAFB;
+    color: #2D3748;
+    font-family: 'Roboto', sans-serif;  
+    /* Tahoma, Geneva, Verdana,  */
 }
 
 /* Para asegurar que el cuerpo y el HTML ocupen toda la altura */
@@ -27,7 +28,8 @@ html, body {
 /* Barra lateral */
 .sidebar {
     width: 250px;
-    background-color: #E9ECEF;
+    background-color:#FFFFFF;
+    border-right: 1px solid #E2E8F0;
     color: white;
     padding: 20px;
     height: 100vh; /* Altura completa */
@@ -49,9 +51,9 @@ html, body {
 
 /* Color del enlace activo (Seleccionado) */
 .sidebar .nav-link.active {
-    background-color: #388E3C; /* Verde UNAM / Ambiental */
+    background-color:#38B2AC; /* Verde UNAM / Ambiental */
     color: #FFFFFF !important; 
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 4px;
 }
 
@@ -83,7 +85,7 @@ html, body {
 
 /* Estilo base de la tarjeta */
 .app-card {
-    border: 1px solid #E9ECEF; /* Borde sutil */
+    border: 1px solid #E2E8F0; /* Borde sutil */
     border-radius: 12px;
     transition: all 0.3s ease; /* Transición para el efecto hover */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Sombra muy suave */
@@ -94,13 +96,13 @@ html, body {
 .app-card:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
     transform: translateY(-3px); /* Pequeño desplazamiento hacia arriba */
-    border-color: #388E3C; /* Borde verde al hacer hover (opcional) */
+    border-color: #38B2AC;/* Borde verde al hacer hover (opcional) */
 }
 
 /* Estilo de los iconos dentro de la tarjeta */
 .app-card .card-icon {
     /* Color verde para el branding/ambiental */
-    color: #388E3C; 
+    color: #38B2AC;
     margin-bottom: 10px;
 }
 
@@ -143,9 +145,56 @@ html, body {
     border: none;
 }
 
+/* --- 1. MEJORA DEL GRUPO DE ENCABEZADOS --- */
+.header-group {
+    padding-top: 40px; /* Espacio superior para separar del header principal */
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.main-page-title {
+    /* Darle más peso al título principal */
+    font-size: 2.5rem; 
+    margin-bottom: 5px !important;
+    line-height: 1.2;
+}
+
+.institution-title {
+    /* Reducir el tamaño para la jerarquía visual */
+    font-size: 1.1rem; 
+    color: #4A5568; /* Color gris para hacerlo más sutil que el título principal */
+    font-weight: 500;
+    margin-bottom: 5px !important;
+}
+
+/* --- 2. MEJORA DE LA LEGIBILIDAD DEL TEXTO --- */
+.reading-container {
+    width: 100%;
+    /* CLAVE: Limitar el ancho para que el texto sea más fácil de leer */
+    max-width: 900px; 
+    margin-left: auto; /* Centrar el bloque de lectura */
+    margin-right: auto;
+    padding: 30px 0;
+    line-height: 1.6; /* Mayor espacio entre líneas para mejor lectura */
+}
+
+/* Estilo para los nuevos párrafos y el texto principal */
+.project-description, .importance-paragraph {
+    margin-bottom: 25px;
+    color: #4A5568; 
+}
+
 /* Títulos */
-h1, h2, h3, h4 {
-    color: #000000;
+h1, h2, h3, h4, .main-title {
+    color: #2D3748;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Negrita para el estilo de Montserrat */
+}
+
+p, .nav-link, .card-title {
+    color: #4A5568;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400; /* Regular para el cuerpo de texto */
 }
 
 /* Botones */
@@ -244,7 +293,7 @@ footer {
 
 .main-area-wrapper {
     /* ... otros estilos ... */
-    
+    background-color: #FFFFFF;
     /* AÑADIR O AJUSTAR ESTA LÍNEA */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
     
