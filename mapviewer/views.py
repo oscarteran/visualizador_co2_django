@@ -69,6 +69,12 @@ def fuentes_info(request):
     }
     return render(request, 'mapviewer/fuentes_info.html', context)
 
+def acerca_de(request):
+    return render(request, 'mapviewer/acerca_de.html')
+
+def ayuda_y_contacto(request):
+    return render(request, 'mapviewer/ayuda_y_contacto.html')
+
 def error_404_view(request, exception):
     return render(request, 'mapviewer/error.html', {
         'codigo_error': 404,

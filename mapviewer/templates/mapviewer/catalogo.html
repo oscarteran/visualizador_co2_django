@@ -1,7 +1,61 @@
-<!-- catalogo.html -->
+<!-- catalogo.html
 {% extends 'mapviewer/base.html' %}
 
 {% block content %}
 <h2>Catálogo de emisiones de CO₂</h2>
 <p>Aquí va el contenido principal...</p>
+{% endblock %} -->
+
+
+<!-- Ejemplo de catalogo.html -->
+{% extends 'mapviewer/base.html' %}
+
+{% block content %}
+
+    <!-- 1. BARRA DE CONTROLES SUPERIOR (Tarjeta Flotante) -->
+    <div class="map-control-bar">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <!-- Título de la Vista -->
+            <div class="map-header-text">
+                <h2 class="map-title">Distribución de principales zonas de medición</h2>
+                <p class="map-subtitle">Mapas interactivos para revisión de datos de emisiones de $\text{CO}_2$.</p>
+            </div>
+
+            <!-- Botón de Acción/Ayuda (Opcional) -->
+            <button class="btn btn-sm btn-action">
+                <i class="fas fa-search-location me-2"></i> Buscar
+            </button>
+        </div>
+
+        <!-- FILTROS (Toolbelt) -->
+        <div class="d-flex flex-wrap align-items-center filter-toolbelt">
+            
+            <!-- Filtro de División Política -->
+            <div class="me-3 mb-2 map-filter-group">
+                <label class="form-label small-label">Localización</label>
+                <select class="form-select custom-select">
+                    <option>División Política</option>
+                    <option>Región Hidrológica</option>
+                </select>
+            </div>
+
+            <!-- Filtro de Ubicación Específica -->
+            <div class="me-3 mb-2 map-filter-group">
+                <label class="form-label small-label">Ubicación</label>
+                <select class="form-select custom-select">
+                    <option>Alcaparrosa</option>
+                    <option>Acoculco</option>
+                </select>
+            </div>
+            
+            <!-- (Añadir más filtros aquí si es necesario) -->
+        </div>
+    </div>
+    
+    <!-- 2. CONTENEDOR DEL MAPA (Tarjeta Flotante) -->
+    <div class="map-container-wrapper">
+        <!-- Aquí va tu mapa Folium/Django (el iframe) -->
+        <!-- Por ejemplo: {{ mapa_html | safe }} -->
+    </div>
+
 {% endblock %}

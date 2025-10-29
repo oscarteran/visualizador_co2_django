@@ -1,0 +1,25 @@
+{% extends 'mapviewer/base.html' %}
+
+{% block content %}
+
+<div style="text-align: center;">
+    <h2>Distribución de principales zonas de medición en territorio nacional</h2>
+    <h5>Mapas interactivos para revisión de datos de emisiones de CO2.</h5>
+</div>
+
+<div class="controls-container">
+    <div class="dropdown-container">
+        <label for="map-selector">Seleccionar mapa:</label>
+        <select id="map-selector" class="form-control">
+            <option value="nacional">División Política</option>
+            <option value="region_norte">Satelital</option>
+            <option value="region_centro">Relieve</option>
+        </select>
+        <button id="load-map-btn" class="btn btn-primary">Cargar Mapa</button>
+    </div>
+</div>
+
+<div class="map-container">
+    {{ mapa|safe }}
+</div>
+{% endblock %}

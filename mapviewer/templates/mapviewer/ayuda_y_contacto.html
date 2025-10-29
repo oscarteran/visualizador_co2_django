@@ -1,0 +1,81 @@
+{% extends 'mapviewer/base.html' %}
+
+{% block title %}Ayuda y Contacto{% endblock %}
+
+{% block content %}
+<div class="main-content-body p-5">
+    
+    <div class="reading-container">
+        <h1 class="main-page-title mb-5">Ayuda y Contacto</h1>
+
+        <div class="row">
+            
+            <!-- Columna de Información de Contacto -->
+            <div class="col-md-6 mb-4">
+                <div class="card p-4 shadow-sm info-card h-100">
+                    <h4 class="mb-3 institution-title" style="color: #38B2AC;">Información de Contacto</h4>
+                    <p class="mb-4">Si tienes preguntas sobre los datos, la metodología o reportar un error, contáctanos a través de los siguientes canales:</p>
+
+                    <ul class="list-unstyled contact-list">
+                        <li class="mb-3">
+                            <i class="fas fa-envelope me-3" style="color: #38B2AC;"></i>
+                            <strong>Email de Soporte:</strong> contacto.emisiones@unam.mx
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-phone me-3" style="color: #38B2AC;"></i>
+                            <strong>Teléfono:</strong> +52 (55) 5622-4211 (Ext. 81000)
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-map-marker-alt me-3" style="color: #38B2AC;"></i>
+                            <strong>Dirección:</strong> Instituto de Geofísica, Circuito de la Investigación Científica, Coyoacán, CDMX.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Columna de Formulario de Contacto (Simulado) -->
+            <div class="col-md-6 mb-4">
+                <div class="card p-4 shadow-sm info-card h-100">
+                    <h4 class="mb-3 institution-title" style="color: #38B2AC;">Envíanos un Mensaje</h4>
+                    <!-- Formulario simulado - NOTA: Requeriría lógica Django/backend real para funcionar -->
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tu Nombre</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Tu Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mensaje o Consulta</label>
+                            <textarea class="form-control" id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn login-button w-100 mt-2">
+                            <i class="fas fa-paper-plane me-2"></i> Enviar Consulta
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
+<style>
+/* Estilos para asegurar la coherencia visual con el modo claro */
+.info-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+}
+.contact-list {
+    color: #4A5568;
+}
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #E2E8F0;
+}
+</style>
+{% endblock %}

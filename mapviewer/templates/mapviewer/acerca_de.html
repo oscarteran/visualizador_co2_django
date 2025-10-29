@@ -1,0 +1,68 @@
+{% extends 'mapviewer/base.html' %}
+{% load static %}
+
+{% block title %}Acerca de{% endblock %}
+
+{% block content %}
+<div class="main-content-body p-5">
+    
+    <div class="reading-container">
+        <h1 class="main-page-title mb-5">Acerca del Catálogo Nacional de Emisiones de CO₂</h1>
+
+        <!-- 1. Bloque de Misión y Visión (Contexto) -->
+        <div class="card p-4 mb-5 shadow-sm info-card">
+            <h4 class="mb-3 institution-title" style="color: #38B2AC;">Misión del Proyecto</h4>
+            <p>
+                Nuestra misión es proporcionar una plataforma de visualización geoespacial accesible y precisa para el inventario de emisiones de CO₂, 
+                sirviendo como herramienta crítica para la investigación científica, la formulación de políticas climáticas 
+                y la toma de decisiones estratégicas en México.
+            </p>
+            <h4 class="mt-4 mb-3 institution-title" style="color: #38B2AC;">Visión</h4>
+            <p>
+                Ser la fuente de datos de referencia nacional en materia de emisiones de gases de efecto invernadero, 
+                contribuyendo activamente a los objetivos de mitigación climática y fomentando una cultura de transparencia y responsabilidad ambiental.
+            </p>
+        </div>
+
+        <!-- 2. Bloque de Afiliación Institucional -->
+        <h2 class="main-page-title mb-4" style="font-size: 1.8rem;">Colaboración Institucional</h2>
+        
+        <div class="row align-items-center justify-content-center pt-3">
+            
+            <!-- Logo UNAM -->
+            <div class="col-md-3 text-center">
+                <img src="{% static 'mapviewer/img/UNAM.png' %}" 
+                     alt="Escudo UNAM" class="logo-institution">
+                <p class="mt-2 text-muted">Universidad Nacional Autónoma de México</p>
+            </div>
+            
+            <!-- Separador -->
+            <div class="col-md-1 text-center" style="font-size: 2rem; color: #E2E8F0;">
+                <i class="fas fa-plus"></i>
+            </div>
+            
+            <!-- Logo Instituto de Geofísica -->
+            <div class="col-md-3 text-center">
+                <img src="{% static 'mapviewer/img/geofisica.png' %}" 
+                     alt="Logo Instituto de Geofísica" class="logo-institution">
+                <p class="mt-2 text-muted">Instituto de Geofísica (Departamento de Recursos)</p>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
+<style>
+/* Estilos específicos para la página Acerca de */
+.info-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+}
+.logo-institution {
+    height: 90px;
+    width: auto;
+    opacity: 0.9;
+}
+</style>
+{% endblock %}

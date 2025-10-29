@@ -1,115 +1,74 @@
 {% extends 'mapviewer/base.html' %}
+{% load static %}
+
+{% block title %}Inventario Nacional{% endblock %}
 
 {% block content %}
-<div class="header-container">
-    <h2>Distribución de principales zonas de medición en territorio nacional</h2>
-    <h5>Mapas interactivos para revisión de datos de emisiones de CO2.</h5>
-</div>
+<div class="map-view-container">
 
-<div class="controls-container">
-    <div class="select-wrapper">
-        <label for="tipo_mapa">Capas:</label>
-        <div class="custom-select">
-            <select name="tipo_mapa" id="tipo_mapa" class="custom-select-input" onchange="this.form.submit()">
-                {% for opcion in opciones_mapa %}
-                    <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
-                {% endfor %}
-            </select>
-            <div class="select-arrow">▼</div>
+    <!-- 1. BARRA DE CONTROLES (Tarjeta Flotante) -->
+    <div class="map-control-bar">
+        
+        <div class="map-header-text mb-3">
+            <h2 class="map-title">Distribución de principales zonas de medición en territorio nacional</h2>
+            <p class="map-subtitle">Mapas interactivos para revisión de datos de emisiones de $\text{CO}_2$.</p>
         </div>
+
+        <!-- FILTROS: Envuelta en un formulario para envío de parámetros GET -->
+        <form id="map-filter-form" method="GET" class="filter-toolbelt">
+            
+            <!-- Campo oculto para mantener la consistencia de la URL si se requiere -->
+            <!-- <input type="hidden" name="ubicacion" value="{{ ubicacion_seleccionada }}"> -->
+
+            <!-- Filtro de Capas/Tipo de Mapa -->
+            <div class="map-filter-group me-4">
+                <label for="tipo_mapa" class="form-label small-label">Capas de Visualización</label>
+                <select name="tipo_mapa" id="tipo_mapa" class="form-select custom-select">
+                    {% for opcion in opciones_mapa %}
+                        <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Ejemplo de Filtro de Ubicación Adicional (Se puede integrar en la vista) -->
+            <div class="map-filter-group">
+                <label for="ubicacion_filtro" class="form-label small-label">Ubicación Específica</label>
+                <select id="ubicacion_filtro" class="form-select custom-select">
+                    <option value="">Todas las ubicaciones</option>
+                    <!-- Aquí iría un bucle si tuvieras una lista de ubicaciones para el filtro -->
+                    <!-- {% for ubicacion in ubicaciones %} ... {% endfor %} -->
+                </select>
+            </div>
+            
+        </form>
     </div>
-</div>
-
-<div class="map-container">
-    {{ mapa|safe }}
-</div>
-
-,<style>
-.header-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.controls-container {
-    margin-bottom: 20px;
-    padding: 0 20px;
-}
-
-.select-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.select-wrapper label {
-    color: white;
-    font-weight: bold;
-}
-
-.custom-select {
-    position: relative;
-    display: inline-block;
-    width: 250px;
-}
-
-.custom-select-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #1f2937;
-    color: white;
-    cursor: pointer;
-}
-
-.select-arrow {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: white;
-    pointer-events: none;
-    font-size: 12px;
-}
-
-/* Estilo para las opciones del dropdown */
-.custom-select-input option {
-    background-color: #1f2937;
-    color: white;
-    padding: 10px;
-}
-
-/* Estilo para el hover sobre las opciones */
-.custom-select-input option:hover {
-    background-color: #374151;
-}
-
-/* Estilo para cuando el dropdown está enfocado */
-.custom-select-input:focus {
-    outline: none;
-    border-color: #6b7280;
-    box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.3);
-}
-
-.map-container {
-    width: 100%;
-    height: 600px;
-}
-</style>
-
-<script>
-document.getElementById('tipo_mapa').addEventListener('change', function() {
-    // Enviar el formulario cuando cambie la selección
-    const formData = new FormData();
-    formData.append('tipo_mapa', this.value);
     
-    // Construir la URL con los parámetros
-    const url = '{% url "inventario_nacional" %}?tipo_mapa=' + encodeURIComponent(this.value);
-    window.location.href = url;
-});
-</script>
+    <!-- 2. CONTENEDOR DEL MAPA (Tarjeta Flotante Grande) -->
+    <div class="map-container-wrapper">
+        <!-- El mapa se renderiza aquí -->
+        <div class="map-content-area">
+            {{ mapa|safe }}
+        </div>
+        
+        <!-- Tarjeta de Leyenda (Ejemplo de elemento flotante sobre el mapa) -->
+        <div class="map-legend-box">
+            <h5 class="legend-title">Leyenda:</h5>
+            <div class="legend-item">
+                <span style="background-color: #38B2AC;"></span> Bajo
+            </div>
+            <div class="legend-item">
+                <span style="background-color: #FFC107;"></span> Medio
+            </div>
+            <div class="legend-item">
+                <span style="background-color: #DC3545;"></span> Alto
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mapviewer/js/map_controls.js' %}"></script>
 {% endblock %}

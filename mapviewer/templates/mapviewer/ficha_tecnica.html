@@ -1,130 +1,61 @@
-<!-- catalogo.html -->
 {% extends 'mapviewer/base.html' %}
+{% load static %}
+
+{% block title %}Ficha Técnica de Zonas{% endblock %}
 
 {% block content %}
-<div class="header-container">
-    <h2>Información de zona:</h2>
-    <p>Este mapa despliega la localización de las muestras tomadas así como el valor medido.</p>
-</div>
+<div class="map-view-container">
 
-<div class="controls-container">
-    <div class="select-wrapper">
-        <!-- Primer dropdown -->
-        <label for="tipo_mapa">Localizaciones:</label>
-        <div class="custom-select">
-            <select name="tipo_mapa" id="tipo_mapa" class="custom-select-input" onchange="this.form.submit()">
-                {% for opcion in opciones_mapa %}
-                    <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
-                {% endfor %}
-            </select>
-            <div class="select-arrow">▼</div>
+    <!-- 1. BARRA DE CONTROLES (Tarjeta Flotante) -->
+    <div class="map-control-bar">
+        
+        <div class="map-header-text mb-3">
+            <h2 class="map-title">Información de zona:</h2>
+            <p class="map-subtitle">Este mapa despliega la localización de las muestras tomadas, así como el valor medido.</p>
         </div>
 
-        <!-- Segundo dropdown -->
-        <label for="ubicacion" style="margin-left: 20px;">Ubicación:</label>
-        <div class="custom-select">
-            <select name="ubicacion" id="ubicacion" class="custom-select-input">
-                {% for sitio in opciones_ubicacion %}
-                    <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>
-                {% endfor %}
-            </select>
-            <div class="select-arrow">▼</div>
-        </div>
+        <!-- FILTROS: Envuelta en un formulario para envío de parámetros GET -->
+        <!-- La acción se maneja mediante JavaScript en este caso, al tener dos filtros -->
+        <form id="map-filter-form-ficha" method="GET" class="filter-toolbelt">
+            
+            <!-- Filtro 1: Localizaciones/Tipo de Mapa -->
+            <div class="map-filter-group me-4">
+                <label for="tipo_mapa" class="form-label small-label">Localizaciones</label>
+                <select name="tipo_mapa" id="tipo_mapa_ficha" class="form-select custom-select">
+                    {% for opcion in opciones_mapa %}
+                        <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Filtro 2: Ubicación Específica -->
+            <div class="map-filter-group">
+                <label for="ubicacion" class="form-label small-label">Ubicación</label>
+                <select name="ubicacion" id="ubicacion_ficha" class="form-select custom-select">
+                    {% for sitio in opciones_ubicacion %}
+                        <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+        </form>
     </div>
+    
+    <!-- 2. CONTENEDOR DEL MAPA (Tarjeta Flotante Grande) -->
+    <div class="map-container-wrapper">
+        <!-- El mapa se renderiza aquí -->
+        <div class="map-content-area">
+            {{ mapa|safe }}
+        </div>
+        
+        <!-- Aquí iría una Leyenda o Tarjeta de Detalle si es necesario -->
+        
+    </div>
+
 </div>
+{% endblock %}
 
-<div class="map-container">
-    {{ mapa|safe }}
-</div>
-
-<style>
-.header-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.controls-container {
-    margin-bottom: 20px;
-    padding: 0 20px;
-}
-
-.select-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.select-wrapper label {
-    color: white;
-    font-weight: bold;
-}
-
-.custom-select {
-    position: relative;
-    display: inline-block;
-    width: 250px;
-}
-
-.custom-select-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #1f2937;
-    color: white;
-    cursor: pointer;
-}
-
-.select-arrow {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: white;
-    pointer-events: none;
-    font-size: 12px;
-}
-
-/* Estilo para las opciones del dropdown */
-.custom-select-input option {
-    background-color: #1f2937;
-    color: white;
-    padding: 10px;
-}
-
-/* Estilo para el hover sobre las opciones */
-.custom-select-input option:hover {
-    background-color: #374151;
-}
-
-/* Estilo para cuando el dropdown está enfocado */
-.custom-select-input:focus {
-    outline: none;
-    border-color: #6b7280;
-    box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.3);
-}
-
-.map-container {
-    width: 100%;
-    height: 600px;
-}
-</style>
-
-<script>
-document.getElementById('tipo_mapa').addEventListener('change', actualizarURL);
-document.getElementById('ubicacion').addEventListener('change', actualizarURL);
-
-function actualizarURL() {
-    const tipoMapa = document.getElementById('tipo_mapa').value;
-    const ubicacion = document.getElementById('ubicacion').value;
-    const url = '{% url "ficha_tecnica" %}?tipo_mapa=' + encodeURIComponent(tipoMapa) + '&ubicacion=' + encodeURIComponent(ubicacion);
-    window.location.href = url;
-}
-</script>
-
-
+{% block extra_js %}
+<!-- Importamos el JS específico para esta vista -->
+<script src="{% static 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
 {% endblock %}

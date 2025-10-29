@@ -3,6 +3,21 @@
 
 {% block title %}Inicio{% endblock %}
 
+{% block top_header_content %}
+<!-- BARRA SUPERIOR (HEADER HORIZONTAL) - SOLO EN LA PÁGINA DE INICIO -->
+<div class="app-header-container"> 
+    <div class="top-app-bar p-3 d-flex align-items-center justify-content-between">
+        <!-- Título de la App a la izquierda -->
+        <h2 class="mb-0 app-bar-title">Catálogo Nacional de Emisiones de CO₂</h2>
+        
+        <!-- Botón de Ingreso a la derecha -->
+        <button class="btn btn-sm login-button">
+            <i class="fas fa-sign-in-alt me-2"></i> Ingresar
+        </button>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="content-flex-container"> 
 

@@ -30,38 +30,28 @@
             <div class="nav-group-top nav flex-column">
                 <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Catalogo de emisiones CO2</a>
                 <a class="nav-link {% if request.path == '/inventario_nacional/' %}active{% endif %}" href="/inventario_nacional/">Inventario Nacional</a>
-                <a class="nav-link {% if request.path == '/fichatec/' %}active{% endif %}" href="/ficha_tecnica/">Ficha técnica</a>
+                <a class="nav-link {% if request.path == '/ficha_tecnica/' %}active{% endif %}" href="/ficha_tecnica/">Ficha técnica</a>
                 <a class="nav-link {% if request.path == '/fuentes_info/' %}active{% endif %}" href="/fuentes_info/">Fuentes de Información</a>
             </div>
 
+            <!-- Enlaces corregidos y añadidos para las nuevas páginas -->
             <div class="nav-group-bottom nav flex-column mt-auto pt-3 border-top"> 
-                <a class="nav-link" href="/ayuda/">Acerca de</a>
-                <a class="nav-link" href="/ayuda/">Ayuda y Contacto</a>
+                <a class="nav-link {% if request.path == '/acerca_de/' %}active{% endif %}" href="/acerca_de/">Acerca de</a>
+                <a class="nav-link {% if request.path == '/ayuda_y_contacto/' %}active{% endif %}" href="/ayuda_y_contacto/">Ayuda y Contacto</a>
             </div>
         </div>
 
-        <!-- Botón Toggle (FUERA de la sidebar, pero aún en el page-wrapper para control de fixed) -->
+        <!-- Botón Toggle (FUERA de la sidebar) -->
         <button id="sidebar-toggle" class="btn btn-sm toggle-sidebar"><i class="fas fa-chevron-left"></i></button>
 
         <!-- 2. Contenedor del Área Principal: GESTIONA EL HEADER Y EL CUERPO VERTICALMENTE -->
         <div class="main-area-wrapper flex-grow-1 d-flex flex-column" id="main-content-area">
             
-            <!-- NUEVO CONTENEDOR PARA APLICAR MARGEN SUPERIOR Y LATERAL -->
-            <div class="app-header-container"> 
-                <!-- BARRA SUPERIOR (HEADER HORIZONTAL) -->
-                <div class="top-app-bar p-3 d-flex align-items-center justify-content-between">
-                    <!-- Título de la App a la izquierda -->
-                    <h2 class="mb-0 app-bar-title">Catálogo Nacional de Emisiones de CO₂</h2>
-                    
-                    <!-- Botón de Ingreso a la derecha -->
-                    <button class="btn btn-sm login-button">
-                        <i class="fas fa-sign-in-alt me-2"></i> Ingresar
-                    </button>
-                </div>
-            </div> <!-- Fin del app-header-container -->
+            <!-- BLOQUE OPCIONAL: Solo se renderizará si una plantilla hija (como inicio.html) lo define. -->
+            {% block top_header_content %}{% endblock %}
 
             <!-- Contenido principal (Donde se carga el block content) -->
-            <div class="main-content flex-grow-1">
+            <div class="main-content flex-grow-1 d-flex flex-column">
                 {% block content %}
                 {% endblock %}
             </div> 
@@ -76,6 +66,8 @@
 
     <!-- Scripts y MathJax -->
     <script src="{% static 'mapviewer/js/sidebar_toggle.js' %}"></script>
+    <script src="{% static 'mapviewer/js/map_controls.js' %}"></script>
+    <script src="{% static 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
 
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <script>
