@@ -1,89 +1,80 @@
-<!-- catalogo.html -->
 {% extends 'mapviewer/base.html' %}
+{% load static %}
+
+{% block title %}Fuentes de Información{% endblock %}
+
+{% block extra_css %}
+<!-- Carga el CSS específico para el estilo de tabla moderno -->
+<link rel="stylesheet" href="{% static 'mapviewer/css/fuentes_informacion.css' %}">
+{% endblock %}
 
 {% block content %}
-
-<div style="text-align: center; max-width: 90%; margin: 0 auto; ">
-    <h1 style="margin-bottom: 20px;">Catálogo Nacional de Emisiones de CO2</h1>
-    <h2 style="margin-bottom: 10px;">UNAM: Universidad Nacional Autónoma de México.</h2>
-    <h3 style="margin-bottom: 10px;">Instituto de Geofísica. Departamento de Recursos Nacionales.</h3> <br><br>
+<div class="main-content-body p-4">
     
-</div>
+    <!-- LOGO INSTITUTO DE GEOFÍSICA (Esquina Superior Izquierda) -->
+    <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logo Geofísica UNAM" class="logo-corner logo-top-left">
 
-<div>
-    <p>En este apartado puedes encontrar recursos bibliográficos y artículos relacionados a la toma de muestras, el proyecto en general e investigación científica relevante.</p><br>
-</div>
-
-<div>
-    <h3>Información específica de los datos:</h3> <br>
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Ubicación</th>
-                <th>Estado</th>
-                <th>Descripción</th>
-                <th>Archivo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for fila in tabla_info %}
-            <tr>
-                <td>{{ fila.Nombre }}</td>
-                <td>
-                    <span class="latlon">{{ fila.Ubicacion.0 }}</span>,
-                    <span class="latlon">{{ fila.Ubicacion.1 }}</span>
-                </td>
-                <td>{{ fila.Estado }}</td>
-                <td>{{ fila.Descripción }}</td>
-                <td>{{ fila.Archivo }}</td> 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table> <br><br><br>
-</div>
-
-<div>
-    <h3>Descarga de archivos con datos crudos</h3> <br><br><br>
-    <div class="button-container">
-        {% for boton in botones %}
-            <a href="{{ boton.url }}" class="download-button">{{ boton.nombre }}</a>
-        {% endfor %}
+    <!-- LOGO UNAM (Esquina Superior Derecha) -->
+    <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo UNAM" class="logo-corner logo-top-right">
+    
+    <div class="reading-container">
+        
+        <!-- Título de la Sección -->
+        <h2 class="section-title">Fuentes de Información y Catálogo de Datos</h2>
+        
+        <!-- Descripción Mejorada -->
+        <p class="project-description">
+            Esta sección compila el catálogo completo de recursos bibliográficos, metodológicos y la información 
+            georreferenciada utilizada para la construcción del Inventario Nacional de Emisiones de $\text{CO}_2$. 
+            La tabla proporciona una vista detallada de las localizaciones y el contexto asociado a cada punto de muestreo.
+        </p>
     </div>
-
+    
+    <!-- CONTENEDOR DE LA TABLA (Tarjeta Flotante) -->
+    <div class="data-table-card">
+        <h3 class="table-subtitle">Catálogo de Datos Georreferenciados</h3>
+        
+        <!-- Tabla de Datos -->
+        <div class="table-responsive">
+            <table class="table modern-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Ubicación (Latitud)</th>
+                        <th>Ubicación (Longitud)</th>
+                        <th>Estado</th>
+                        <th>Descripción</th>
+                        <!-- Se elimina la columna 'Archivo' -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Usamos 'tabla_info' y las claves del diccionario tal como estaban antes. -->
+                    {% for fila in tabla_info %}
+                    <tr>
+                        <td>{{ fila.Nombre }}</td>
+                        <!-- Muestra la Latitud (Ubicacion.0) -->
+                        <td class="coords-data">
+                            <span class="latlon">{{ fila.Ubicacion.0 }}</span>
+                        </td>
+                         <!-- Muestra la Longitud (Ubicacion.1) -->
+                         <td class="coords-data">
+                            <span class="latlon">{{ fila.Ubicacion.1 }}</span>
+                        </td>
+                        <td>{{ fila.Estado }}</td>
+                        <td>{{ fila.Descripción }}</td>
+                        <!-- Se elimina la celda del Archivo -->
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <!-- CORRECCIÓN: Colspan actualizado a 5 (Se eliminó la columna Archivo) -->
+                        <td colspan="5" class="text-center text-muted">No hay datos de fuentes disponibles.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Se elimina completamente la Sección de Documentación Adicional -->
 </div>
-
-<style>
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    background-color: #111827;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #374151;
-}
-
-th {
-    background-color: #1f2937;
-    color: #d1d5db;
-}
-
-td {
-    color: #f9fafb;
-}
-
-.latlon {
-    background-color: #374151;
-    padding: 4px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.9em;
-}
-</style>
 {% endblock %}

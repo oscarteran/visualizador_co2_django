@@ -579,3 +579,67 @@ footer {
     border-radius: 50%;
     margin-right: 8px;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #1f2937;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #374151;
+}
+
+th {
+    background-color: #111827;
+    color: #9ca3af;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+
+td {
+    color: #f3f4f6;
+}
+
+/* Estilos para las Coordenadas, ya aplicados: */
+.latlon {
+    background-color: transparent; 
+    padding: 0;
+    color: #9ca3af;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9em; 
+    margin-right: 5px;
+}
+
+/* Estilos para el Botón, ya aplicados: */
+.download-button {
+    background-color: #10b981;
+    color: #1f2937;
+    padding: 12px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05em;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+
+.download-button:hover {
+    background-color: #059669;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.download-button:active {
+    background-color: #047857;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
