@@ -27,7 +27,7 @@ WORKDIR /app
 # Copia los archivos de tu proyecto (solo requirements.txt primero para aprovechar el cache)
 COPY requirements.txt .
 
-# Instala las dependencias de Python
+# Instala las dependencias de Python (Asegúrate que Gunicorn esté aquí)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia el resto del código
@@ -52,5 +52,7 @@ ENV PORT 8080
 # Establece el entrypoint por defecto
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-# Comando para correr el servidor (desarrollo)
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+# COMANDO CORREGIDO: Usar Gunicorn con workers para producción en Cloud Run
+# Gunicorn utiliza la variable de entorno $PORT (8080) para escuchar.
+# Se recomienda usar 2 * CPU_cores + 1. Aquí usamos 2 workers como ejemplo.
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "9000"]
