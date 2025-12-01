@@ -76,24 +76,38 @@ def generar_mapa_html(file_path: str, tipo_mapa: str = "División Política"):
 def generar_mapas_individuales(ubicacion: str, tipo_mapa: str):
     
     def asignar_color_emision(valor_emision):
+        # if valor_emision < 0:
+        #     return 'lightgreen'
+        # elif valor_emision < 100:
+        #     return 'green'
+        # elif valor_emision < 300:
+        #     return 'lightblue'
+        # elif valor_emision < 600:
+        #     return 'cadetblue'
+        # elif valor_emision < 1000:
+        #     return 'blue'
+        # elif valor_emision < 5000:
+        #     return 'orange'
+        # elif valor_emision < 50:
+        #     return 'darkred'
+        # elif valor_emision < 75:
+        #     return 'red'
+        # elif valor_emision < 100:
+        #     return 'darkpurple'
+        # else:
+        #     return 'black' # El nivel más alto
         if valor_emision < 0:
             return 'lightgreen'
-        elif valor_emision < 3:
-            return 'green'
-        elif valor_emision < 5:
-            return 'lightblue'
-        elif valor_emision < 10:
-            return 'cadetblue'
-        elif valor_emision < 20:
-            return 'blue'
-        elif valor_emision < 30:
-            return 'orange'
-        elif valor_emision < 50:
-            return 'darkred'
-        elif valor_emision < 75:
-            return 'red'
         elif valor_emision < 100:
-            return 'darkpurple'
+            return 'lightblue'
+        elif valor_emision < 300:
+            return 'cadetblue'
+        elif valor_emision < 600:
+            return 'blue'
+        elif valor_emision < 1000:
+            return 'orange'
+        elif valor_emision < 5000:
+            return 'red'
         else:
             return 'black' # El nivel más alto
     
