@@ -13,6 +13,10 @@ while ! nc -z $DB_HOST $DB_PORT; do
 done
 
 echo "PostgreSQL started!"
-]
+
+# Aplicar migraciones antes de iniciar el servidor
+echo "Applying database migrations..."
+python manage.py makemigrations
+python manage.py migrate
 # Ejecutar el comando principal (el que estaba en docker-compose)
 exec "$@"

@@ -1,6 +1,56 @@
 from django.db import models
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis.geos import Point
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+# =============================================
+# PERFIL DE USUARIO
+# =============================================
+
+class UserProfile(models.Model):
+    """
+    Perfil extendido del usuario, enlazado 1:1 con el modelo User de Django.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    institution = models.CharField(max_length=200, blank=True, default='', verbose_name='Institución')
+    role = models.CharField(max_length=100, blank=True, default='', verbose_name='Rol / Cargo')
+    bio = models.TextField(blank=True, default='', verbose_name='Biografía')
+
+    class Meta:
+        verbose_name = 'Perfil de Usuario'
+        verbose_name_plural = 'Perfiles de Usuarios'
+
+    def __str__(self):
+        return f'Perfil de {self.user.username}'
+
+    @property
+    def avatar_initial(self):
+        """Retorna la inicial del nombre o del username para el avatar."""
+        if self.user.first_name:
+            return self.user.first_name[0].upper()
+        return self.user.username[0].upper()
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Crea un perfil automáticamente al registrar un usuario nuevo."""
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """Guarda el perfil al guardar el usuario."""
+    if hasattr(instance, 'profile'):
+        instance.profile.save()
+
+
+# =============================================
+# MODELOS DE DATOS GEO
+# =============================================
 
 # Create your models here.
 
