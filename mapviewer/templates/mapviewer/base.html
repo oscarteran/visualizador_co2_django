@@ -51,36 +51,6 @@
                     href="/ayuda_y_contacto/">Ayuda y Contacto</a>
             </div>
 
-            <!-- Sección de Usuario en Sidebar -->
-            <div class="sidebar-user-section mt-4 pt-3 border-top"
-                style="border-color: var(--border-color) !important;">
-                {% if user.is_authenticated %}
-                <div class="d-flex align-items-center mb-2 px-3">
-                    <div class="user-avatar d-flex align-items-center justify-content-center me-3"
-                        style="width: 35px; height: 35px; background-color: var(--accent); color: var(--text-on-accent); border-radius: 50%; font-weight: 600; font-size: 1rem;">
-                        {{ user.profile.avatar_initial|default:user.username.0|upper }}
-                    </div>
-                    <div class="user-info w-100" style="overflow: hidden;">
-                        <p class="mb-0 text-truncate"
-                            style="color: var(--text-primary); font-size: 0.9rem; font-weight: 600;">
-                            {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
-                        </p>
-                        <a href="{% url 'logout' %}" class="text-decoration-none"
-                            style="color: #dc3545; font-size: 0.8rem;"><i class="fas fa-sign-out-alt me-1"></i>Salir</a>
-                    </div>
-                </div>
-                {% else %}
-                <div class="d-flex flex-column px-3">
-                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-sm mb-2"
-                        style="background-color: var(--accent); color: var(--text-on-accent); border-radius: 6px;"><i
-                            class="fas fa-sign-in-alt me-2"></i>Ingresar</a>
-                    <a href="{% url 'register' %}" class="btn btn-sm"
-                        style="border: 1px solid var(--accent); color: var(--accent); border-radius: 6px;"><i
-                            class="fas fa-user-plus me-2"></i>Registrarse</a>
-                </div>
-                {% endif %}
-            </div>
-
             <!-- Botón Toggle de Tema (Claro/Oscuro) -->
             <div class="theme-toggle-wrapper">
                 <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="Cambiar tema">

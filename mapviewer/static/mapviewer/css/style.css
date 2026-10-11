@@ -317,7 +317,7 @@ body {
 }
 
 /* =============================================
-   LOGOS DE ESQUINA (SOLO INICIO)
+   LOGOS INSTITUCIONALES (INICIO Y FUENTES)
    ============================================= */
 
 .logos-container {
@@ -406,29 +406,6 @@ p,
 }
 
 /* =============================================
-   TARJETAS (CARDS) — PÁGINA INICIO
-   ============================================= */
-
-.app-card-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-.app-card {
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
-    background-color: var(--bg-card);
-}
-
-.app-card:hover {
-    box-shadow: var(--shadow-card-hover);
-    transform: translateY(-3px);
-    border-color: var(--accent);
-}
-
-/* =============================================
    PÁGINA INICIO — CONTENEDOR FLEX
    ============================================= */
 
@@ -452,12 +429,6 @@ p,
 
 .text-block {
     text-align: left;
-}
-
-.card-row {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 100%;
 }
 
 /* =============================================
@@ -932,10 +903,6 @@ tr:hover td {
     filter: brightness(1.2);
 }
 
-[data-theme="dark"] .logo-corner {
-    filter: brightness(1.3);
-}
-
 /* =============================================
    SECTION TITLE (Fuentes de información)
    ============================================= */
@@ -1012,10 +979,6 @@ tr:hover td {
         font-size: 1.6rem;
     }
 
-    .logo-corner {
-        height: 50px;
-    }
-
     .content-flex-container {
         justify-content: flex-start;
         padding-top: 10px;
@@ -1033,18 +996,5 @@ tr:hover td {
 
     .map-title {
         font-size: 1rem;
-    }
-
-    .logo-corner {
-        height: 40px;
-        top: 15px;
-    }
-
-    .logo-top-left {
-        left: 15px;
-    }
-
-    .logo-top-right {
-        right: 15px;
     }
 }

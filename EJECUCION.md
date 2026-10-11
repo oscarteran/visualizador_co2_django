@@ -1,198 +1,57 @@
 # 🚀 Guía de Ejecución - Visualizador CO2 Django
 
-## Requisitos Previos
+La aplicación **no usa base de datos**: los mapas y tablas se generan a partir de los archivos CSV/JSON en `data/processed/`. Solo necesitas Python (o Docker).
 
-- Docker Desktop instalado y funcionando
-- Docker Compose v2.0+
-- Git (para clonar el repositorio)
+## 🛠️ Ejecución local (recomendada)
 
-## Configuración de la Base de Datos
-
-Este proyecto utiliza **PostgreSQL** como base de datos principal, configurado con Docker Compose.
-
-### Características de la Base de Datos:
-- **Motor**: PostgreSQL 15
-- **Nombre**: `co2_visualizador`
-- **Usuario**: `postgres`
-- **Contraseña**: `postgres123`
-- **Puerto**: `5432`
-- **Persistencia**: Los datos se mantienen entre reinicios
-
-## 🐳 Ejecución con Docker (Recomendado)
-
-### 1. Clonar el Repositorio
+### 1. Crear y activar el entorno virtual
 ```bash
-git clone <url-del-repositorio>
-cd visualizador_co2_django
+python -m venv venv
+
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
 ```
 
-### 2. Levantar los Servicios
+### 2. Instalar dependencias
 ```bash
-# Construir y levantar todos los servicios (PostgreSQL + Django)
-docker-compose up --build -d
+pip install -r requirements.txt
 ```
 
-### 3. Ejecutar Migraciones
-```bash
-# Crear las tablas en PostgreSQL
-docker-compose exec web python manage.py migrate
-```
-
-### 4. Crear Superusuario (Opcional)
-```bash
-# Crear usuario administrador para acceder al panel de admin
-docker-compose exec web python manage.py createsuperuser
-```
-
-### 5. Acceder a la Aplicación
-- **Aplicación Web**: http://localhost:8000
-- **Panel de Admin**: http://localhost:8000/admin
-- **Base de Datos**: localhost:5432
-
-## 🔧 Comandos Útiles
-
-### Gestión de Servicios
-```bash
-# Ver estado de los servicios
-docker-compose ps
-
-# Ver logs en tiempo real
-docker-compose logs -f
-
-# Ver logs de un servicio específico
-docker-compose logs -f web
-docker-compose logs -f db
-
-# Detener todos los servicios
-docker-compose down
-
-# Detener y eliminar volúmenes (⚠️ CUIDADO: Elimina datos)
-docker-compose down -v
-```
-
-### Comandos Django
-```bash
-# Ejecutar comandos Django dentro del contenedor
-docker-compose exec web python manage.py <comando>
-
-# Ejemplos:
-docker-compose exec web python manage.py shell
-docker-compose exec web python manage.py collectstatic
-docker-compose exec web python manage.py makemigrations
-```
-
-### Acceso a la Base de Datos
-```bash
-# Conectar directamente a PostgreSQL
-docker-compose exec db psql -U postgres -d co2_visualizador
-
-# O desde tu máquina local (si tienes psql instalado)
-psql -h localhost -p 5432 -U postgres -d co2_visualizador
-```
-
-## 🛠️ Desarrollo Local (Sin Docker)
-
-### 1. Instalar PostgreSQL
-- Instalar PostgreSQL 15+ en tu sistema
-- Crear base de datos: `co2_visualizador`
-- Crear usuario: `postgres` con contraseña: `postgres123`
-
-### 2. Configurar Variables de Entorno
-Crear archivo `.env` en la raíz del proyecto:
+### 3. (Opcional) Archivo `.env`
 ```env
-DB_NAME=co2_visualizador
-DB_USER=postgres
-DB_PASSWORD=postgres123
-DB_HOST=localhost
-DB_PORT=5432
 DEBUG=True
 SECRET_KEY=tu-secret-key-aqui
 ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
 ```
 
-### 3. Instalar Dependencias
+### 4. Levantar el servidor
 ```bash
-# Crear entorno virtual
-python -m venv venv
-
-# Activar entorno virtual
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Instalar dependencias
-pip install -r requirements.txt
-```
-
-### 4. Ejecutar la Aplicación
-```bash
-# Ejecutar migraciones
-python manage.py migrate
-
-# Crear superusuario
-python manage.py createsuperuser
-
-# Levantar servidor
 python manage.py runserver
 ```
+Aplicación: http://localhost:8000
 
-## 📊 Estructura de la Base de Datos
+## 🐳 Ejecución con Docker
 
-La aplicación utiliza las siguientes tablas principales:
-- `auth_user` - Usuarios del sistema
-- `auth_group` - Grupos de usuarios
-- `django_session` - Sesiones de usuario
-- `django_content_type` - Tipos de contenido
-- `django_migrations` - Historial de migraciones
-
-## 🔍 Solución de Problemas
-
-### Error de Conexión a la Base de Datos
 ```bash
-# Verificar que PostgreSQL esté funcionando
-docker-compose logs db
-
-# Reiniciar solo el servicio de base de datos
-docker-compose restart db
+docker-compose up --build -d   # construir y levantar
+docker-compose logs -f web     # ver logs
+docker-compose down            # detener
 ```
+Aplicación: http://localhost:8000
 
-### Error de Migraciones
-```bash
-# Verificar estado de migraciones
-docker-compose exec web python manage.py showmigrations
+## 📊 Datos
 
-# Aplicar migraciones específicas
-docker-compose exec web python manage.py migrate <app_name>
-```
+| Página | Archivo que lee |
+|---|---|
+| `/inventario_nacional/` | `data/processed/grafico_nacional.json` |
+| `/ficha_tecnica/` | `data/processed/P_<Ubicacion>LatLon.csv` |
+| `/fuentes_info/` | tabla definida en `mapviewer/utils/tablas.py` |
 
-### Limpiar Todo y Empezar de Nuevo
-```bash
-# Detener servicios
-docker-compose down
+Para actualizar los mapas basta con reemplazar estos archivos; no hay migraciones ni carga de datos.
 
-# Eliminar volúmenes y contenedores
-docker-compose down -v --remove-orphans
+## 📝 Notas
 
-# Eliminar imágenes
-docker-compose down --rmi all
-
-# Volver a construir
-docker-compose up --build -d
-```
-
-## 📝 Notas Importantes
-
-- Los datos de PostgreSQL se almacenan en un volumen persistente
-- El puerto 8000 debe estar libre para la aplicación web
-- El puerto 5432 debe estar libre para PostgreSQL
-- Para producción, cambiar las credenciales por defecto
-- El archivo `.env` no debe subirse al repositorio (está en `.gitignore`)
-
-## 🆘 Soporte
-
-Si encuentras problemas:
-1. Verificar que Docker esté funcionando: `docker --version`
-2. Revisar logs: `docker-compose logs`
-3. Verificar puertos disponibles: `netstat -an | findstr :8000`
-4. Reiniciar Docker Desktop si es necesario
+- El puerto 8000 debe estar libre.
+- Para producción, define `SECRET_KEY` y `DEBUG=False`.
