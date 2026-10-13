@@ -4,55 +4,30 @@
 {% block title %}Fuentes de información{% endblock %}
 
 {% block content %}
-<div class="main-content-body">
+{% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Fuentes de información y catálogo de datos" lead="Esta sección compila el catálogo completo de recursos bibliográficos, metodológicos y la información georreferenciada utilizada para la construcción del Inventario Nacional de Emisiones de CO₂. La tabla proporciona una vista detallada de las localizaciones y el contexto asociado a cada punto de muestreo." %}
 
-    {% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Fuentes de información y catálogo de datos" lead="Esta sección compila el catálogo completo de recursos bibliográficos, metodológicos y la información georreferenciada utilizada para la construcción del Inventario Nacional de Emisiones de CO₂. La tabla proporciona una vista detallada de las localizaciones y el contexto asociado a cada punto de muestreo." %}
+<section class="page-section" aria-labelledby="titulo-catalogo">
+    <h2 id="titulo-catalogo">Catálogo de zonas</h2>
+    {% include "mapviewer/components/data_table.html" with columns=catalogo_columnas rows=catalogo_filas caption="Fuente: Instituto de Geofísica, UNAM. Coordenadas en WGS84." %}
+</section>
 
-    <!-- CONTENEDOR DE LA TABLA (Tarjeta Flotante) -->
-    <div class="data-table-card">
-        <h3 class="table-subtitle">Catálogo de Datos Georreferenciados</h3>
-        
-        <!-- Tabla de Datos -->
-        <div class="table-responsive">
-            <table class="table modern-table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Ubicación (Latitud)</th>
-                        <th>Ubicación (Longitud)</th>
-                        <th>Estado</th>
-                        <th>Descripción</th>
-                        <!-- Se elimina la columna 'Archivo' -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Usamos 'tabla_info' y las claves del diccionario tal como estaban antes. -->
-                    {% for fila in tabla_info %}
-                    <tr>
-                        <td>{{ fila.Nombre }}</td>
-                        <!-- Muestra la Latitud (Ubicacion.0) -->
-                        <td class="coords-data">
-                            <span class="latlon">{{ fila.Ubicacion.0 }}</span>
-                        </td>
-                         <!-- Muestra la Longitud (Ubicacion.1) -->
-                         <td class="coords-data">
-                            <span class="latlon">{{ fila.Ubicacion.1 }}</span>
-                        </td>
-                        <td>{{ fila.Estado }}</td>
-                        <td>{{ fila.Descripción }}</td>
-                        <!-- Se elimina la celda del Archivo -->
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <!-- CORRECCIÓN: Colspan actualizado a 5 (Se eliminó la columna Archivo) -->
-                        <td colspan="5" class="text-center text-muted">No hay datos de fuentes disponibles.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <!-- Se elimina completamente la Sección de Documentación Adicional -->
-</div>
+<section class="page-section" aria-labelledby="titulo-origen">
+    <h2 id="titulo-origen">Origen de los datos</h2>
+    <p class="section-intro">
+        Origen y fecha de medición de cada zona, tal como aparecen en el catálogo original
+        (<span class="dx-data">data/raw/Catalogo_de_datos_CO2_Jacome_Paz_2020.xlsx</span>).
+    </p>
+    {% include "mapviewer/components/data_table.html" with columns=fuentes_columnas rows=fuentes_filas caption="Valores sin corregir. «Sin registrar»: el catálogo no indica el dato." %}
+</section>
+
+<section class="page-section reading-container" aria-labelledby="titulo-bibliografia">
+    <h2 id="titulo-bibliografia">Bibliografía</h2>
+    <ul class="dx-biblio">
+        <li>
+            Jácome Paz (2020). <em>Catálogo de datos de CO₂</em> [hoja de cálculo
+            <span class="dx-data">Catalogo_de_datos_CO2_Jacome_Paz_2020.xlsx</span>].
+            <span class="dx-muted">Referencia bibliográfica completa por confirmar.</span>
+        </li>
+    </ul>
+</section>
 {% endblock %}

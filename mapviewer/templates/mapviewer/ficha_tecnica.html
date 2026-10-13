@@ -6,26 +6,27 @@
 {% block head_extra %}{{ mapa.header|safe }}{% endblock %}
 
 {% block content %}
-<div class="map-view-container">
+<!-- Encabezado con acciones: selector de zona y descarga -->
+<div class="page-head-actions">
+    {% include "mapviewer/components/page_header.html" with eyebrow=eyebrow title=ubicacion_seleccionada lead=lead rule=False %}
 
-    {% include "mapviewer/components/page_header.html" with eyebrow="Ficha técnica" title=ubicacion_seleccionada lead="Este mapa despliega la localización de las muestras tomadas, así como el valor medido." rule=False %}
+    <form id="map-filter-form-ficha" method="GET" class="page-actions">
+        <input type="hidden" name="tipo_mapa" value="{{ capa_inicial }}" data-map-layer-input>
+        <div class="dx-field">
+            <label for="ubicacion_ficha" class="dx-label">Zona</label>
+            <select name="ubicacion" id="ubicacion_ficha" class="dx-select">
+                {% for sitio in opciones_ubicacion %}
+                    <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <a class="dx-btn dx-btn-secondary" href="{{ url_descarga }}" download>{% icon "download" 16 %}Descargar CSV</a>
+    </form>
+</div>
 
-    <!-- Selector de zona (recarga con ?ubicacion=; conserva la capa base actual) -->
-    <div class="map-control-bar">
-        <form id="map-filter-form-ficha" method="GET" class="filter-toolbelt">
-            <input type="hidden" name="tipo_mapa" value="{{ capa_inicial }}" data-map-layer-input>
-            <div class="map-filter-group">
-                <label for="ubicacion_ficha" class="form-label small-label">Zona</label>
-                <select name="ubicacion" id="ubicacion_ficha" class="form-select custom-select">
-                    {% for sitio in opciones_ubicacion %}
-                        <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </form>
-    </div>
-
-    <div class="map-container-wrapper">
+<!-- Mapa (1fr) + panel de datos (380px) -->
+<div class="ficha-grid">
+    <div class="map-container-wrapper ficha-map">
         <div class="map-content-area">
             {{ mapa.html|safe }}
         </div>
@@ -38,7 +39,32 @@
         </div>
     </div>
 
+    <aside class="ficha-panel" aria-label="Resumen de la zona">
+        <div class="ficha-stats">
+            {% include "mapviewer/components/stat_tile.html" with label="Puntos" value=stats.n compact=True %}
+            {% include "mapviewer/components/stat_tile.html" with label="Mediana" value=stats_mediana compact=True %}
+            {% include "mapviewer/components/stat_tile.html" with label="Máximo" value=stats_maximo compact=True %}
+        </div>
+
+        <div class="dx-stat">
+            <div class="dx-eyebrow dx-muted">Distribución por clase</div>
+            {% histogram valores hist_caption %}
+        </div>
+
+        <div class="dx-stat dx-note">
+            <div class="dx-eyebrow">Nota metodológica</div>
+            <p class="dx-caption">
+                Flujo medido con {{ metodo|lower }}. Valores en {{ unidad }}; unidad y método por confirmar.
+                Origen de los datos: {{ fuente.origen }}. Fecha de medición: {{ fuente.fecha }}.
+            </p>
+        </div>
+    </aside>
 </div>
+
+<!-- Mediciones de la zona -->
+<section class="page-section" aria-label="Mediciones de {{ ubicacion_seleccionada }}">
+    {% include "mapviewer/components/data_table.html" with columns=columnas rows=filas caption=tabla_caption %}
+</section>
 
 {{ mapa.script|safe }}
 {{ mapa.config|json_script:"map-config" }}

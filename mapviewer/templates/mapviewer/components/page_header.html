@@ -2,7 +2,8 @@
 PageHeader — eyebrow + título + lead + filete oro.
 Uso: {% include "mapviewer/components/page_header.html" with eyebrow="…" title="…" lead="…" rule=False %}
 rule=False omite el filete (encabezado compacto de las páginas de mapa).
-{% endcomment %}<header class="dx-header{% if class %} {{ class }}{% endif %}">
+display=True usa el estilo «display» en el título (portada).
+{% endcomment %}<header class="dx-header{% if display %} is-display{% endif %}{% if class %} {{ class }}{% endif %}">
     {% if eyebrow %}<div class="dx-eyebrow">{{ eyebrow }}</div>{% endif %}
     <h1 class="dx-h1">{{ title }}</h1>
     {% if lead %}<p class="dx-lead">{{ lead }}</p>{% endif %}

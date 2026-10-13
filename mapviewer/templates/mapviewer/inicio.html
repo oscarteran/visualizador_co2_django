@@ -1,7 +1,9 @@
 {% extends 'mapviewer/base.html' %}
-{% load static %}
+{% load static difusco %}
 
 {% block title %}Inicio{% endblock %}
+
+{% block head_extra %}{{ mapa.header|safe }}{% endblock %}
 
 {% block content %}
 <!-- Escudos institucionales: juntos, a 40px, solo en portada y pie -->
@@ -10,10 +12,28 @@
     <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logotipo del Instituto de Geofísica, UNAM" class="dx-logo">
 </div>
 
-{% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Catálogo de Emisiones Naturales Difusas de CO₂" lead="Un inventario georreferenciado de la desgasificación difusa en zonas geotérmicas y volcánicas de México." %}
+{% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Catálogo de Emisiones Naturales Difusas de CO₂" lead="Un inventario georreferenciado de la desgasificación difusa en zonas geotérmicas y volcánicas de México." display=True %}
 
-<div class="reading-container">
+<!-- Cifras del catálogo (calculadas en la vista a partir de data/processed/) -->
+<div class="stat-row">
+    {% include "mapviewer/components/stat_tile.html" with label="Zonas" value=resumen.zonas note="Sistemas geotérmicos y volcánicos." %}
+    {% include "mapviewer/components/stat_tile.html" with label="Puntos de medición" value=resumen.n note="Mediciones de flujo de CO₂ del suelo." %}
+    {% include "mapviewer/components/stat_tile.html" with label="Rango de flujo" value=rango_flujo unit=unidad note="Mínimo y máximo del catálogo." %}
+</div>
 
+<!-- Mapa testigo: estático, invita a explorar el Inventario Nacional -->
+<section class="page-section" aria-label="Mapa de las zonas de medición">
+    <div class="map-container-wrapper testigo-map" role="img" aria-label="Mapa de México con las {{ resumen.zonas }} zonas de medición del catálogo">
+        <div class="map-content-area">
+            {{ mapa.html|safe }}
+        </div>
+    </div>
+    <div class="page-actions-row">
+        <a class="dx-btn dx-btn-primary" href="{% url 'inventario_nacional' %}">Explorar el mapa{% icon "arrow" 16 %}</a>
+    </div>
+</section>
+
+<section class="page-section reading-container">
     <p>
         Este proyecto es un esfuerzo colectivo por recolectar datos y generar datos geolocalizados
         con el fin de generar un inventario nacional de emisiones de CO₂. A través de la barra de navegación lateral
@@ -43,5 +63,8 @@
         promover tecnologías limpias y proteger a las poblaciones vulnerables, optimizando la inversión y fomentando
         un desarrollo económico resiliente y bajo en carbono.
     </p>
-</div>
+</section>
+
+{{ mapa.script|safe }}
+{{ mapa.config|json_script:"map-config" }}
 {% endblock %}

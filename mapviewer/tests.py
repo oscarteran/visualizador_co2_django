@@ -138,7 +138,7 @@ class PageTests(SimpleTestCase):
                 self.assertEqual(html.count('aria-current="page"'), 1)
                 self.assertIn(f'href="{url}" class="dx-nav is-active" aria-current="page"', html)
                 self.assertIn('class="dx-footer"', html)
-                self.assertNotIn("Catalogo", html)
+                self.assertNotIn("Catalogo ", html)  # etiqueta sin acento; el archivo fuente es «Catalogo_…»
                 self.assertNotIn("var(--accent)", html)
 
 
@@ -198,3 +198,54 @@ class MapTests(SimpleTestCase):
         self.assertIn('data-action="measure"', ficha)
         inventario = self.client.get("/inventario_nacional/").content.decode()
         self.assertNotIn('data-action="measure"', inventario)
+
+
+class PaginasFase4Tests(SimpleTestCase):
+
+    def test_fuentes_coinciden_con_csv(self):
+        """La correspondencia zona → catálogo original da el mismo nº de puntos que el CSV."""
+        from .utils import mapas
+        from .utils.tablas import fuentes_por_zona
+        fuentes = fuentes_por_zona()
+        for zona in mapas.ARCHIVOS_ZONA:
+            self.assertEqual(fuentes[zona]["puntos"], len(mapas.leer_puntos(zona)), zona)
+
+    def test_descargar_csv(self):
+        from .utils import mapas
+        r = self.client.get("/ficha_tecnica/descargar/?ubicacion=Alcaparrosa")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('filename="difusco2_Alcaparrosa.csv"', r["Content-Disposition"])
+        original = (mapas.DATA_DIR / "P_AlcaparrosaLatLon.csv").read_bytes()
+        self.assertEqual(b"".join(r.streaming_content), original)            # sin modificar
+
+    def test_ficha_panel_y_tabla(self):
+        html = self.client.get("/ficha_tecnica/?ubicacion=Alcaparrosa").content.decode()
+        self.assertIn("Flujo de CO₂ del suelo en 23 puntos de medición.", html)
+        self.assertIn('class="dx-stat is-compact"', html)
+        self.assertIn("8.54", html)                                         # mediana
+        self.assertIn("5 190", html)                                   # máximo
+        self.assertIn("Histograma de flujo por clase: 1, 11, 6, 3, 2", html)
+        self.assertIn("dx-note", html)
+        self.assertEqual(html.count("<tr data-point="), 23)
+        self.assertIn("−98.14030", html)                               # signo menos tipográfico
+        self.assertIn('href="/ficha_tecnica/descargar/?ubicacion=Alcaparrosa"', html)
+
+    def test_inicio(self):
+        html = self.client.get("/").content.decode()
+        self.assertIn("is-display", html)
+        self.assertEqual(html.count('class="dx-stat"'), 3)
+        self.assertIn(">750<", html.replace(" ", ""))
+        self.assertIn('class="dx-btn dx-btn-primary"', html)
+        self.assertIn('"kind": "testigo"', html)
+
+    def test_inventario_zonelist(self):
+        html = self.client.get("/inventario_nacional/").content.decode()
+        self.assertIn('class="dx-float zl-panel"', html)
+        self.assertEqual(html.count("dx-zl-row"), 7)
+        self.assertIn('href="/ficha_tecnica/?ubicacion=Escalera"', html)
+
+    def test_sin_font_awesome(self):
+        for url in ("/", "/acerca_de/", "/ayuda_y_contacto/", "/fuentes_info/"):
+            html = self.client.get(url).content.decode()
+            self.assertNotIn("font-awesome", html)
+            self.assertNotIn('class="fas', html)

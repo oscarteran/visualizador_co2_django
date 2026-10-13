@@ -17,6 +17,12 @@
 
         <!-- Controles del mapa: map_controls.js los coloca como controles de Leaflet -->
         <div class="dx-map-controls-src" hidden>
+            <div data-map-control="topleft">
+                <nav class="dx-float zl-panel" aria-label="Zonas de medición">
+                    <div class="dx-eyebrow dx-muted zl-title">{{ zonas|length }} zonas</div>
+                    {% include "mapviewer/components/zone_list.html" with zones=zonas %}
+                </nav>
+            </div>
             <div data-map-control="topright">{% include "mapviewer/components/layer_switcher.html" with layers=capas value=capa_inicial %}</div>
             <div data-map-control="topright">{% include "mapviewer/components/map_controls.html" with fit_label="Ver todo el país" extra=False %}</div>
             <div data-map-control="bottomright">{% flux_legend title="Flujo mediano por zona" nodata=False %}</div>

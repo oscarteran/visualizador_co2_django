@@ -1,74 +1,43 @@
 {% extends 'mapviewer/base.html' %}
+{% load difusco %}
 
 {% block title %}Ayuda y contacto{% endblock %}
 
-{% block head_extra %}
-<!-- Font Awesome solo para los iconos de contenido de esta página (se sustituyen en la Fase 4) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-{% endblock %}
-
 {% block content %}
-<div class="main-content-body">
+{% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Ayuda y contacto" lead="Para preguntas sobre los datos, la metodología o para reportar un error, se puede escribir o llamar al equipo del catálogo." %}
 
-    {% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Ayuda y contacto" %}
+<div class="contact-grid">
 
-    <div class="reading-container">
+    <!-- Información de contacto -->
+    <section class="dx-card" aria-labelledby="titulo-contacto">
+        <h2 id="titulo-contacto" class="dx-eyebrow dx-muted">Información de contacto</h2>
+        <ul class="contact-list">
+            <li>{% icon "mail" 20 "contact-icon" %}<span><strong>Correo de soporte:</strong> contacto.ayuda@unam.mx</span></li>
+            <li>{% icon "phone" 20 "contact-icon" %}<span><strong>Teléfono:</strong> +52 (55) 5555-5555 (Ext. 81000)</span></li>
+            <li>{% icon "map-pin" 20 "contact-icon" %}<span><strong>Dirección:</strong> Instituto de Geofísica, Circuito de la Investigación Científica, Coyoacán, CDMX.</span></li>
+        </ul>
+    </section>
 
-        <div class="row">
-
-            <!-- Columna de Información de Contacto -->
-            <div class="col-md-6 mb-4">
-                <div class="card p-4 shadow-sm info-card h-100">
-                    <h2 class="dx-eyebrow dx-muted">Información de contacto</h2>
-                    <p class="mb-4">Si tienes preguntas sobre los datos, la metodología o reportar un error, contáctanos
-                        a través de los siguientes canales:</p>
-
-                    <ul class="list-unstyled contact-list">
-                        <li class="mb-3">
-                            <i class="fas fa-envelope me-3 contact-icon" aria-hidden="true"></i>
-                            <strong>Email de Soporte:</strong> contacto.ayuda@unam.mx
-                        </li>
-                        <li class="mb-3">
-                            <i class="fas fa-phone me-3 contact-icon" aria-hidden="true"></i>
-                            <strong>Teléfono:</strong> +52 (55) 5555-5555 (Ext. 81000)
-                        </li>
-                        <li class="mb-3">
-                            <i class="fas fa-map-marker-alt me-3 contact-icon" aria-hidden="true"></i>
-                            <strong>Dirección:</strong> Instituto de Geofísica, Circuito de la Investigación Científica,
-                            Coyoacán, CDMX.
-                        </li>
-                    </ul>
-                </div>
+    <!-- Formulario de contacto (todavía sin envío en el servidor) -->
+    <section class="dx-card" aria-labelledby="titulo-mensaje">
+        <h2 id="titulo-mensaje" class="dx-eyebrow dx-muted">Enviar un mensaje</h2>
+        <form class="contact-form">
+            <div class="dx-field">
+                <label for="name" class="dx-label">Nombre</label>
+                <input type="text" class="dx-input" id="name" autocomplete="name" required>
             </div>
-
-            <!-- Columna de Formulario de Contacto (Simulado) -->
-            <div class="col-md-6 mb-4">
-                <div class="card p-4 shadow-sm info-card h-100">
-                    <h2 class="dx-eyebrow dx-muted">Envíanos un mensaje</h2>
-                    <!-- Formulario simulado - NOTA: Requeriría lógica Django/backend real para funcionar -->
-                    <form>
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Tu Nombre</label>
-                            <input type="text" class="form-control" id="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Tu Email</label>
-                            <input type="email" class="form-control" id="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Mensaje o Consulta</label>
-                            <textarea class="form-control" id="message" rows="4" required></textarea>
-                        </div>
-                        <button type="submit" class="btn login-button w-100 mt-2">
-                            <i class="fas fa-paper-plane me-2" aria-hidden="true"></i> Enviar Consulta
-                        </button>
-                    </form>
-                </div>
+            <div class="dx-field">
+                <label for="email" class="dx-label">Correo electrónico</label>
+                <input type="email" class="dx-input" id="email" autocomplete="email" required>
             </div>
+            <div class="dx-field">
+                <label for="message" class="dx-label">Mensaje o consulta</label>
+                <textarea class="dx-input" id="message" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="dx-btn dx-btn-primary contact-submit">{% icon "send" 16 %}Enviar consulta</button>
+            <p class="dx-caption">El formulario todavía no envía mensajes; mientras tanto, se puede usar el correo de soporte.</p>
+        </form>
+    </section>
 
-        </div>
-
-    </div>
 </div>
-
 {% endblock %}

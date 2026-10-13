@@ -4,7 +4,7 @@ Uso: {% include "mapviewer/components/zone_list.html" with zones=zonas active="A
 Cada zona: {"name", "state", "cls" (clase mediana 1–5), "n" (nº de puntos o None), "href"}.
 {% endcomment %}<ul class="dx-zl{% if class %} {{ class }}{% endif %}" role="list">
     {% for z in zones %}<li>
-        <a href="{{ z.href|default:'#' }}" class="dx-zl-row{% if z.name == active %} is-on{% endif %}"{% if z.name == active %} aria-current="true"{% endif %}>
+        <a href="{{ z.href|default:'#' }}" class="dx-zl-row{% if z.name == active %} is-on{% endif %}"{% if z.name == active %} aria-current="true"{% endif %} data-zone="{{ z.name }}">
             <span class="dx-dot dx-flux-{{ z.cls|default:3 }}" aria-hidden="true"></span>
             <span class="dx-zl-main"><span class="dx-zl-name">{{ z.name }}</span><span class="dx-zl-sub">{{ z.state }}</span></span>
             <span class="dx-zl-n">{% if z.n is not None %}{{ z.n }} pts{% endif %}</span>

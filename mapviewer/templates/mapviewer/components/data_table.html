@@ -5,12 +5,13 @@ columns: [{"key", "label", "numeric": bool, "kind": None | "flux" | "flux_class"
   flux       → valor con format_flux (5 190, 90.7, 8.54)
   flux_class → Badge con el punto de la clase del valor
   coord      → 5 decimales y signo menos tipográfico
+Si una fila trae "id", el <tr> lleva data-point (enlace fila ↔ marcador del mapa).
 {% endcomment %}{% load difusco %}<div class="dx-table-wrap{% if class %} {{ class }}{% endif %}">
     <table class="dx-table">
         {% if caption %}<caption>{{ caption }}</caption>{% endif %}
         <thead><tr>{% for c in columns %}<th{% if c.numeric %} class="is-num"{% endif %} scope="col">{{ c.label }}</th>{% endfor %}</tr></thead>
         <tbody>
-            {% for r in rows %}<tr>{% for c in columns %}{% with v=r|get_item:c.key %}<td{% if c.numeric %} class="is-num"{% endif %}>{% if c.kind == "flux" %}{{ v|format_flux }}{% elif c.kind == "flux_class" %}{% with fc=v|flux_class %}{% include "mapviewer/components/badge.html" with flux=fc text=fc|flux_name tone=None class=None %}{% endwith %}{% elif c.kind == "coord" %}{{ v|format_coord }}{% else %}{{ v }}{% endif %}</td>{% endwith %}{% endfor %}</tr>{% endfor %}
+            {% for r in rows %}<tr{% if r.id %} data-point="{{ r.id }}"{% endif %}>{% for c in columns %}{% with v=r|get_item:c.key %}<td{% if c.numeric %} class="is-num"{% endif %}>{% if c.kind == "flux" %}{{ v|format_flux }}{% elif c.kind == "flux_class" %}{% with fc=v|flux_class %}{% include "mapviewer/components/badge.html" with flux=fc text=fc|flux_name tone=None class=None %}{% endwith %}{% elif c.kind == "coord" %}{{ v|format_coord }}{% else %}{{ v }}{% endif %}</td>{% endwith %}{% endfor %}</tr>{% endfor %}
         </tbody>
     </table>
 </div>

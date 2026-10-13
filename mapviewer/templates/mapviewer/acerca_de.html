@@ -3,62 +3,38 @@
 
 {% block title %}Acerca de{% endblock %}
 
-{% block head_extra %}
-<!-- Font Awesome solo para los iconos de contenido de esta página (se sustituyen en la Fase 4) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-{% endblock %}
-
 {% block content %}
-<div class="main-content-body">
+{% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Acerca del Catálogo de Emisiones Naturales Difusas de CO₂" %}
 
-    {% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Acerca del Catálogo de Emisiones Naturales Difusas de CO₂" %}
+<div class="reading-container">
+    <section class="page-section-first" aria-labelledby="titulo-mision">
+        <h2 id="titulo-mision">Misión del proyecto</h2>
+        <p>
+            Nuestra misión es proporcionar una plataforma de visualización geoespacial accesible y precisa para el
+            inventario de emisiones de CO₂, sirviendo como herramienta crítica para la investigación científica,
+            la formulación de políticas climáticas y la toma de decisiones estratégicas en México.
+        </p>
+    </section>
 
-    <div class="reading-container">
+    <section class="page-section" aria-labelledby="titulo-vision">
+        <h2 id="titulo-vision">Visión</h2>
+        <p>
+            Ser la fuente de datos de referencia nacional en materia de emisiones de gases de efecto invernadero,
+            contribuyendo activamente a los objetivos de mitigación climática y fomentando una cultura de
+            transparencia y responsabilidad ambiental.
+        </p>
+    </section>
 
-        <!-- 1. Bloque de Misión y Visión (Contexto) -->
-        <div class="card p-4 mb-5 shadow-sm info-card">
-            <h2 class="dx-eyebrow dx-muted">Misión del proyecto</h2>
-            <p>
-                Nuestra misión es proporcionar una plataforma de visualización geoespacial accesible y precisa para el
-                inventario de emisiones de CO₂,
-                sirviendo como herramienta crítica para la investigación científica, la formulación de políticas
-                climáticas
-                y la toma de decisiones estratégicas en México.
-            </p>
-            <h2 class="dx-eyebrow dx-muted mt-4">Visión</h2>
-            <p>
-                Ser la fuente de datos de referencia nacional en materia de emisiones de gases de efecto invernadero,
-                contribuyendo activamente a los objetivos de mitigación climática y fomentando una cultura de
-                transparencia y responsabilidad ambiental.
-            </p>
+    <section class="page-section" aria-labelledby="titulo-colaboracion">
+        <h2 id="titulo-colaboracion">Colaboración institucional</h2>
+        <!-- Escudos juntos, a la misma altura (40px), sin recolorear -->
+        <div class="dx-logos">
+            <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo de la UNAM" class="dx-logo">
+            <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logotipo del Instituto de Geofísica, UNAM" class="dx-logo">
         </div>
-
-        <!-- 2. Bloque de Afiliación Institucional -->
-        <h2 class="mb-4">Colaboración institucional</h2>
-
-        <div class="row align-items-center justify-content-center pt-3">
-
-            <!-- Logo UNAM -->
-            <div class="col-md-3 text-center">
-                <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo UNAM" class="logo-institution">
-                <p class="mt-2 text-muted">Universidad Nacional Autónoma de México</p>
-            </div>
-
-            <!-- Separador -->
-            <div class="col-md-1 text-center collab-plus" aria-hidden="true">
-                <i class="fas fa-plus"></i>
-            </div>
-
-            <!-- Logo Instituto de Geofísica -->
-            <div class="col-md-3 text-center">
-                <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logo Instituto de Geofísica"
-                    class="logo-institution">
-                <p class="mt-2 text-muted">Instituto de Geofísica (Departamento de Recursos Naturales)</p>
-            </div>
-
-        </div>
-
-    </div>
+        <p class="dx-caption institutions">
+            Universidad Nacional Autónoma de México · Instituto de Geofísica, Departamento de Recursos Naturales.
+        </p>
+    </section>
 </div>
-
 {% endblock %}

@@ -39,8 +39,12 @@
             node.classList.add('dx-map-control');
             new DomControl({ position: node.getAttribute('data-map-control'), node: node }).addTo(map);
         });
-        L.control.scale({ position: cfg.kind === 'zona' ? 'topleft' : 'bottomleft', imperial: false, maxWidth: 80 })
-            .addTo(map);
+        // El mapa testigo de la portada es estático: sin escala ni interacción.
+        const isStatic = cfg.kind === 'testigo';
+        if (!isStatic) {
+            L.control.scale({ position: cfg.kind === 'zona' ? 'topleft' : 'bottomleft', imperial: false, maxWidth: 80 })
+                .addTo(map);
+        }
 
         // Los botones propios de los plugins se ocultan: los maneja MapControls.
         if (map.fullscreenControl) map.fullscreenControl.getContainer().classList.add('dx-native-hidden');
@@ -135,16 +139,75 @@
             });
         });
 
-        // ---------- ZoneMarker (Inventario Nacional) ----------
-        const cluster = cfg.cluster ? window[cfg.cluster] : null;
+        // ---------- Tabla de mediciones ↔ FluxMarker (Ficha técnica) ----------
+        // Pasar el cursor por una fila resalta su marcador; abrir un marcador resalta su fila.
+        if (cfg.points) {
+            const byId = {};
+            cfg.points.forEach(function (p) {
+                const marker = circles.find(function (c) {
+                    const ll = c.getLatLng();
+                    return ll.lat === p[1] && ll.lng === p[2];
+                });
+                if (marker) byId[p[0]] = marker;
+            });
+            const rows = Array.from(document.querySelectorAll('tr[data-point]'));
+            rows.forEach(function (row) {
+                const marker = byId[row.getAttribute('data-point')];
+                if (!marker) return;
+                row.addEventListener('mouseenter', function () { marker.fire('mouseover'); });
+                row.addEventListener('mouseleave', function () { marker.fire('mouseout'); });
+                marker.on('popupopen', function () {
+                    rows.forEach(function (r) { r.classList.toggle('is-selected', r === row); });
+                });
+                marker.on('popupclose', function () { row.classList.remove('is-selected'); });
+            });
+        }
+
+        // ---------- ZoneMarker y ZoneList (Inventario Nacional) ----------
+        const cluster = cfg.cluster && !isStatic ? window[cfg.cluster] : null;
         if (cluster) {
+            const zoneRows = Array.from(document.querySelectorAll('.dx-zl-row[data-zone]'));
+            const markers = {};
+
+            function setActiveZone(name) {
+                zoneRows.forEach(function (row) {
+                    const on = row.getAttribute('data-zone') === name;
+                    row.classList.toggle('is-on', on);
+                    if (on) row.setAttribute('aria-current', 'true');
+                    else row.removeAttribute('aria-current');
+                });
+            }
+
             cluster.eachLayer(function (marker) {
+                markers[marker.options.zoneName] = marker;
                 marker.on('click', function () {
                     map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 9), { duration: 0.8 });
                 });
                 marker.on('popupopen popupclose', function (e) {
+                    const open = e.type === 'popupopen';
                     const el = marker.getElement() && marker.getElement().querySelector('.dx-zm');
-                    if (el) el.classList.toggle('is-selected', e.type === 'popupopen');
+                    if (el) el.classList.toggle('is-selected', open);
+                    setActiveZone(open ? marker.options.zoneName : null);
+                });
+            });
+
+            // Clic (o Enter) en una fila: flyTo a la zona y abrir su MapPopup.
+            // Sin JS la fila sigue siendo un enlace a la ficha técnica.
+            zoneRows.forEach(function (row) {
+                row.addEventListener('click', function (e) {
+                    const marker = markers[row.getAttribute('data-zone')];
+                    if (!marker) return;
+                    e.preventDefault();
+                    map.closePopup();
+                    const show = function () {
+                        cluster.zoomToShowLayer(marker, function () { marker.openPopup(); });
+                    };
+                    if (map.getZoom() >= 10 && map.getBounds().contains(marker.getLatLng())) {
+                        show();
+                    } else {
+                        map.once('moveend', show);
+                        map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 10), { duration: 0.8 });
+                    }
                 });
             });
         }

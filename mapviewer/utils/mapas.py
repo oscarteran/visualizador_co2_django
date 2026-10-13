@@ -110,6 +110,22 @@ def leer_puntos(zona):
     ]
 
 
+def estadisticas(valores):
+    """Resumen de una serie de flujos (se calcula aquí, no en JS)."""
+    return {
+        "n": len(valores),
+        "mediana": statistics.median(valores),
+        "minimo": min(valores),
+        "maximo": max(valores),
+    }
+
+
+def resumen_catalogo():
+    """Totales de la portada: nº de zonas, puntos y rango de flujo de todo el catálogo."""
+    valores = [p["valor"] for zona in ARCHIVOS_ZONA for p in leer_puntos(zona)]
+    return {"zonas": len(ARCHIVOS_ZONA), **estadisticas(valores)}
+
+
 def leer_zonas():
     """Zonas del inventario con coordenadas, entidad, nº de puntos y clase mediana."""
     with open(ZONAS_JSON, encoding="utf-8") as f:
@@ -132,11 +148,16 @@ def leer_zonas():
 
 # ---------- mapa base ----------
 
-def _crear_mapa():
+# Opciones de L.map para el mapa testigo de la portada: sin ninguna interacción.
+SIN_INTERACCION = {"dragging": False, "scrollWheelZoom": False, "doubleClickZoom": False,
+                   "boxZoom": False, "keyboard": False, "touchZoom": False}
+
+
+def _crear_mapa(estatico=False):
     # maxZoom va como opción de L.map: con tiles=None, max_zoom de Folium solo afecta a
     # la capa por defecto y MarkerCluster exige que el mapa lo tenga definido.
     m = folium.Map(location=[23.5, -102], zoom_start=5, tiles=None, zoom_control=False,
-                   control_scale=False, maxZoom=MAX_ZOOM)
+                   control_scale=False, maxZoom=MAX_ZOOM, **(SIN_INTERACCION if estatico else {}))
     # Solo Leaflet (+ jQuery para los popups): sin Bootstrap 3, Font Awesome ni AwesomeMarkers.
     m.default_js = [LEAFLET_JS, JQUERY_JS]
     m.default_css = [LEAFLET_CSS]
@@ -146,8 +167,9 @@ def _crear_mapa():
                                 max_zoom=MAX_ZOOM, max_native_zoom=conf.get("max_native_zoom"))
         capa.add_to(m)
         capas[clave] = capa.get_name()
-    fs = Fullscreen(position="topright", title="Pantalla completa", title_cancel="Salir de pantalla completa")
-    fs.add_to(m)
+    if not estatico:
+        Fullscreen(position="topright", title="Pantalla completa",
+                   title_cancel="Salir de pantalla completa").add_to(m)
     return m, capas
 
 
@@ -188,16 +210,22 @@ def _popup(html):
 
 # ---------- mapas por página ----------
 
-def mapa_nacional(capa_inicial=CAPA_POR_DEFECTO):
-    """Inventario Nacional: una etiqueta ZoneMarker por zona, agrupadas si se traslapan."""
+def mapa_nacional(capa_inicial=CAPA_POR_DEFECTO, estatico=False):
+    """Inventario Nacional: una etiqueta ZoneMarker por zona, agrupadas si se traslapan.
+    Con estatico=True es el mapa testigo de la portada: sin interacción ni popups."""
     zonas = leer_zonas()
-    m, capas = _crear_mapa()
+    m, capas = _crear_mapa(estatico)
     grupo = MarkerCluster(icon_create_function=CLUSTER_ICON_JS, options={
-        "showCoverageOnHover": False, "spiderfyOnMaxZoom": True, "maxClusterRadius": 60})
+        "showCoverageOnHover": False, "spiderfyOnMaxZoom": not estatico,
+        "zoomToBoundsOnClick": not estatico, "maxClusterRadius": 60})
     grupo.add_to(m)
     for z in zonas:
         icono = folium.DivIcon(html=render_to_string("mapviewer/components/zone_marker.html", {"z": z}),
                                class_name="dx-divicon", icon_size=(0, 0), icon_anchor=(0, 0))
+        if estatico:
+            folium.Marker([z["lat"], z["lon"]], icon=icono, keyboard=False, interactive=False,
+                          flux_class=z["cls"], zone_name=z["name"]).add_to(grupo)
+            continue
         popup = render_to_string("mapviewer/components/map_popup.html", {
             "zone": f"{z['name']} · mediana", "id": f"{z['n']} pts", "value": z["median"],
             "coords": f"{design.format_coord(z['lat'])}, {design.format_coord(z['lon'])}",
@@ -210,7 +238,7 @@ def mapa_nacional(capa_inicial=CAPA_POR_DEFECTO):
     bounds = [[min(lats), min(lons)], [max(lats), max(lons)]]
     m.fit_bounds(bounds, padding=(PADDING_ENCUADRE, PADDING_ENCUADRE))
     partes = _partes(m)
-    partes["config"] = _config(m, capas, capa_inicial, bounds, "nacional")
+    partes["config"] = _config(m, capas, capa_inicial, bounds, "testigo" if estatico else "nacional")
     partes["config"]["cluster"] = grupo.get_name()
     partes["zonas"] = zonas
     return partes
@@ -247,5 +275,7 @@ def mapa_zona(zona, capa_inicial=CAPA_POR_DEFECTO):
     partes = _partes(m)
     partes["config"] = _config(m, capas, capa_inicial, bounds, "zona")
     partes["config"]["measure"] = medir.get_name()
+    # Para enlazar marcador ↔ fila de la tabla (map_controls.js los empareja por coordenadas)
+    partes["config"]["points"] = [[p["id"], p["lat"], p["lon"]] for p in puntos]
     partes["puntos"] = puntos
     return partes

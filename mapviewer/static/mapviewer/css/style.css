@@ -130,11 +130,6 @@ textarea:focus-visible {
     box-shadow: var(--shadow-card) !important;
 }
 
-.list-unstyled {
-    padding-left: 0;
-    list-style: none;
-}
-
 /* =============================================
    ESTRUCTURA GENERAL
    ============================================= */
@@ -348,111 +343,86 @@ textarea:focus-visible {
 }
 
 /* =============================================
-   COMPONENTES PROVISIONALES
-   Clases de Bootstrap que siguen en el HTML hasta que las fases 2 y 4 las
-   sustituyan por dx-*. Mismo lenguaje que .dx-btn, .dx-stat y .dx-table.
+   COMPONENTES DEL SITIO
+   Tarjetas, notas, campos y enlaces-botón con el lenguaje de components.css.
    ============================================= */
 
-/* Botón secundario (equivale a .dx-btn) */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    height: 40px;
-    padding: 0 var(--space-4);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--line-strong);
-    background-color: var(--surface);
-    color: var(--ink);
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: var(--surface-sunken);
-}
-
-/* Botón primario (equivale a .dx-btn-primary) */
-.login-button {
-    background-color: var(--unam-blue);
-    border-color: var(--unam-blue);
-    color: var(--on-unam-blue);
-}
-
-.login-button:hover {
-    background-color: var(--unam-blue-hover);
-    border-color: var(--unam-blue-hover);
-    color: var(--on-unam-blue);
-}
-
-/* Tarjeta (equivale a .dx-stat) */
-.card,
-.info-card {
-    background-color: var(--surface);
+/* Tarjeta: mismo aspecto que .dx-stat (surface, borde line, radius-lg, shadow-card) */
+.dx-card {
+    background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
+    padding: var(--space-6);
+}
+
+/* Nota metodológica / aviso: fondo gold-tint, sin borde ni sombra */
+.dx-note {
+    background: var(--gold-tint);
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.dx-note p {
+    margin: 0;
     color: var(--ink);
 }
 
-.contact-list {
+/* Dato en mono (rutas, coordenadas, valores sueltos en texto) */
+.dx-data {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 20px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Botones que son enlaces (<a class="dx-btn">): sin subrayado ni color de enlace */
+a.dx-btn,
+a.dx-btn:hover {
     color: var(--ink);
+    text-decoration: none;
 }
 
-.contact-icon {
-    color: var(--unam-blue);
-    width: 20px;
-    text-align: center;
+a.dx-btn-primary,
+a.dx-btn-primary:hover {
+    color: var(--on-unam-blue);
 }
 
-.collab-plus {
-    font-size: 24px;
-    color: var(--line-strong);
+/* Campos de formulario: borde line-strong (≥3:1), altura de control 40px */
+.dx-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
 }
 
-/* Campos de formulario: borde line-strong */
-.form-label {
-    display: block;
+.dx-label {
     font-size: 14px;
     line-height: 22px;
     font-weight: 500;
     color: var(--ink);
-    margin-bottom: var(--space-1);
 }
 
-.form-control,
-.form-select,
-.custom-select {
-    display: block;
-    width: 100%;
+.dx-input,
+.dx-select {
     min-height: 40px;
     padding: var(--space-2) var(--space-3);
     font-size: 14px;
     line-height: 20px;
-    background-color: var(--surface);
+    background: var(--surface);
     color: var(--ink);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-md);
 }
 
-.form-select,
-.custom-select {
-    width: auto;
+.dx-select {
     cursor: pointer;
 }
 
-.form-control:focus,
-.form-select:focus,
-.custom-select:focus {
+.dx-input:focus-visible,
+.dx-select:focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: 2px;
-}
-
-.table-responsive {
-    overflow-x: auto;
 }
 
 /* =============================================
@@ -484,54 +454,147 @@ textarea:focus-visible {
 }
 
 /* =============================================
-   VISTA DE MAPAS — LAYOUT RESPONSIVO
+   PÁGINAS — ESTRUCTURA COMÚN
    ============================================= */
 
+/* Ritmo vertical: space-8 entre bloques, space-12 entre secciones */
+.page-section {
+    margin-top: var(--space-12);
+}
+
+.page-section h2 {
+    margin-bottom: var(--space-4);
+}
+
+.section-intro {
+    max-width: var(--measure);
+    color: var(--ink-muted);
+}
+
+/* PageHeader con acciones a la derecha (Ficha técnica) */
+.page-head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+}
+
+.page-head-actions .dx-header {
+    margin-bottom: 0;
+}
+
+.page-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
+}
+
+.page-actions .dx-field {
+    margin-bottom: 0;
+}
+
+.page-actions-row {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+}
+
+/* PageHeader de portada: título con el estilo «display» */
+.dx-header.is-display .dx-h1 {
+    font-size: 44px;
+    line-height: 52px;
+    letter-spacing: -0.5px;
+}
+
+/* Fila de StatTiles (portada) */
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+}
+
+/* Bibliografía */
+.dx-biblio {
+    padding-left: var(--space-6);
+}
+
+.dx-biblio li + li {
+    margin-top: var(--space-2);
+}
+
+/* Acerca de */
+.page-section-first h2 {
+    margin-bottom: var(--space-4);
+}
+
+.institutions {
+    margin: var(--space-3) 0 0;
+}
+
+/* Ayuda y contacto */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.contact-grid h2 {
+    margin-bottom: var(--space-4);
+}
+
+.contact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+}
+
+.contact-list li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+}
+
+.contact-list li + li {
+    margin-top: var(--space-4);
+}
+
+.contact-icon {
+    color: var(--unam-blue);
+    margin-top: 3px;
+}
+
+.contact-submit {
+    width: 100%;
+    justify-content: center;
+}
+
+.contact-form .dx-caption {
+    margin: var(--space-3) 0 0;
+}
+
+/* =============================================
+   VISTA DE MAPAS
+   ============================================= */
+
+/* Inventario: encabezado compacto + mapa que llena la pantalla (mín. 520px) */
 .map-view-container {
     display: flex;
     flex-direction: column;
-    /* Llena la primera pantalla; el pie de página queda debajo */
     min-height: calc(100vh - var(--space-12) - var(--space-8));
     width: 100%;
-    gap: var(--space-4);
-    padding: 0;
+    gap: var(--space-6);
 }
 
 .map-view-container .dx-header {
     margin-bottom: 0;
 }
 
-/* Barra de controles del mapa */
-.map-control-bar {
-    background-color: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4) var(--space-6);
-    box-shadow: var(--shadow-card);
-    flex-shrink: 0;
-    border: 1px solid var(--line);
-}
-
-/* Filtros y dropdowns */
-.filter-toolbelt {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-}
-
-/* Etiqueta de filtro: estilo "eyebrow" en ink-muted */
-.small-label {
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    display: block;
-    margin-bottom: var(--space-1);
-}
-
-/* Tarjeta del mapa: ocupa el espacio restante, con un mínimo de 520px (Mapas.md).
-   El mapa Folium va incrustado (sin iframe); sus controles los coloca map_controls.js. */
+/* Tarjeta del mapa. El mapa Folium va incrustado (sin iframe); sus controles los
+   coloca map_controls.js como controles de Leaflet. */
 .map-container-wrapper {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
@@ -549,86 +612,64 @@ textarea:focus-visible {
     inset: 0;
 }
 
-/* =============================================
-   TABLAS DE DATOS (mismo lenguaje que .dx-table)
-   ============================================= */
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: var(--space-4);
-    background-color: var(--surface);
-    font-size: 14px;
-    line-height: 20px;
+/* Panel flotante ZoneList (Inventario Nacional) */
+.zl-panel {
+    width: var(--sidebar-width);
+    padding: var(--space-2);
 }
 
-th,
-td {
-    padding: var(--space-3) var(--space-4);
-    text-align: left;
-    border-bottom: 1px solid var(--line);
+.zl-title {
+    padding: var(--space-2) var(--space-3) var(--space-1);
+    margin: 0;
 }
 
-th {
-    background-color: var(--surface-sunken);
-    color: var(--ink-muted);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
+/* Ficha técnica: mapa (1fr) + panel de datos (380px) */
+.ficha-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: var(--space-6);
+    align-items: stretch;
 }
 
-td {
-    color: var(--ink);
+.ficha-map {
+    min-height: 560px;
 }
 
-tbody tr:last-child td {
-    border-bottom: 0;
+.ficha-panel {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
 }
 
-tbody tr:hover td {
-    background-color: var(--unam-blue-tint);
+.ficha-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
 }
 
-/* Coordenadas y números: estilo "data" */
-.latlon {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    line-height: 20px;
-    font-variant-numeric: tabular-nums;
-    color: var(--ink);
-    margin-right: var(--space-1);
+/* Fila resaltada desde el mapa (clic en un FluxMarker) */
+.dx-table tbody tr.is-selected td {
+    background: var(--unam-blue-tint);
 }
 
-.data-table-card {
-    background-color: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--line);
-    overflow: hidden;
-}
-
-.table-subtitle {
-    margin-bottom: var(--space-4);
-}
-
-/* =============================================
-   LOGO INSTITUCIONAL
-   ============================================= */
-
-.logo-institution {
-    height: 90px;
-    width: auto;
-}
-
-[data-theme="dark"] .logo-institution {
-    filter: brightness(1.2);
+/* Portada: mapa testigo (estático) */
+.testigo-map {
+    min-height: 0;
+    height: 360px;
+    flex: none;
 }
 
 /* =============================================
    RESPONSIVE — MEDIA QUERIES
    ============================================= */
+
+/* Ajustes mínimos para que las retículas no se rompan; el pulido móvil es la Fase 5 */
+@media (max-width: 1024px) {
+    .ficha-grid,
+    .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
 
 @media (max-width: 768px) {
     .sidebar {
@@ -664,12 +705,7 @@ tbody tr:hover td {
         padding: var(--space-6) var(--space-4);
     }
 
-    .map-control-bar {
-        padding: var(--space-3) var(--space-4);
-    }
-
-    .filter-toolbelt {
-        flex-direction: column;
-        gap: var(--space-2);
+    .stat-row {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
