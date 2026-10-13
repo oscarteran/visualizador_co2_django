@@ -42,9 +42,11 @@
     margin-left: var(--map-inset);
 }
 
-/* Controles propios de los plugins: los sustituye MapControls */
+/* Controles propios de los plugins: los sustituye MapControls. Se ocultan también
+   por CSS (no solo desde map_controls.js) para que nunca aparezcan sueltos. */
 .dx-native-hidden,
-.leaflet-control-measure {
+.leaflet-control-measure,
+.leaflet-bar:has(> .leaflet-control-zoom-fullscreen) {
     display: none !important;
 }
 

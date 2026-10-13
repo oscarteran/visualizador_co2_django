@@ -60,7 +60,11 @@
         function setBase(key, fromUser) {
             const next = tileFor(key);
             if (!next) return;
-            if (activeTile && activeTile !== next) map.removeLayer(activeTile);
+            // Quita cualquier otra capa base (la inicial ya viene activa desde el servidor)
+            Object.keys(layers).forEach(function (k) {
+                const layer = layers[k];
+                if (layer && layer !== next && map.hasLayer(layer)) map.removeLayer(layer);
+            });
             if (!map.hasLayer(next)) next.addTo(map);
             next.bringToBack();
             activeTile = next;

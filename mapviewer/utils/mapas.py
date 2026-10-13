@@ -22,11 +22,11 @@ from pathlib import Path
 import folium
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.templatetags.static import static
 from django.urls import reverse
 from folium.plugins import Fullscreen, MarkerCluster, MeasureControl
 
 from .. import design
+from ..templatetags.difusco import asset_url
 from .tablas import tabla_resumen_info
 
 logger = logging.getLogger(__name__)
@@ -153,7 +153,7 @@ SIN_INTERACCION = {"dragging": False, "scrollWheelZoom": False, "doubleClickZoom
                    "boxZoom": False, "keyboard": False, "touchZoom": False}
 
 
-def _crear_mapa(estatico=False):
+def _crear_mapa(estatico=False, capa_inicial=CAPA_POR_DEFECTO):
     # maxZoom va como opción de L.map: con tiles=None, max_zoom de Folium solo afecta a
     # la capa por defecto y MarkerCluster exige que el mapa lo tenga definido.
     m = folium.Map(location=[23.5, -102], zoom_start=5, tiles=None, zoom_control=False,
@@ -162,8 +162,12 @@ def _crear_mapa(estatico=False):
     m.default_js = [LEAFLET_JS, JQUERY_JS]
     m.default_css = [LEAFLET_CSS]
     capas = {}
+    # La capa inicial ya viene activa desde el servidor (en su variante clara si es «Mapa»):
+    # el mapa se ve aunque map_controls.js no llegue a ejecutarse.
+    visible = "mapa_light" if capa_inicial == "mapa" else capa_inicial
     for clave, conf in TESELAS.items():
-        capa = folium.TileLayer(conf["tiles"], attr=conf.get("attr"), name=clave, show=False, control=False,
+        capa = folium.TileLayer(conf["tiles"], attr=conf.get("attr"), name=clave, show=clave == visible,
+                                control=False,
                                 max_zoom=MAX_ZOOM, max_native_zoom=conf.get("max_native_zoom"))
         capa.add_to(m)
         capas[clave] = capa.get_name()
@@ -178,7 +182,7 @@ def _partes(m):
     fig = m.get_root()
     fig.render()
     # map.css al final del header para que gane sobre leaflet.css y los plugins.
-    fig.header.add_child(folium.CssLink(static("mapviewer/css/map.css")), name="dx_map_css")
+    fig.header.add_child(folium.CssLink(asset_url("mapviewer/css/map.css")), name="dx_map_css")
     header = fig.header.render()
     # Folium repite <meta> que ya están en base.html; su viewport impide hacer zoom
     # en móvil (user-scalable=no), así que se quitan.
@@ -217,7 +221,7 @@ def mapa_nacional(capa_inicial=CAPA_POR_DEFECTO, estatico=False):
     """Inventario Nacional: una etiqueta ZoneMarker por zona, agrupadas si se traslapan.
     Con estatico=True es el mapa testigo de la portada: sin interacción ni popups."""
     zonas = leer_zonas()
-    m, capas = _crear_mapa(estatico)
+    m, capas = _crear_mapa(estatico, capa_inicial)
     grupo = MarkerCluster(icon_create_function=CLUSTER_ICON_JS, options={
         "showCoverageOnHover": False, "spiderfyOnMaxZoom": not estatico,
         "zoomToBoundsOnClick": not estatico, "maxClusterRadius": 60})
@@ -250,7 +254,7 @@ def mapa_nacional(capa_inicial=CAPA_POR_DEFECTO, estatico=False):
 def mapa_zona(zona, capa_inicial=CAPA_POR_DEFECTO):
     """Ficha técnica: un FluxMarker (CircleMarker) por medición, encuadrado en la zona."""
     puntos = leer_puntos(zona)
-    m, capas = _crear_mapa()
+    m, capas = _crear_mapa(capa_inicial=capa_inicial)
     # Medición de distancias: el botón «Medir» de MapControls maneja este plugin;
     # su control propio se oculta en map.css.
     medir = MeasureControl(position="topright", primary_length_unit="meters", secondary_length_unit=None,

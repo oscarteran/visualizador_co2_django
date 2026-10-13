@@ -269,3 +269,27 @@ class ResponsivoTests(SimpleTestCase):
     def test_controles_extra_marcados(self):
         html = self.client.get("/ficha_tecnica/").content.decode()
         self.assertIn("dx-mapctl-group dx-mapctl-extra", html)
+
+
+import re
+
+
+class CacheYMapaBaseTests(SimpleTestCase):
+    """Evita que un navegador use JS/CSS viejos de caché y que el mapa quede sin fondo."""
+
+    def test_estaticos_versionados(self):
+        import re
+        html = self.client.get("/inventario_nacional/").content.decode()
+        for archivo in ("map_controls.js", "sidebar_toggle.js", "theme_toggle.js", "style.css", "tokens.css", "map.css"):
+            self.assertRegex(html, re.escape(archivo) + r"\?v=\d+", archivo)
+
+    def test_capa_base_inicial_desde_el_servidor(self):
+        from .utils import mapas
+        for capa, servicio in (("mapa", "World_Light_Gray_Base"), ("satelite", "World_Imagery"),
+                               ("relieve", "World_Shaded_Relief")):
+            script = mapas.mapa_nacional(capa)["script"]
+            # Solo la capa inicial se agrega al mapa en el script de Folium (show=True)
+            tile_vars = re.findall(r"var (tile_layer_\w+) = L\.tileLayer\(\s*\"([^\"]+)\"", script)
+            añadidas = [url for var, url in tile_vars if f"{var}.addTo(" in script]
+            self.assertEqual(len(añadidas), 1, capa)
+            self.assertIn(servicio, añadidas[0])

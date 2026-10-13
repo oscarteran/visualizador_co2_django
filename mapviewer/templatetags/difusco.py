@@ -5,12 +5,33 @@ Traducen la lógica de design_handoff/reference/interactive/components-reference
 (fluxClass, formatFlux, Icon, FluxMarker, FluxLegend, Histogram) a Django. Los
 partials que generan el HTML viven en templates/mapviewer/components/.
 """
+import os
+
 from django import template
+from django.contrib.staticfiles import finders
+from django.templatetags.static import static
 from django.utils.html import format_html
 
 from .. import design
 
 register = template.Library()
+
+
+def asset_url(path):
+    """URL de un estático propio con ?v=<fecha de modificación>.
+
+    Django sirve /static/ sin versión en el nombre ni Cache-Control, y los
+    navegadores pueden reutilizar una copia vieja sin preguntar al servidor
+    (p. ej. un map_controls.js anterior al rediseño). Con la versión en la URL,
+    cada cambio del archivo obliga a descargarlo de nuevo."""
+    url = static(path)
+    found = finders.find(path)
+    return f"{url}?v={int(os.path.getmtime(found))}" if found else url
+
+
+@register.simple_tag
+def asset(path):
+    return asset_url(path)
 
 # Trazos de 24×24 de components-reference.js (ICONS). moon, sun y chevron-* son
 # de Lucide, la familia de iconos lineales que indica el README del sistema.

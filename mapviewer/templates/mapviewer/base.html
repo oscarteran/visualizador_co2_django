@@ -26,14 +26,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap-utilities.min.css" rel="stylesheet">
 
     <!-- Design system: tokens → componentes dx-* → estilos del sitio -->
-    <link rel="stylesheet" href="{% static 'mapviewer/css/tokens.css' %}">
-    <link rel="stylesheet" href="{% static 'mapviewer/css/components.css' %}">
-    <link rel="stylesheet" href="{% static 'mapviewer/css/style.css' %}">
+    <link rel="stylesheet" href="{% asset 'mapviewer/css/tokens.css' %}">
+    <link rel="stylesheet" href="{% asset 'mapviewer/css/components.css' %}">
+    <link rel="stylesheet" href="{% asset 'mapviewer/css/style.css' %}">
     <!-- Dependencias propias de la página (Leaflet/Folium + map.css en las páginas de mapa) -->
     {% block head_extra %}{% endblock %}
 
     <!-- Aplica el tema guardado antes de pintar la página (evita el destello claro) -->
-    <script src="{% static 'mapviewer/js/theme_toggle.js' %}"></script>
+    <script src="{% asset 'mapviewer/js/theme_toggle.js' %}"></script>
 </head>
 
 <body>
@@ -109,9 +109,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{% static 'mapviewer/js/sidebar_toggle.js' %}"></script>
-    <script src="{% static 'mapviewer/js/map_controls.js' %}"></script>
-    <script src="{% static 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
+    <script src="{% asset 'mapviewer/js/sidebar_toggle.js' %}"></script>
+    <script src="{% asset 'mapviewer/js/map_controls.js' %}"></script>
+    <script src="{% asset 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
 </body>
 
 </html>

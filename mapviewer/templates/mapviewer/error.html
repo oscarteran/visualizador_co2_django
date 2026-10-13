@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-{% load static %}
+{% load static difusco %}
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
-    <link rel="stylesheet" href="{% static 'mapviewer/css/tokens.css' %}">
+    <link rel="stylesheet" href="{% asset 'mapviewer/css/tokens.css' %}">
     <!-- Aplica el tema guardado (claro/oscuro) -->
-    <script src="{% static 'mapviewer/js/theme_toggle.js' %}"></script>
+    <script src="{% asset 'mapviewer/js/theme_toggle.js' %}"></script>
     <style>
         body {
             background-color: var(--paper);
