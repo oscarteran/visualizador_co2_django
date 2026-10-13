@@ -1,1 +1,7 @@
 *.pyc
+__pycache__/
+
+# Entornos virtuales y archivos generados
+venv/
+.venv/
+staticfiles/

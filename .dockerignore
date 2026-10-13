@@ -1,3 +1,15 @@
+# Configuración local: NUNCA en la imagen (DEBUG=True, hosts locales, SECRET_KEY
+# de desarrollo). En Cloud Run las variables se definen en el servicio.
+.env
+.env.*
+
+# Material de desarrollo que el sitio no necesita
+design_handoff/
+img/
+*.md
+app.yaml
+.claude/
+
 # Python
 __pycache__/
 *.py[cod]

@@ -44,9 +44,13 @@ Single Django app (`mapviewer`) with `config/` holding project settings. **There
 | Variable | Default | Purpose |
 |---|---|---|
 | `DEBUG` | `False` | Django debug mode |
-| `SECRET_KEY` | hardcoded insecure key | Override in production |
-| `ALLOWED_HOSTS` | `*` | Comma-separated hosts |
-| `PORT` | `8080` | Internal app port (Docker maps 8080→8000) |
+| `SECRET_KEY` | — (required when `DEBUG=False`; dev-only fallback when `DEBUG=True`) | Django secret key; in Cloud Run use Secret Manager |
+| `ALLOWED_HOSTS` | `.run.app,localhost,127.0.0.1,0.0.0.0` | Comma-separated hosts |
+| `CSRF_TRUSTED_ORIGINS` | `https://*.run.app` | Comma-separated origins (add a custom domain here) |
+| `LOG_LEVEL` | `INFO` | Root logging level |
+| `PORT` | `8080` | Port gunicorn binds to (set by Cloud Run; Docker Compose maps 8080→8000) |
+
+`.env` is for local development only: `.dockerignore`/`.gcloudignore` keep it out of the image. Deployment target is Google Cloud Run (see `EJECUCION.md`); `requirements.txt` only lists what the code imports.
 
 
 ## Diseño (DIFUSCO₂)

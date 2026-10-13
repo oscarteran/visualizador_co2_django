@@ -1,0 +1,27 @@
+# Archivos que NO se suben a Cloud Build al desplegar con
+#   gcloud run deploy --source .
+# (sin este archivo gcloud usaría .gitignore y subiría el entorno virtual)
+.gcloudignore
+.git/
+.gitignore
+
+# Configuración local (DEBUG=True, SECRET_KEY de desarrollo)
+.env
+.env.*
+
+# Entornos virtuales y archivos generados
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+staticfiles/
+db.sqlite3
+*.log
+
+# Material de desarrollo
+design_handoff/
+img/
+.claude/
+.vscode/
+.idea/

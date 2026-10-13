@@ -12,28 +12,47 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
-# Cargar variables de entorno desde .env
+# Variables de entorno desde .env (solo desarrollo local; .env no entra en la imagen
+# Docker). Las variables ya definidas en el entorno (Cloud Run) tienen prioridad.
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ws1@eldhv8*y39#-frqcb83z8h=bxuaocx6*x6jx=q7f29jrc5"
+def _lista(variable, por_defecto):
+    """Variable de entorno separada por comas → lista sin elementos vacíos."""
+    return [v.strip() for v in os.getenv(variable, por_defecto).split(",") if v.strip()]
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-#ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+# SECURITY WARNING: keep the secret key used in production secret!
+# En producción (DEBUG=False) es obligatoria: definir SECRET_KEY en Cloud Run
+# (de preferencia como secreto de Secret Manager).
+SECRET_KEY = os.getenv("SECRET_KEY", "")
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured(
+            "Falta la variable de entorno SECRET_KEY (obligatoria con DEBUG=False).")
+    SECRET_KEY = "django-insecure-solo-desarrollo-local"
 
-# Usa el puerto del entorno
-PORT = os.environ.get("PORT", 8080)
+# Por defecto acepta los dominios de Cloud Run (*.run.app) y el equipo local;
+# para un dominio propio, definir ALLOWED_HOSTS y CSRF_TRUSTED_ORIGINS.
+ALLOWED_HOSTS = _lista("ALLOWED_HOSTS", ".run.app,localhost,127.0.0.1,0.0.0.0")
+CSRF_TRUSTED_ORIGINS = _lista("CSRF_TRUSTED_ORIGINS", "https://*.run.app")
+
+# Cloud Run termina HTTPS en su balanceador y reenvía la petición por HTTP con
+# X-Forwarded-Proto: así Django sabe que la conexión original es segura.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# La cookie CSRF solo viaja por HTTPS en producción. La redirección a HTTPS y HSTS
+# no se activan aquí: Cloud Run ya sirve *.run.app únicamente por HTTPS.
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 # Application definition
@@ -56,7 +75,14 @@ MIDDLEWARE = [
 # envía solo el origen (sin ruta ni query), igual que el default de los navegadores.
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE se eliminó en Django 5.1; ahora va en STORAGES. WhiteNoise
+# comprime los estáticos en collectstatic. Sin «Manifest» (nombres con hash): las
+# URL de CSS/JS ya llevan ?v=<fecha> (template tag asset) y así las pruebas no
+# dependen de haber corrido collectstatic.
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+}
 
 ROOT_URLCONF = "config.urls"
 
@@ -116,6 +142,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'DEBUG',  # Puedes cambiar a INFO si quieres menos mensajes
+        # INFO por defecto (DEBUG llenaría Cloud Logging); se cambia con LOG_LEVEL
+        'level': os.getenv("LOG_LEVEL", "INFO"),
     },
 }

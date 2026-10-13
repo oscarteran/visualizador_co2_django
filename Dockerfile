@@ -1,30 +1,35 @@
-# 1. Usa una imagen base oficial de Python
-FROM python:3.11-slim
+# DIFUSCO₂ — imagen para Google Cloud Run
+FROM python:3.13-slim
 
-# Establece el directorio de trabajo dentro del contenedor
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    DJANGO_SETTINGS_MODULE=config.settings \
+    PORT=8080
+
 WORKDIR /app
 
-# Copia los archivos de tu proyecto (solo requirements.txt primero para aprovechar el cache)
+# Dependencias primero (capa en caché mientras requirements.txt no cambie)
 COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Instala las dependencias de Python (Asegúrate que Gunicorn esté aquí)
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia el resto del código
+# Código y datos (.dockerignore excluye .env, entornos virtuales y archivos de desarrollo)
 COPY . .
 
-# Recolecta los archivos estáticos (importante para Django)
-RUN python manage.py collectstatic --noinput
+# Estáticos comprimidos para WhiteNoise. SECRET_KEY solo para este paso: la real
+# se define en Cloud Run y nunca queda guardada en la imagen.
+RUN SECRET_KEY=solo-para-collectstatic python manage.py collectstatic --noinput
 
-# Expone el puerto que usará Django
+# Usuario sin privilegios
+RUN useradd --create-home --uid 1000 app && chown -R app:app /app
+USER app
+
 EXPOSE 8080
 
-# Variables de entorno
-ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=config.settings
-ENV PORT 8080
-
-# COMANDO CORREGIDO: Usar Gunicorn con workers para producción en Cloud Run
-# Gunicorn utiliza la variable de entorno $PORT (8080) para escuchar.
-# Se recomienda usar 2 * CPU_cores + 1. Aquí usamos 2 workers como ejemplo.
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "9000"]
+# Cloud Run define $PORT (8080 por defecto). gthread: 2 procesos × 4 hilos.
+# El timeout (s) debe ser menor o igual al timeout de solicitud del servicio en Cloud Run.
+CMD exec gunicorn config.wsgi:application \
+    --bind 0.0.0.0:${PORT} \
+    --workers 2 --threads 4 --worker-class gthread \
+    --timeout 120 \
+    --access-logfile - --error-logfile -
