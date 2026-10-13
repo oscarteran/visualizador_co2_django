@@ -205,7 +205,10 @@ def _config(m, capas, capa_inicial, bounds, tipo):
 
 
 def _popup(html):
-    return folium.Popup(html, max_width=260, class_name="dx-leaflet-popup", close_button=False)
+    # El auto-pan deja libres el LayerSwitcher (arriba) y la columna de MapControls
+    # (derecha): los controles de Leaflet quedan por encima de los popups.
+    return folium.Popup(html, max_width=260, class_name="dx-leaflet-popup", close_button=False,
+                        auto_pan_padding_top_left=[16, 72], auto_pan_padding_bottom_right=[64, 16])
 
 
 # ---------- mapas por página ----------

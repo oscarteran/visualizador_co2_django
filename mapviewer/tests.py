@@ -249,3 +249,23 @@ class PaginasFase4Tests(SimpleTestCase):
             html = self.client.get(url).content.decode()
             self.assertNotIn("font-awesome", html)
             self.assertNotIn('class="fas', html)
+
+
+class ResponsivoTests(SimpleTestCase):
+    """Fase 5: piezas del layout móvil presentes en el HTML."""
+
+    def test_menu_movil(self):
+        html = self.client.get("/fuentes_info/").content.decode()
+        self.assertIn('class="mobile-bar"', html)
+        self.assertIn('id="mobile-menu-btn"', html)
+        self.assertIn('aria-controls="app-sidebar" aria-expanded="false"', html)
+        self.assertIn('id="sidebar-backdrop" hidden', html)
+
+    def test_inventario_select_movil(self):
+        html = self.client.get("/inventario_nacional/").content.decode()
+        self.assertIn("data-zone-select", html)
+        self.assertEqual(html.count('<option value="') - 1, 7)   # 7 zonas + «Elegir una zona…»
+
+    def test_controles_extra_marcados(self):
+        html = self.client.get("/ficha_tecnica/").content.decode()
+        self.assertIn("dx-mapctl-group dx-mapctl-extra", html)

@@ -338,6 +338,15 @@ textarea:focus-visible {
     width: auto;
 }
 
+/* Tema oscuro: los escudos (azul marino) van sobre una placa clara para que se
+   lean; la imagen no se recolorea. */
+[data-theme="dark"] .dx-logos {
+    width: fit-content;
+    background: var(--ink);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+}
+
 .page-logos {
     margin-bottom: var(--space-8);
 }
@@ -374,6 +383,8 @@ textarea:focus-visible {
     font-size: 14px;
     line-height: 20px;
     font-variant-numeric: tabular-nums;
+    /* rutas y nombres de archivo largos: se parten en lugar de desbordar en móvil */
+    overflow-wrap: anywhere;
 }
 
 /* Botones que son enlaces (<a class="dx-btn">): sin subrayado ni color de enlace */
@@ -647,6 +658,11 @@ a.dx-btn-primary:hover {
     gap: var(--space-3);
 }
 
+/* La primera columna de las tablas es el identificador (Punto, Zona): no se parte */
+.dx-table td:first-child {
+    white-space: nowrap;
+}
+
 /* Fila resaltada desde el mapa (clic en un FluxMarker) */
 .dx-table tbody tr.is-selected td {
     background: var(--unam-blue-tint);
@@ -663,7 +679,33 @@ a.dx-btn-primary:hover {
    RESPONSIVE — MEDIA QUERIES
    ============================================= */
 
-/* Ajustes mínimos para que las retículas no se rompan; el pulido móvil es la Fase 5 */
+/* Barra superior y fondo del menú: solo en móvil */
+.mobile-bar,
+.zone-select-mobile {
+    display: none;
+}
+
+.sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: transparent;
+}
+
+.sidebar-backdrop[hidden] {
+    display: none;
+}
+
+.mobile-menu-close,
+.menu-open .mobile-menu-open {
+    display: none;
+}
+
+.menu-open .mobile-menu-close {
+    display: block;
+}
+
+/* Tabletas: retículas a una columna */
 @media (max-width: 1024px) {
     .ficha-grid,
     .contact-grid {
@@ -671,41 +713,107 @@ a.dx-btn-primary:hover {
     }
 }
 
+/* Móvil (< 768px): menú colapsable, contenido apilado
+   (encabezado → mapa 60vh → panel → tabla) y ZoneList como <select> */
 @media (max-width: 768px) {
-    .sidebar {
-        position: fixed;
-        z-index: 999;
-        height: 100%;
-        transform: translateX(-100%);
-    }
-
-    .sidebar:not(.collapsed) {
-        transform: translateX(0);
-    }
-
+    /* La barra lateral pasa a ser un menú que se abre desde la barra superior;
+       cerrada queda fuera del orden de tabulación (visibility: hidden). */
+    .sidebar,
     .sidebar.collapsed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1001;
+        width: var(--sidebar-width);
+        height: 100%;
+        padding: var(--space-6) var(--space-4);
+        box-shadow: var(--shadow-pop);
         transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform 0.25s ease, visibility 0.25s;
+    }
+
+    /* Al abrir, visibility cambia de inmediato (si no, focus() llega antes de que
+       los enlaces sean enfocables); al cerrar espera a que termine el desplazamiento. */
+    .sidebar.is-open {
+        transform: none;
+        visibility: visible;
+        transition: transform 0.25s ease;
     }
 
     .toggle-sidebar {
-        left: 0;
+        display: none;
     }
 
-    .toggle-sidebar:not(.sidebar-collapsed) {
-        left: calc(var(--sidebar-width) - var(--space-4));
+    .mobile-bar {
+        position: sticky;
+        top: 0;
+        z-index: 900;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-2) var(--space-4);
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-bar .dx-wordmark {
+        font-size: 24px;
+        line-height: 32px;
     }
 
     .main-content {
         padding: var(--space-6) var(--space-4);
     }
 
-    .dx-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: var(--space-6) var(--space-4);
+    .dx-header.is-display .dx-h1 {
+        font-size: 32px;
+        line-height: 40px;
+        letter-spacing: 0;
+    }
+
+    .page-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .page-actions .dx-field {
+        flex: 1 1 160px;
     }
 
     .stat-row {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Mapas a 60vh */
+    .map-view-container {
+        min-height: 0;
+    }
+
+    .map-container-wrapper,
+    .ficha-map {
+        flex: none;
+        height: 60vh;
+        min-height: 0;
+    }
+
+    .testigo-map {
+        height: 240px;
+    }
+
+    /* ZoneList → <select> nativo encima del mapa */
+    .zone-select-mobile {
+        display: flex;
+        margin-bottom: 0;
+    }
+
+    .zl-panel {
+        display: none;
+    }
+
+    .dx-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--space-6) var(--space-4);
     }
 }

@@ -67,14 +67,27 @@
             </div>
         </aside>
 
-        <!-- Botón para colapsar la barra lateral -->
+        <!-- Botón para colapsar la barra lateral (escritorio) -->
         <button id="sidebar-toggle" class="toggle-sidebar" type="button" aria-controls="app-sidebar"
             aria-expanded="true" aria-label="Ocultar barra lateral" title="Ocultar barra lateral">
             {% icon "chevron-left" 18 %}
         </button>
 
+        <!-- Fondo del menú móvil: un clic fuera lo cierra -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
         <!-- Área principal: contenido + pie de página (se desplazan juntos) -->
         <div class="main-area-wrapper" id="main-content-area">
+            <!-- Barra superior móvil (< 768px): wordmark + menú colapsable -->
+            <div class="mobile-bar">
+                <a class="dx-wordmark" href="{% url 'inicio' %}" aria-label="DIFUSCO₂, inicio">DIFUSCO<span class="dx-wordmark-sub">₂</span></a>
+                <button id="mobile-menu-btn" class="dx-btn dx-btn-quiet mobile-menu-btn" type="button"
+                    aria-controls="app-sidebar" aria-expanded="false">
+                    {% icon "menu" 20 "mobile-menu-open" %}{% icon "x" 20 "mobile-menu-close" %}
+                    <span>Menú</span>
+                </button>
+            </div>
+
             <main class="main-content" id="contenido">
                 <div class="dx-page">
                     {% block content %}{% endblock %}

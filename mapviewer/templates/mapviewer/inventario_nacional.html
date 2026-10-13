@@ -10,6 +10,15 @@
 
     {% include "mapviewer/components/page_header.html" with eyebrow="Inventario Nacional" title="Zonas de medición de CO₂ difuso" lead="Siete sistemas geotérmicos y volcánicos con mediciones de flujo de CO₂ del suelo. Selecciona una zona para ver su ficha técnica." rule=False %}
 
+    <!-- Móvil (< 768px): la ZoneList se sustituye por un <select> nativo encima del mapa -->
+    <div class="dx-field zone-select-mobile">
+        <label for="zona-movil" class="dx-label">Zona</label>
+        <select id="zona-movil" class="dx-select" data-zone-select>
+            <option value="">Elegir una zona…</option>
+            {% for z in zonas %}<option value="{{ z.name }}">{{ z.name }} · {{ z.n }} pts</option>{% endfor %}
+        </select>
+    </div>
+
     <div class="map-container-wrapper">
         <div class="map-content-area">
             {{ mapa.html|safe }}

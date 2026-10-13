@@ -170,6 +170,8 @@
             const markers = {};
 
             function setActiveZone(name) {
+                const select = document.querySelector('[data-zone-select]');
+                if (select) select.value = name || '';
                 zoneRows.forEach(function (row) {
                     const on = row.getAttribute('data-zone') === name;
                     row.classList.toggle('is-on', on);
@@ -191,25 +193,36 @@
                 });
             });
 
-            // Clic (o Enter) en una fila: flyTo a la zona y abrir su MapPopup.
-            // Sin JS la fila sigue siendo un enlace a la ficha técnica.
+            // flyTo a la zona y abrir su MapPopup
+            function focusZone(name) {
+                const marker = markers[name];
+                if (!marker) return false;
+                map.closePopup();
+                const show = function () {
+                    cluster.zoomToShowLayer(marker, function () { marker.openPopup(); });
+                };
+                if (map.getZoom() >= 10 && map.getBounds().contains(marker.getLatLng())) {
+                    show();
+                } else {
+                    map.once('moveend', show);
+                    map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 10), { duration: 0.8 });
+                }
+                return true;
+            }
+
+            // Clic (o Enter) en una fila. Sin JS la fila sigue siendo un enlace a la ficha técnica.
             zoneRows.forEach(function (row) {
                 row.addEventListener('click', function (e) {
-                    const marker = markers[row.getAttribute('data-zone')];
-                    if (!marker) return;
-                    e.preventDefault();
-                    map.closePopup();
-                    const show = function () {
-                        cluster.zoomToShowLayer(marker, function () { marker.openPopup(); });
-                    };
-                    if (map.getZoom() >= 10 && map.getBounds().contains(marker.getLatLng())) {
-                        show();
-                    } else {
-                        map.once('moveend', show);
-                        map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 10), { duration: 0.8 });
-                    }
+                    if (focusZone(row.getAttribute('data-zone'))) e.preventDefault();
                 });
             });
+            // <select> de zonas en móvil
+            const zoneSelect = document.querySelector('[data-zone-select]');
+            if (zoneSelect) {
+                zoneSelect.addEventListener('change', function () {
+                    if (zoneSelect.value) focusZone(zoneSelect.value);
+                });
+            }
         }
 
         // ---------- MapControls ----------

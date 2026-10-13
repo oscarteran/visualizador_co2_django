@@ -11,7 +11,7 @@ extra=False omite «Medir distancia» (Inventario Nacional).
         <button type="button" class="dx-mapbtn" aria-label="{{ fit_label|default:'Encuadrar zona' }}" title="{{ fit_label|default:'Encuadrar zona' }}" data-action="fit">{% icon "fit" %}</button>
         <button type="button" class="dx-mapbtn" aria-label="Pantalla completa" title="Pantalla completa" aria-pressed="false" data-action="fullscreen">{% icon "expand" %}</button>
     </div>
-    {% if extra %}<div class="dx-mapctl-group">
+    {% if extra %}<div class="dx-mapctl-group dx-mapctl-extra">
         <button type="button" class="dx-mapbtn" aria-label="Medir distancia" title="Medir distancia" aria-pressed="false" data-action="measure">{% icon "ruler" %}</button>
     </div>{% endif %}
 </div>
