@@ -3,62 +3,45 @@
 
 {% block title %}Inicio{% endblock %}
 
-{% block top_header_content %}
-<!-- BARRA SUPERIOR (HEADER HORIZONTAL) - SOLO EN LA PÁGINA DE INICIO -->
-<div class="app-header-container">
-    <div class="top-app-bar p-3 d-flex align-items-center justify-content-between">
-        <!-- Título de la App a la izquierda -->
-        <h2 class="mb-0 app-bar-title"></h2>
-    </div>
-</div>
-{% endblock %}
-
 {% block content %}
-<div class="content-flex-container">
+<!-- Escudos institucionales: juntos, a 40px, solo en portada y pie -->
+<div class="dx-logos page-logos">
+    <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo de la UNAM" class="dx-logo">
+    <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logotipo del Instituto de Geofísica, UNAM" class="dx-logo">
+</div>
 
-    <!-- Contenedor Logos sin posición absoluta -->
-    <div class="logos-container">
-        <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo UNAM" class="logo-unam-header">
-        <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logo Geofísica UNAM" class="logo-geofisica-header">
-    </div>
+{% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Catálogo de Emisiones Naturales Difusas de CO₂" lead="Un inventario georreferenciado de la desgasificación difusa en zonas geotérmicas y volcánicas de México." %}
 
-    <div class="header-group text-center">
-        <h1 class="main-page-title">Catálogo de Emisiones Naturales Difusas de CO₂</h1>
-        <h3 class="institution-title">UNAM: Universidad Nacional Autónoma de México.</h3>
-        <h3 class="institution-title">Instituto de Geofísica. Departamento de Recursos Naturales.</h3>
-    </div>
+<div class="reading-container">
 
-    <div class="reading-container">
+    <p>
+        Este proyecto es un esfuerzo colectivo por recolectar datos y generar datos geolocalizados
+        con el fin de generar un inventario nacional de emisiones de CO₂. A través de la barra de navegación lateral
+        es posible acceder a las diferentes páginas, mapas y contenido relacionado.
+    </p>
 
-        <p class="project-description">
-            Este proyecto es un esfuerzo colectivo por recolectar datos y generar datos geolocalizados
-            con el fin de generar un inventario nacional de emisiones de CO₂. A través de la barra de navegación lateral
-            es posible acceder a las diferentes páginas, mapas y contenido relacionado.
-        </p>
+    <p>
+        El conocimiento preciso y actualizado de las emisiones de dióxido de carbono (CO₂) es
+        fundamental
+        para la toma de decisiones climáticas a nivel nacional e internacional medido en zonas geotérmicas y
+        volcánicas. Al mapear y cuantificar estas emisiones,
+        la comunidad científica y los responsables políticos pueden identificar las principales fuentes de
+        contaminación,
+        evaluar la efectividad de las políticas de mitigación implementadas y cumplir con los compromisos
+        establecidos
+        en acuerdos ambientales globales. Este inventario actúa como una herramienta de diagnóstico esencial para la
+        sostenibilidad.
+    </p>
 
-        <p class="importance-paragraph">
-            El conocimiento preciso y actualizado de las emisiones de dióxido de carbono (CO₂) es
-            fundamental
-            para la toma de decisiones climáticas a nivel nacional e internacional medido en zonas geotérmicas y
-            volcánicas. Al mapear y cuantificar estas emisiones,
-            la comunidad científica y los responsables políticos pueden identificar las principales fuentes de
-            contaminación,
-            evaluar la efectividad de las políticas de mitigación implementadas y cumplir con los compromisos
-            establecidos
-            en acuerdos ambientales globales. Este inventario actúa como una herramienta de diagnóstico esencial para la
-            sostenibilidad.
-        </p>
-
-        <p class="importance-paragraph">
-            Más allá del impacto ambiental, el seguimiento de las emisiones de CO₂ tiene implicaciones
-            directas en la salud pública y la economía.
-            La concentración de gases de efecto invernadero está intrínsecamente ligada a la calidad del aire y a los
-            patrones climáticos extremos.
-            Disponer de datos geolocalizados y precisos permite a las autoridades planificar mejor la infraestructura
-            energética,
-            promover tecnologías limpias y proteger a las poblaciones vulnerables, optimizando la inversión y fomentando
-            un desarrollo económico resiliente y bajo en carbono.
-        </p>
-    </div>
+    <p>
+        Más allá del impacto ambiental, el seguimiento de las emisiones de CO₂ tiene implicaciones
+        directas en la salud pública y la economía.
+        La concentración de gases de efecto invernadero está intrínsecamente ligada a la calidad del aire y a los
+        patrones climáticos extremos.
+        Disponer de datos geolocalizados y precisos permite a las autoridades planificar mejor la infraestructura
+        energética,
+        promover tecnologías limpias y proteger a las poblaciones vulnerables, optimizando la inversión y fomentando
+        un desarrollo económico resiliente y bajo en carbono.
+    </p>
 </div>
 {% endblock %}

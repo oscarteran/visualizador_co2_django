@@ -1,0 +1,17 @@
+{% comment %}
+FluxLegend — leyenda de las cinco clases de flujo.
+Uso: {% load difusco %}{% flux_legend title="Flujo mediano por zona" nodata=False %}
+{% endcomment %}<div class="dx-legend{% if css_class %} {{ css_class }}{% endif %}" role="group" aria-label="{{ title }} en {{ unit }}">
+    <div class="dx-legend-head">
+        <span class="dx-legend-title">{{ title }}</span>
+        <span class="dx-legend-unit">{{ unit }}</span>
+    </div>
+    <div class="dx-legend-scale">
+        {% for s in steps %}<div class="dx-legend-step">
+            <span class="dx-legend-mk">{% include "mapviewer/components/flux_marker.html" with m=s.marker %}</span>
+            <span class="dx-swatch dx-flux-{{ s.cls }}"></span>
+            <span class="dx-legend-label">{{ s.label }}</span>
+        </div>{% endfor %}
+    </div>
+    {% if nodata %}<div class="dx-legend-foot">{% include "mapviewer/components/flux_marker.html" with m=nodata_marker %}<span>Sin dato / bajo límite de detección</span></div>{% endif %}
+</div>

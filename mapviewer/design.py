@@ -43,6 +43,37 @@ MAP_STROKE_IMAGERY = "#FFFFFF"
 MARKER_SELECTED = {"light": "#B8892B", "dark": "#E2BC67"}
 
 
+NBSP = " "
+MINUS = "−"
+
+
+def format_flux(value):
+    """Valor de flujo como en components-reference.js: miles con espacio duro
+    (5 190), 1 decimal entre 10 y 100, 2 decimales debajo de 10; «—» sin dato."""
+    if value is None:
+        return "—"
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return "—"
+    if math.isnan(value):
+        return "—"
+    if value >= 100:
+        return f"{math.floor(value + 0.5):,}".replace(",", NBSP)
+    if value >= 10:
+        return f"{value:.1f}"
+    return f"{value:.2f}"
+
+
+def format_coord(value):
+    """Coordenada en grados decimales con 5 decimales y signo menos tipográfico."""
+    if value is None:
+        return "—"
+    value = float(value)
+    text = f"{abs(value):.5f}"
+    return MINUS + text if value < 0 else text
+
+
 def flux_class(value):
     """Clase de flujo 1–5 por décadas; 0 si no hay dato."""
     if value is None:

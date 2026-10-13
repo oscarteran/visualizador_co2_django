@@ -55,3 +55,88 @@ class FluxClassTests(SimpleTestCase):
         counts = Counter(design.flux_class(v) for v in values)
         self.assertEqual(len(values), 23)
         self.assertEqual([counts[c] for c in range(1, 6)], [1, 11, 6, 3, 2])
+
+
+class FormatTests(SimpleTestCase):
+
+    def test_format_flux(self):
+        nbsp = " "
+        cases = [(5190, f"5{nbsp}190"), (2150, f"2{nbsp}150"), (644, "644"), (90.7, "90.7"),
+                 (11.4, "11.4"), (8.54, "8.54"), (0.367, "0.37"), (None, "—")]
+        for value, expected in cases:
+            self.assertEqual(design.format_flux(value), expected, value)
+
+    def test_format_coord(self):
+        self.assertEqual(design.format_coord(-98.140431), "−98.14043")
+        self.assertEqual(design.format_coord(19.937928), "19.93793")
+
+
+class ComponentTests(SimpleTestCase):
+    """Los partials reproducen el HTML de components-reference.js."""
+
+    def render(self, source, **context):
+        from django.template import Context, Template
+        return Template("{% load difusco %}" + source).render(Context(context))
+
+    def test_page_header(self):
+        inc = '{% include "mapviewer/components/page_header.html" with eyebrow="E" title="T" lead="L" %}'
+        html = self.render(inc)
+        for css in ("dx-header", "dx-eyebrow", "dx-h1", "dx-lead", "dx-rule"):
+            self.assertIn(css, html)
+        compact = self.render(inc.replace('lead="L"', 'lead="L" rule=False'))
+        self.assertNotIn("dx-rule", compact)
+
+    def test_badge_flux_and_tone(self):
+        flux = self.render('{% include "mapviewer/components/badge.html" with text="Alto" flux=4 %}')
+        self.assertIn('class="dx-badge dx-badge-flux"', flux)
+        self.assertIn('dx-dot dx-flux-4', flux)
+        high = self.render('{% include "mapviewer/components/badge.html" with text="x" tone="high" %}')
+        self.assertIn('dx-flux-5', high)
+        gold = self.render('{% include "mapviewer/components/badge.html" with text="Aviso" tone="gold" %}')
+        self.assertIn('dx-badge-gold', gold)
+        self.assertNotIn('dx-dot', gold)
+
+    def test_histogram_counts(self):
+        html = self.render("{% histogram values 'cap' %}", values=[0.5, 2, 3, 50, 5000])
+        self.assertIn("Histograma de flujo por clase: 1, 2, 1, 0, 1", html)
+        self.assertEqual(html.count('class="dx-fill-'), 4)  # sin barra para la clase vacía
+
+    def test_flux_legend(self):
+        html = self.render("{% flux_legend nodata=False %}")
+        self.assertEqual(html.count("dx-legend-step"), 5)
+        self.assertIn(design.FLUX_UNIT, html)
+        self.assertNotIn("dx-legend-foot", html)
+
+    def test_map_popup(self):
+        html = self.render('{% include "mapviewer/components/map_popup.html" with zone="Alcaparrosa" value=2150 href="/x/" %}')
+        self.assertIn("2 150", html)
+        self.assertIn("Muy alto", html)
+        self.assertIn("dx-pop-link", html)
+
+    def test_data_table_kinds(self):
+        cols = [{"key": "lat", "label": "Latitud", "numeric": True, "kind": "coord"},
+                {"key": "v", "label": "Flujo", "numeric": True, "kind": "flux"},
+                {"key": "v", "label": "Clase", "kind": "flux_class"}]
+        html = self.render('{% include "mapviewer/components/data_table.html" with columns=cols rows=rows %}',
+                           cols=cols, rows=[{"lat": -98.14043, "v": 701}])
+        self.assertIn("−98.14043", html)
+        self.assertIn('class="is-num">701<', html)
+        self.assertIn("dx-flux-4", html)
+
+
+class PageTests(SimpleTestCase):
+    PAGES = {
+        "inicio": "/", "inventario_nacional": "/inventario_nacional/", "ficha_tecnica": "/ficha_tecnica/",
+        "fuentes_info": "/fuentes_info/", "acerca_de": "/acerca_de/", "ayuda_y_contacto": "/ayuda_y_contacto/",
+    }
+
+    def test_pages_render_with_layout(self):
+        for name, url in self.PAGES.items():
+            with self.subTest(page=name):
+                html = self.client.get(url).content.decode()
+                self.assertIn('class="dx-header', html)
+                self.assertEqual(html.count('aria-current="page"'), 1)
+                self.assertIn(f'href="{url}" class="dx-nav is-active" aria-current="page"', html)
+                self.assertIn('class="dx-footer"', html)
+                self.assertNotIn("Catalogo", html)
+                self.assertNotIn("var(--accent)", html)

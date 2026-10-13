@@ -1,0 +1,15 @@
+{% comment %}
+Histogram — mediciones por clase de flujo; la geometría la calcula {% histogram values caption %}.
+{% endcomment %}<figure class="dx-hist{% if css_class %} {{ css_class }}{% endif %}">
+    <svg width="100%" viewBox="0 0 {{ width }} {{ height }}" role="img" aria-label="Histograma de flujo por clase: {{ counts }}">
+        <line class="dx-hist-base" x1="0" x2="{{ width }}" y1="{{ base_line }}" y2="{{ base_line }}"></line>
+        {% for b in bars %}<g>
+            <title>{{ b.label }} {{ unit }}: {{ b.n }} puntos</title>
+            <rect class="dx-hist-hit" x="{{ b.x }}" y="{{ top }}" width="{{ b.w }}" height="{{ hit_h }}"></rect>
+            {% if b.n %}<path class="dx-fill-{{ b.cls }}" d="{{ b.path }}"></path>{% endif %}
+            <text class="dx-hist-n" x="{{ b.cx }}" y="{{ b.n_y }}" text-anchor="middle">{{ b.n }}</text>
+            <text class="dx-hist-x" x="{{ b.cx }}" y="{{ b.x_y }}" text-anchor="middle">{{ b.label }}</text>
+        </g>{% endfor %}
+    </svg>
+    {% if caption %}<figcaption class="dx-caption">{{ caption }}</figcaption>{% endif %}
+</figure>

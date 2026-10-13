@@ -1,0 +1,8 @@
+{% comment %}
+StatTile — cifra clave con etiqueta, unidad y nota de fuente.
+Uso: {% include "mapviewer/components/stat_tile.html" with label="Mediana" value="8.54" unit="g m⁻² d⁻¹" note="…" compact=True %}
+{% endcomment %}<div class="dx-stat{% if compact %} is-compact{% endif %}{% if class %} {{ class }}{% endif %}">
+    <div class="dx-eyebrow dx-muted">{{ label }}</div>
+    <div class="dx-stat-value">{{ value }}{% if unit %}<span class="dx-stat-unit">{{ unit }}</span>{% endif %}</div>
+    {% if note %}<div class="dx-caption">{{ note }}</div>{% endif %}
+</div>

@@ -1,35 +1,13 @@
 {% extends 'mapviewer/base.html' %}
 {% load static %}
 
-{% block title %}Fuentes de Información{% endblock %}
-
-{% block extra_css %}
-<!-- Carga el CSS específico para el estilo de tabla moderno -->
-<link rel="stylesheet" href="{% static 'mapviewer/css/fuentes_informacion.css' %}">
-{% endblock %}
+{% block title %}Fuentes de información{% endblock %}
 
 {% block content %}
-<div class="main-content-body p-4">
-    
-    <!-- Logos institucionales (mismo encabezado que la página de inicio) -->
-    <div class="logos-container mx-auto">
-        <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo UNAM" class="logo-unam-header">
-        <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logo Geofísica UNAM" class="logo-geofisica-header">
-    </div>
-    
-    <div class="reading-container">
-        
-        <!-- Título de la Sección -->
-        <h2 class="section-title">Fuentes de Información y Catálogo de Datos</h2>
-        
-        <!-- Descripción Mejorada -->
-        <p class="project-description">
-            Esta sección compila el catálogo completo de recursos bibliográficos, metodológicos y la información 
-            georreferenciada utilizada para la construcción del Inventario Nacional de Emisiones de CO₂. 
-            La tabla proporciona una vista detallada de las localizaciones y el contexto asociado a cada punto de muestreo.
-        </p>
-    </div>
-    
+<div class="main-content-body">
+
+    {% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Fuentes de información y catálogo de datos" lead="Esta sección compila el catálogo completo de recursos bibliográficos, metodológicos y la información georreferenciada utilizada para la construcción del Inventario Nacional de Emisiones de CO₂. La tabla proporciona una vista detallada de las localizaciones y el contexto asociado a cada punto de muestreo." %}
+
     <!-- CONTENEDOR DE LA TABLA (Tarjeta Flotante) -->
     <div class="data-table-card">
         <h3 class="table-subtitle">Catálogo de Datos Georreferenciados</h3>

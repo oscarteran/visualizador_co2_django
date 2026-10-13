@@ -1,0 +1,16 @@
+{% comment %}
+MapPopup — tarjeta al hacer clic en un punto o una zona.
+Uso: {% include "mapviewer/components/map_popup.html" with zone="Alcaparrosa" id="ALC-23" value=2150 coords="19.93793, −98.14043" method="Cámara de acumulación" href="…" %}
+En Folium se pasa como folium.Popup(render_to_string(...), max_width=260).
+{% endcomment %}{% load difusco %}{% with c=value|flux_class %}<div class="dx-pop{% if class %} {{ class }}{% endif %}">
+    <div class="dx-pop-head"><span class="dx-eyebrow dx-muted">{{ zone|default:"Zona" }}</span>{% if id %}<span class="dx-pop-id">{{ id }}</span>{% endif %}</div>
+    <div class="dx-pop-value">{{ value|format_flux }}<span class="dx-stat-unit">{% if unit %}{{ unit }}{% else %}{% flux_unit %}{% endif %}</span></div>
+    {% if c %}{% include "mapviewer/components/badge.html" with flux=c text=c|flux_name tone=None class=None %}{% endif %}
+    <dl class="dx-pop-meta">
+        {% if coords %}<dt>Coordenadas</dt><dd>{{ coords }}</dd>{% endif %}
+        {% if date %}<dt>Fecha</dt><dd>{{ date }}</dd>{% endif %}
+        {% if method %}<dt>Método</dt><dd class="is-text">{{ method }}</dd>{% endif %}
+    </dl>
+    {% if href %}<a class="dx-pop-link" href="{{ href }}">{{ link_label|default:"Ver ficha técnica" }}{% icon "arrow" 14 %}</a>{% endif %}
+    <span class="dx-pop-tip" aria-hidden="true"></span>
+</div>{% endwith %}

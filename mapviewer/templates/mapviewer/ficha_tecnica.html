@@ -1,18 +1,15 @@
 {% extends 'mapviewer/base.html' %}
 {% load static %}
 
-{% block title %}Ficha Técnica de Zonas{% endblock %}
+{% block title %}Ficha técnica · {{ ubicacion_seleccionada }}{% endblock %}
 
 {% block content %}
 <div class="map-view-container">
 
-    <!-- 1. BARRA DE CONTROLES (Tarjeta Flotante) -->
+    {% include "mapviewer/components/page_header.html" with eyebrow="Ficha técnica" title=ubicacion_seleccionada lead="Este mapa despliega la localización de las muestras tomadas, así como el valor medido." rule=False %}
+
+    <!-- 1. BARRA DE CONTROLES (provisional: la Fase 3 la sustituye por LayerSwitcher) -->
     <div class="map-control-bar">
-        
-        <div class="map-header-text mb-3">
-            <h2 class="map-title">Información de zona:</h2>
-            <p class="map-subtitle">Este mapa despliega la localización de las muestras tomadas, así como el valor medido.</p>
-        </div>
 
         <!-- FILTROS: Envuelta en un formulario para envío de parámetros GET -->
         <!-- La acción se maneja mediante JavaScript en este caso, al tener dos filtros -->
@@ -20,7 +17,7 @@
             
             <!-- Filtro 1: Localizaciones/Tipo de Mapa -->
             <div class="map-filter-group me-4">
-                <label for="tipo_mapa" class="form-label small-label">Localizaciones</label>
+                <label for="tipo_mapa_ficha" class="form-label small-label">Mapa base</label>
                 <select name="tipo_mapa" id="tipo_mapa_ficha" class="form-select custom-select">
                     {% for opcion in opciones_mapa %}
                         <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
@@ -30,7 +27,7 @@
 
             <!-- Filtro 2: Ubicación Específica -->
             <div class="map-filter-group">
-                <label for="ubicacion" class="form-label small-label">Ubicación</label>
+                <label for="ubicacion_ficha" class="form-label small-label">Zona</label>
                 <select name="ubicacion" id="ubicacion_ficha" class="form-select custom-select">
                     {% for sitio in opciones_ubicacion %}
                         <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>

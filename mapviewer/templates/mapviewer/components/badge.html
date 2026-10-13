@@ -1,0 +1,7 @@
+{% comment %}
+Badge — etiqueta corta.
+Uso: {% include "mapviewer/components/badge.html" with text="Puebla" tone="neutral" %}
+     {% include "mapviewer/components/badge.html" with text="Alto" flux=4 %}
+tone: neutral | blue | gold | low | mid | high (low/mid/high = flux 1/3/5).
+Con flux la clase se muestra como punto de color junto a texto ink.
+{% endcomment %}{% load difusco %}{% firstof tone "neutral" as t %}{% with f=flux|badge_flux:t %}<span class="dx-badge dx-badge-{% if f %}flux{% else %}{{ t }}{% endif %}{% if class %} {{ class }}{% endif %}">{% if f %}<span class="dx-dot dx-flux-{{ f }}" aria-hidden="true"></span>{% endif %}{{ text }}</span>{% endwith %}

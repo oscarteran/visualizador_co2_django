@@ -147,14 +147,17 @@ textarea:focus-visible {
 }
 
 /* =============================================
-   BARRA LATERAL (SIDEBAR)
+   BARRA LATERAL (SIDEBAR) — NavItem
    ============================================= */
 
 .sidebar {
     width: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
     background-color: var(--surface);
     border-right: 1px solid var(--line);
-    padding: var(--space-6);
+    padding: var(--space-6) var(--space-4);
     height: 100%;
     flex-shrink: 0;
     overflow-y: auto;
@@ -162,51 +165,50 @@ textarea:focus-visible {
     transition: width 0.3s ease-in-out;
 }
 
-/* Wordmark tipográfico (la versión completa con el ₂ en oro llega en la Fase 2) */
-.sidebar .logo-area h5 {
+.sidebar-brand {
+    padding: 0 var(--space-3);
+}
+
+/* Wordmark tipográfico: Source Serif 4 600, unam-blue, con el ₂ en gold-ink */
+.dx-wordmark {
+    display: inline-block;
     font-family: var(--font-serif);
     font-size: 32px;
     line-height: 40px;
     font-weight: 600;
     color: var(--unam-blue);
-}
-
-.sidebar > h5 {
-    color: var(--ink);
-}
-
-.sidebar .nav {
-    display: flex;
-}
-
-.nav-group-bottom {
-    border-top: 1px solid var(--line);
-    padding-top: var(--space-4);
-    margin-top: auto !important;
-}
-
-.sidebar .nav-link {
-    display: block;
-    color: var(--ink-muted);
-    padding: 10px var(--space-3);
-    margin-bottom: var(--space-1);
-    border-radius: var(--radius-md);
-    font-size: 14px;
-    line-height: 22px;
-    font-weight: 500;
-}
-
-.sidebar .nav-link:hover {
-    background-color: var(--surface-sunken);
-    color: var(--ink);
     text-decoration: none;
 }
 
-.sidebar .nav-link.active {
-    background-color: var(--unam-blue-tint);
+.dx-wordmark:hover {
     color: var(--unam-blue);
-    font-weight: 600;
-    box-shadow: inset 3px 0 0 var(--unam-blue);
+    text-decoration: none;
+}
+
+.dx-wordmark-sub {
+    color: var(--gold-ink);
+}
+
+.sidebar-tagline {
+    margin: var(--space-2) 0 0;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.sidebar-nav-secondary {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+}
+
+.dx-nav .dx-icon {
+    display: inline-block;
+    margin-right: var(--space-2);
+    vertical-align: -4px;
 }
 
 /* =============================================
@@ -219,224 +221,130 @@ textarea:focus-visible {
     left: calc(var(--sidebar-width) - var(--space-4));
     transform: translateY(-50%);
     z-index: 1000;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 40px;
+    padding: 0;
     background-color: var(--surface);
     border: 1px solid var(--line-strong);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    padding: var(--space-1) var(--space-2);
     cursor: pointer;
     color: var(--ink-muted);
     transition: left 0.3s ease-in-out;
 }
 
 .toggle-sidebar:hover {
-    background-color: var(--surface-sunken);
-    color: var(--ink);
+    background-color: var(--unam-blue-tint);
+    color: var(--unam-blue);
+}
+
+.toggle-sidebar .dx-icon {
+    transition: transform 0.3s;
 }
 
 .toggle-sidebar.sidebar-collapsed {
     left: 0;
 }
 
+.toggle-sidebar.sidebar-collapsed .dx-icon {
+    transform: rotate(180deg);
+}
+
 .sidebar.collapsed {
     width: 0;
     padding: 0;
+    border-right: 0;
     overflow: hidden;
 }
 
-.sidebar.collapsed .logo-area,
-.sidebar.collapsed > h5,
-.sidebar.collapsed .nav,
-.sidebar.collapsed .theme-toggle-wrapper {
+.sidebar.collapsed > * {
     display: none;
 }
 
 /* =============================================
-   BOTÓN TOGGLE DE TEMA (SOL/LUNA)
+   BOTÓN TOGGLE DE TEMA (LUNA/SOL)
    ============================================= */
 
 .theme-toggle-wrapper {
-    padding: var(--space-2) 0;
-    margin-top: var(--space-4);
+    padding-top: var(--space-4);
     border-top: 1px solid var(--line);
 }
 
 .theme-toggle-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
     width: 100%;
-    height: 40px;
-    padding: 0 var(--space-4);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-md);
-    background-color: var(--surface);
-    color: var(--ink);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
 }
 
-.theme-toggle-btn:hover {
-    background-color: var(--surface-sunken);
-}
-
-.theme-toggle-btn i {
+.theme-toggle-btn .dx-icon {
     color: var(--unam-blue);
-    width: 20px;
-    text-align: center;
+}
+
+.theme-icon-sun,
+[data-theme="dark"] .theme-icon-moon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+    display: block;
 }
 
 /* =============================================
    ÁREA PRINCIPAL
    ============================================= */
 
+/* El área principal se desplaza completa: contenido + pie de página */
 .main-area-wrapper {
-    background-color: var(--paper);
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: hidden;
+    min-width: 0;
+    overflow-y: auto;
+    background-color: var(--paper);
 }
 
 .main-content {
-    flex: 1;
-    overflow-y: auto;
-    background-color: var(--paper);
+    flex: 1 0 auto;
+    padding: var(--space-12) var(--space-8);
     color: var(--ink);
-    position: relative;
-    padding: var(--space-6) var(--space-8);
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
 }
 
-/* =============================================
-   LOGOS INSTITUCIONALES (INICIO Y FUENTES)
-   ============================================= */
-
-.logos-container {
-    display: flex;
-    justify-content: space-between;
+.dx-page {
     width: 100%;
-    max-width: 900px;
-    margin-bottom: var(--space-2);
-    padding: 0 var(--space-4);
+    max-width: var(--content-max);
+    margin: 0 auto;
 }
 
-.logo-unam-header {
-    height: 80px;
-    width: auto;
+/* PageHeader: separación respecto al contenido de la página */
+.dx-header {
+    margin-bottom: var(--space-8);
 }
-
-.logo-geofisica-header {
-    height: 60px;
-    width: auto;
-}
-
-/* =============================================
-   ENCABEZADOS Y TIPOGRAFÍA
-   ============================================= */
-
-.header-group {
-    padding-top: var(--space-2);
-    padding-bottom: var(--space-6);
-    width: 100%;
-    max-width: 900px;
-}
-
-/* Título de portada: estilo "display" */
-.main-page-title {
-    font-family: var(--font-serif);
-    font-size: 44px;
-    line-height: 52px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    color: var(--ink);
-    margin-bottom: var(--space-1) !important;
-}
-
-/* Rótulo institucional: estilo "eyebrow" */
-.institution-title {
-    font-family: var(--font-sans);
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--gold-ink);
-    margin-bottom: var(--space-1) !important;
-}
-
-.section-title {
-    font-family: var(--font-serif);
-    font-size: 24px;
-    line-height: 32px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: var(--space-4);
-}
-
-/* =============================================
-   CONTENEDOR DE LECTURA (TEXTOS)
-   ============================================= */
 
 .reading-container {
     width: 100%;
-    max-width: var(--content-max);
-    margin-left: auto;
-    margin-right: auto;
-    padding: var(--space-8) 0;
 }
 
 .reading-container p {
     max-width: var(--measure);
 }
 
-.project-description,
-.importance-paragraph {
-    margin-bottom: var(--space-6);
-    color: var(--ink);
-}
-
 /* =============================================
-   PÁGINA INICIO — CONTENEDOR FLEX
+   LOGOS INSTITUCIONALES (PORTADA Y PIE)
    ============================================= */
 
-.content-flex-container {
-    width: 100%;
+/* Escudos juntos, a la misma altura (40px); nunca se recolorean */
+.dx-logos {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    position: relative;
-    padding: var(--space-6) 0;
+    gap: var(--space-6);
 }
 
-/* =============================================
-   BARRA SUPERIOR (HEADER HORIZONTAL) — INICIO
-   ============================================= */
-
-.app-header-container {
-    padding: var(--space-4) var(--space-6) 0;
-    flex-shrink: 0;
+.dx-logo {
+    height: 40px;
+    width: auto;
 }
 
-.top-app-bar {
-    background-color: var(--surface);
-    color: var(--ink);
-    border: 1px solid var(--line);
-    box-shadow: var(--shadow-card);
-    border-radius: var(--radius-lg);
-    flex-shrink: 0;
-}
-
-.app-bar-title {
-    font-family: var(--font-serif);
-    font-size: 24px;
-    line-height: 32px;
-    font-weight: 600;
-    color: var(--ink);
+.page-logos {
+    margin-bottom: var(--space-8);
 }
 
 /* =============================================
@@ -494,6 +402,17 @@ textarea:focus-visible {
     color: var(--ink);
 }
 
+.contact-icon {
+    color: var(--unam-blue);
+    width: 20px;
+    text-align: center;
+}
+
+.collab-plus {
+    font-size: 24px;
+    color: var(--line-strong);
+}
+
 /* Campos de formulario: borde line-strong */
 .form-label {
     display: block;
@@ -537,18 +456,31 @@ textarea:focus-visible {
 }
 
 /* =============================================
-   FOOTER
+   PIE DE PÁGINA
    ============================================= */
 
-footer {
-    background-color: var(--surface-sunken);
-    color: var(--ink-muted);
-    padding: var(--space-2) var(--space-4);
-    font-size: 12px;
-    line-height: 18px;
-    border-top: 1px solid var(--line);
-    text-align: center;
+.dx-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
     flex-shrink: 0;
+    padding: var(--space-6) var(--space-8);
+    background-color: var(--surface-sunken);
+    border-top: 1px solid var(--line);
+}
+
+.dx-footer-text p {
+    margin: 0;
+    color: var(--ink-muted);
+}
+
+.dx-footer-text p + p {
+    margin-top: var(--space-1);
+}
+
+.dx-footer-text strong {
+    color: var(--ink);
+    font-weight: 600;
 }
 
 /* =============================================
@@ -558,11 +490,15 @@ footer {
 .map-view-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    /* Llena la primera pantalla; el pie de página queda debajo */
+    min-height: calc(100vh - var(--space-12) - var(--space-8));
     width: 100%;
     gap: var(--space-4);
     padding: 0;
-    overflow: hidden;
+}
+
+.map-view-container .dx-header {
+    margin-bottom: 0;
 }
 
 /* Barra de controles del mapa */
@@ -575,30 +511,11 @@ footer {
     border: 1px solid var(--line);
 }
 
-.map-title {
-    font-family: var(--font-serif);
-    font-size: 24px;
-    line-height: 32px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 0;
-}
-
-.map-subtitle {
-    font-size: 14px;
-    line-height: 22px;
-    color: var(--ink-muted);
-    margin: var(--space-1) 0 0;
-}
-
 /* Filtros y dropdowns */
 .filter-toolbelt {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--line);
-    margin-top: var(--space-3);
 }
 
 /* Etiqueta de filtro: estilo "eyebrow" en ink-muted */
@@ -754,13 +671,6 @@ tbody tr:hover td {
    RESPONSIVE — MEDIA QUERIES
    ============================================= */
 
-@media (max-width: 992px) {
-    .main-page-title {
-        font-size: 32px;
-        line-height: 40px;
-    }
-}
-
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;
@@ -786,7 +696,13 @@ tbody tr:hover td {
     }
 
     .main-content {
-        padding: var(--space-4);
+        padding: var(--space-6) var(--space-4);
+    }
+
+    .dx-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--space-6) var(--space-4);
     }
 
     .map-control-bar {
@@ -796,14 +712,5 @@ tbody tr:hover td {
     .filter-toolbelt {
         flex-direction: column;
         gap: var(--space-2);
-    }
-
-    .main-page-title {
-        font-size: 24px;
-        line-height: 32px;
-    }
-
-    .content-flex-container {
-        padding-top: var(--space-2);
     }
 }

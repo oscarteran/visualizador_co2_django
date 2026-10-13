@@ -1,0 +1,4 @@
+{% comment %}
+FluxMarker (SVG) — lo genera {% flux_marker %} o se incluye con with m=<contexto de _marker>.
+En el mapa real el marcador es un folium.CircleMarker; este SVG es para leyendas.
+{% endcomment %}<svg class="dx-fm is-{{ m.state }}{% if m.imagery %} on-imagery{% endif %}" width="{{ m.size }}" height="{{ m.size }}" viewBox="0 0 {{ m.size }} {{ m.size }}" role="img" aria-label="{{ m.label }}">{% if m.state == "selected" %}<circle class="dx-fm-ring" cx="{{ m.center }}" cy="{{ m.center }}" r="{{ m.ring_r }}"></circle>{% endif %}{% if m.cls %}<circle class="dx-fm-dot dx-fill-{{ m.cls }}" cx="{{ m.center }}" cy="{{ m.center }}" r="{{ m.r }}"></circle>{% else %}<circle class="dx-fm-nodata" cx="{{ m.center }}" cy="{{ m.center }}" r="{{ m.r }}"></circle>{% endif %}</svg>

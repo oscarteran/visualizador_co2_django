@@ -1,4 +1,6 @@
 // mapviewer/static/mapviewer/js/theme_toggle.js
+// Se carga en <head>: aplica el tema guardado antes de pintar la página.
+// Los iconos luna/sol se muestran por CSS según [data-theme].
 
 (function() {
     'use strict';
@@ -7,9 +9,24 @@
     const DARK = 'dark';
     const LIGHT = 'light';
 
+    function readTheme() {
+        try {
+            return localStorage.getItem(THEME_KEY);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function saveTheme(theme) {
+        try {
+            localStorage.setItem(THEME_KEY, theme);
+        } catch (e) {
+            // Sin almacenamiento (modo privado): el tema dura solo esta visita.
+        }
+    }
+
     // Aplicar tema guardado INMEDIATAMENTE (antes de DOMContentLoaded para evitar flash)
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme === DARK) {
+    if (readTheme() === DARK) {
         document.documentElement.setAttribute('data-theme', DARK);
     }
 
@@ -17,24 +34,16 @@
         const btn = document.getElementById('theme-toggle-btn');
         if (!btn) return;
 
-        const icon = btn.querySelector('i');
         const label = btn.querySelector('.theme-label');
 
         function updateButton(theme) {
-            if (icon) {
-                icon.classList.remove('fa-moon', 'fa-sun');
-                icon.classList.add(theme === DARK ? 'fa-sun' : 'fa-moon');
-            }
             if (label) {
-                label.textContent = theme === DARK ? 'Tema Claro' : 'Tema Oscuro';
+                label.textContent = theme === DARK ? 'Tema claro' : 'Tema oscuro';
             }
         }
 
-        // Establecer estado inicial del botón
-        const currentTheme = document.documentElement.getAttribute('data-theme') || LIGHT;
-        updateButton(currentTheme);
+        updateButton(document.documentElement.getAttribute('data-theme') || LIGHT);
 
-        // Evento click
         btn.addEventListener('click', function() {
             const isCurrentlyDark = document.documentElement.getAttribute('data-theme') === DARK;
             const newTheme = isCurrentlyDark ? LIGHT : DARK;
@@ -45,7 +54,7 @@
                 document.documentElement.removeAttribute('data-theme');
             }
 
-            localStorage.setItem(THEME_KEY, newTheme);
+            saveTheme(newTheme);
             updateButton(newTheme);
         });
     });

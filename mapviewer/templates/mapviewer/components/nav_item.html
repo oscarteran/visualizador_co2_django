@@ -1,0 +1,6 @@
+{% comment %}
+NavItem — enlace de la barra lateral.
+Uso: {% include "mapviewer/components/nav_item.html" with href="/" label="Inicio" %}
+Queda activo (is-active + aria-current="page") cuando href coincide con la ruta
+actual; se puede forzar con active=True.
+{% endcomment %}{% load difusco %}{% if active or href == request.path %}<a href="{{ href }}" class="dx-nav is-active{% if class %} {{ class }}{% endif %}" aria-current="page">{% else %}<a href="{{ href }}" class="dx-nav{% if class %} {{ class }}{% endif %}">{% endif %}{% if icon_name %}{% icon icon_name 20 %}{% endif %}{{ label }}</a>

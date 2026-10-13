@@ -6,13 +6,10 @@
 {% block content %}
 <div class="map-view-container">
 
-    <!-- 1. BARRA DE CONTROLES (Tarjeta Flotante) -->
+    {% include "mapviewer/components/page_header.html" with eyebrow="Inventario Nacional" title="Zonas de medición de CO₂ difuso" lead="Siete sistemas geotérmicos y volcánicos con mediciones de flujo de CO₂ del suelo. Selecciona una zona para ver su ficha técnica." rule=False %}
+
+    <!-- 1. BARRA DE CONTROLES (provisional: la Fase 3 la sustituye por LayerSwitcher) -->
     <div class="map-control-bar">
-        
-        <div class="map-header-text mb-3">
-            <h2 class="map-title">Distribución de principales zonas de medición en territorio nacional</h2>
-            <p class="map-subtitle">Mapas interactivos para revisión de datos de emisiones de CO₂.</p>
-        </div>
 
         <!-- FILTROS: Envuelta en un formulario para envío de parámetros GET -->
         <form id="map-filter-form" method="GET" class="filter-toolbelt">

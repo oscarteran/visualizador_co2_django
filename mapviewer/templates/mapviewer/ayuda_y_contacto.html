@@ -1,33 +1,34 @@
 {% extends 'mapviewer/base.html' %}
 
-{% block title %}Ayuda y Contacto{% endblock %}
+{% block title %}Ayuda y contacto{% endblock %}
 
 {% block content %}
-<div class="main-content-body p-5">
+<div class="main-content-body">
+
+    {% include "mapviewer/components/page_header.html" with eyebrow="Instituto de Geofísica · UNAM" title="Ayuda y contacto" %}
 
     <div class="reading-container">
-        <h1 class="main-page-title mb-5">Ayuda y Contacto</h1>
 
         <div class="row">
 
             <!-- Columna de Información de Contacto -->
             <div class="col-md-6 mb-4">
                 <div class="card p-4 shadow-sm info-card h-100">
-                    <h4 class="mb-3 institution-title" style="color: var(--accent);">Información de Contacto</h4>
+                    <h2 class="dx-eyebrow dx-muted">Información de contacto</h2>
                     <p class="mb-4">Si tienes preguntas sobre los datos, la metodología o reportar un error, contáctanos
                         a través de los siguientes canales:</p>
 
                     <ul class="list-unstyled contact-list">
                         <li class="mb-3">
-                            <i class="fas fa-envelope me-3" style="color: var(--accent);"></i>
+                            <i class="fas fa-envelope me-3 contact-icon" aria-hidden="true"></i>
                             <strong>Email de Soporte:</strong> contacto.ayuda@unam.mx
                         </li>
                         <li class="mb-3">
-                            <i class="fas fa-phone me-3" style="color: var(--accent);"></i>
+                            <i class="fas fa-phone me-3 contact-icon" aria-hidden="true"></i>
                             <strong>Teléfono:</strong> +52 (55) 5555-5555 (Ext. 81000)
                         </li>
                         <li class="mb-3">
-                            <i class="fas fa-map-marker-alt me-3" style="color: var(--accent);"></i>
+                            <i class="fas fa-map-marker-alt me-3 contact-icon" aria-hidden="true"></i>
                             <strong>Dirección:</strong> Instituto de Geofísica, Circuito de la Investigación Científica,
                             Coyoacán, CDMX.
                         </li>
@@ -38,7 +39,7 @@
             <!-- Columna de Formulario de Contacto (Simulado) -->
             <div class="col-md-6 mb-4">
                 <div class="card p-4 shadow-sm info-card h-100">
-                    <h4 class="mb-3 institution-title" style="color: var(--accent);">Envíanos un Mensaje</h4>
+                    <h2 class="dx-eyebrow dx-muted">Envíanos un mensaje</h2>
                     <!-- Formulario simulado - NOTA: Requeriría lógica Django/backend real para funcionar -->
                     <form>
                         <div class="mb-3">
@@ -54,7 +55,7 @@
                             <textarea class="form-control" id="message" rows="4" required></textarea>
                         </div>
                         <button type="submit" class="btn login-button w-100 mt-2">
-                            <i class="fas fa-paper-plane me-2"></i> Enviar Consulta
+                            <i class="fas fa-paper-plane me-2" aria-hidden="true"></i> Enviar Consulta
                         </button>
                     </form>
                 </div>
@@ -65,5 +66,4 @@
     </div>
 </div>
 
-<!-- Estilos movidos a style.css con soporte de tema -->
 {% endblock %}
