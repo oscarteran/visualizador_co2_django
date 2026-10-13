@@ -14,9 +14,6 @@ logger = logging.getLogger(__name__)
 def inicio(request):
     return render(request, 'mapviewer/inicio.html')
 
-def catalogo(request):
-    return render(request, 'mapviewer/catalogo.html')
-
 def inventario_nacional(request):
     # Obtener el tipo de mapa seleccionado del parámetro GET
     tipo_mapa = request.GET.get('tipo_mapa', 'División Política')
