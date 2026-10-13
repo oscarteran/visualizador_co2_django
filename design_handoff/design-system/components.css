@@ -1,0 +1,163 @@
+/* DIFUSCO₂ — componentes (clases dx-*). Requiere tokens.css. Las reglas "body {…}" del inicio son solo para previews: no copiarlas tal cual. */
+
+body { margin: 0; padding: var(--space-4); background: var(--paper); color: var(--ink); font-family: var(--font-sans); font-size: 16px; line-height: 26px; }
+.dx-row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.dx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); }
+.dx-muted { color: var(--ink-muted) !important; }
+
+/* Header */
+.dx-header { max-width: var(--measure); }
+.dx-eyebrow { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gold-ink); margin-bottom: var(--space-2); }
+.dx-h1 { font-family: var(--font-serif); font-size: 32px; line-height: 40px; font-weight: 600; margin: 0; color: var(--ink); }
+.dx-lead { font-size: 18px; line-height: 28px; color: var(--ink-muted); margin: var(--space-3) 0 0; }
+.dx-rule { width: 48px; height: 2px; background: var(--gold); margin-top: var(--space-6); }
+.dx-caption { font-size: 12px; line-height: 18px; color: var(--ink-muted); }
+
+/* Nav */
+.dx-nav { display: block; padding: 10px var(--space-3); border-radius: var(--radius-md); color: var(--ink-muted); text-decoration: none; font-size: 14px; line-height: 22px; font-weight: 500; }
+.dx-nav:hover { background: var(--surface-sunken); color: var(--ink); }
+.dx-nav.is-active { background: var(--unam-blue-tint); color: var(--unam-blue); font-weight: 600; box-shadow: inset 3px 0 0 var(--unam-blue); }
+.dx-nav:focus-visible, .dx-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Button */
+.dx-btn { font: inherit; font-size: 14px; font-weight: 500; line-height: 20px; height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-md); border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); cursor: pointer; }
+.dx-btn:hover { background: var(--surface-sunken); }
+.dx-btn-primary { background: var(--unam-blue); border-color: var(--unam-blue); color: var(--on-unam-blue); }
+.dx-btn-primary:hover { background: var(--unam-blue-hover); border-color: var(--unam-blue-hover); }
+.dx-btn-quiet { border-color: transparent; background: transparent; color: var(--unam-blue); }
+.dx-btn-quiet:hover { background: var(--unam-blue-tint); }
+.dx-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Badge */
+.dx-badge { display: inline-flex; align-items: center; font-size: 12px; line-height: 20px; font-weight: 600; padding: 0 var(--space-2); border-radius: var(--radius-sm); background: var(--surface-sunken); color: var(--ink-muted); }
+.dx-badge-blue { background: var(--unam-blue-tint); color: var(--unam-blue); }
+.dx-badge-gold { background: var(--gold-tint); color: var(--gold-ink); }
+.dx-badge-flux { background: var(--surface); color: var(--ink); border: 1px solid var(--line); gap: 6px; padding: 0 var(--space-2) 0 6px; }
+.dx-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1px var(--map-stroke); flex: none; }
+
+/* StatTile */
+.dx-stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: var(--space-6); }
+.dx-stat-value { font-family: var(--font-serif); font-size: 36px; line-height: 40px; font-weight: 600; color: var(--ink); margin: var(--space-2) 0 var(--space-1); font-variant-numeric: tabular-nums; }
+.dx-stat-unit { font-family: var(--font-mono); font-size: 14px; font-weight: 400; color: var(--ink-muted); margin-left: var(--space-2); }
+
+/* (FluxLegend: see map section) */
+/* DataTable */
+.dx-table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow-x: auto; }
+.dx-table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 20px; }
+.dx-table caption { text-align: left; padding: var(--space-3) var(--space-4); font-size: 12px; color: var(--ink-muted); caption-side: bottom; border-top: 1px solid var(--line); }
+.dx-table th { text-align: left; background: var(--surface-sunken); color: var(--ink-muted); font-size: 12px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }
+.dx-table td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); color: var(--ink); }
+.dx-table tr:last-child td { border-bottom: 0; }
+.dx-table tbody tr:hover td { background: var(--unam-blue-tint); }
+.dx-table .is-num { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ================= MAPAS ================= */
+.dx-icon { display: block; flex: none; }
+.dx-btn { display: inline-flex; align-items: center; gap: var(--space-2); }
+.dx-flux-1 { background: var(--flux-1); } .dx-flux-2 { background: var(--flux-2); } .dx-flux-3 { background: var(--flux-3); } .dx-flux-4 { background: var(--flux-4); } .dx-flux-5 { background: var(--flux-5); }
+.dx-fill-1 { fill: var(--flux-1); } .dx-fill-2 { fill: var(--flux-2); } .dx-fill-3 { fill: var(--flux-3); } .dx-fill-4 { fill: var(--flux-4); } .dx-fill-5 { fill: var(--flux-5); }
+
+/* Map chrome: floating panels share one look */
+.dx-seg, .dx-mapctl-group, .dx-legend, .dx-pop, .dx-zm-chip, .dx-float { background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-md); box-shadow: var(--shadow-pop); }
+
+/* StatTile compact */
+.dx-stat.is-compact { padding: var(--space-4); }
+.dx-stat.is-compact .dx-stat-value { font-size: 28px; line-height: 32px; white-space: nowrap; }
+
+/* LayerSwitcher (segmented) */
+.dx-seg { display: inline-flex; padding: 3px; gap: 2px; }
+.dx-seg-item { font: inherit; font-size: 13px; font-weight: 500; line-height: 18px; height: 30px; padding: 0 var(--space-3); border: 0; border-radius: 3px; background: transparent; color: var(--ink-muted); cursor: pointer; }
+.dx-seg-item:hover { background: var(--surface-sunken); color: var(--ink); }
+.dx-seg-item.is-on { background: var(--unam-blue); color: var(--on-unam-blue); }
+.dx-seg-item:focus-visible, .dx-mapbtn:focus-visible, .dx-zl-row:focus-visible, .dx-pop-link:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* MapControls */
+.dx-mapctl { display: inline-flex; flex-direction: column; gap: var(--space-2); }
+.dx-mapctl-group { display: flex; flex-direction: column; overflow: hidden; }
+.dx-mapbtn { width: 36px; height: 36px; display: grid; place-items: center; border: 0; background: var(--surface); color: var(--ink); cursor: pointer; }
+.dx-mapbtn + .dx-mapbtn { border-top: 1px solid var(--line); }
+.dx-mapbtn:hover { background: var(--unam-blue-tint); color: var(--unam-blue); }
+.dx-mapbtn.is-on { background: var(--unam-blue); color: var(--on-unam-blue); }
+
+/* FluxMarker */
+.dx-fm { display: block; overflow: visible; }
+.dx-fm-dot { stroke: var(--map-stroke); stroke-width: 1; transition: r .12s; }
+.dx-fm.on-imagery .dx-fm-dot { stroke: var(--map-stroke-imagery); stroke-width: 1.5; }
+.dx-fm.is-hover .dx-fm-dot { stroke-width: 2; }
+.dx-fm-ring { fill: none; stroke: var(--marker-selected); stroke-width: 2.5; }
+.dx-fm.is-muted { opacity: .35; }
+.dx-fm-nodata { fill: var(--surface); stroke: var(--ink-muted); stroke-width: 1.25; stroke-dasharray: 2 2; }
+
+/* ZoneMarker (national map) */
+.dx-zm { position: absolute; display: flex; flex-direction: column; align-items: center; transform: translate(-50%, -100%); pointer-events: auto; }
+.dx-zm-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 var(--space-2); font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; cursor: pointer; border-radius: 14px; }
+.dx-zm-n { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--ink-muted); padding-left: 6px; border-left: 1px solid var(--line); }
+.dx-zm-stem { width: 1px; height: 10px; background: var(--ink); }
+.dx-zm-anchor { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px var(--surface); }
+.dx-zm.is-selected .dx-zm-chip { background: var(--unam-blue); border-color: var(--unam-blue); color: var(--on-unam-blue); }
+.dx-zm.is-selected .dx-zm-n { color: var(--on-unam-blue); border-color: rgba(255,255,255,.35); }
+.dx-zm.is-selected .dx-zm-chip .dx-dot { box-shadow: 0 0 0 1.5px var(--on-unam-blue); }
+
+/* ClusterMarker */
+.dx-cm { position: relative; display: grid; place-items: center; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-pop); }
+.dx-cm-ring { position: absolute; inset: 0; border-radius: 50%; -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%); mask: radial-gradient(circle, transparent 58%, #000 60%); }
+.dx-cm-n { position: relative; font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--ink); }
+
+/* MapPopup */
+.dx-pop { position: relative; width: 240px; padding: var(--space-3) var(--space-4) var(--space-4); }
+.dx-pop-head { display: flex; justify-content: space-between; align-items: baseline; }
+.dx-pop-head .dx-eyebrow { margin: 0; }
+.dx-pop-id { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+.dx-pop-value { font-family: var(--font-serif); font-size: 30px; line-height: 36px; font-weight: 600; color: var(--ink); margin: var(--space-1) 0 var(--space-2); font-variant-numeric: tabular-nums; }
+.dx-pop-meta { display: grid; grid-template-columns: auto 1fr; gap: 2px var(--space-3); margin: var(--space-3) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--line); font-size: 12px; line-height: 18px; }
+.dx-pop-meta dt { color: var(--ink-muted); }
+.dx-pop-meta dd { margin: 0; font-family: var(--font-mono); color: var(--ink); text-align: right; }
+.dx-pop-meta dd.is-text { font-family: var(--font-sans); }
+.dx-pop-link { display: inline-flex; align-items: center; gap: var(--space-1); margin-top: var(--space-3); font-size: 13px; font-weight: 600; color: var(--unam-blue); text-decoration: none; }
+.dx-pop-link:hover { text-decoration: underline; }
+.dx-pop-tip { position: absolute; left: 50%; bottom: -7px; width: 12px; height: 12px; background: var(--surface); border-right: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); transform: translateX(-50%) rotate(45deg); }
+
+/* FluxLegend */
+.dx-legend { display: inline-block; padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); }
+.dx-legend-head { display: flex; gap: var(--space-2); align-items: baseline; margin-bottom: var(--space-2); }
+.dx-legend-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.dx-legend-unit { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+.dx-legend-scale { display: flex; gap: 2px; }
+.dx-legend-step { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-1); min-width: 58px; }
+.dx-legend-mk { height: 30px; display: flex; align-items: flex-end; justify-content: center; }
+.dx-swatch { display: block; height: 8px; }
+.dx-legend-step:first-child .dx-swatch { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.dx-legend-step:last-child .dx-swatch { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.dx-legend-label { font-family: var(--font-mono); font-size: 11px; line-height: 14px; color: var(--ink-muted); text-align: center; }
+.dx-legend-foot { display: flex; align-items: center; gap: var(--space-1); margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--line); font-size: 11px; color: var(--ink-muted); }
+
+/* ZoneList */
+.dx-zl { list-style: none; margin: 0; padding: 0; }
+.dx-zl-row { display: flex; align-items: center; gap: var(--space-3); padding: 10px var(--space-3); border-radius: var(--radius-md); text-decoration: none; color: var(--ink); }
+.dx-zl-row:hover { background: var(--surface-sunken); }
+.dx-zl-row.is-on { background: var(--unam-blue-tint); box-shadow: inset 3px 0 0 var(--unam-blue); }
+.dx-zl-main { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.dx-zl-name { font-size: 14px; font-weight: 600; line-height: 20px; }
+.dx-zl-sub { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.dx-zl-n { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+
+/* Histogram */
+.dx-hist { margin: 0; }
+.dx-hist svg { display: block; overflow: visible; }
+.dx-hist-base { stroke: var(--line-strong); stroke-width: 1; }
+.dx-hist-hit { fill: transparent; }
+.dx-hist g:hover .dx-hist-hit { fill: var(--surface-sunken); }
+.dx-hist-n { font-family: var(--font-mono); font-size: 11px; fill: var(--ink); }
+.dx-hist-x { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-muted); }
+
+/* MapCanvas (ilustrativo) */
+.dx-canvas { position: relative; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--line); background: var(--basemap-land); }
+.dx-canvas.is-imagery { background: #2F3A2C; }
+.dx-canvas.is-relief { background: var(--basemap-relief); }
+.dx-canvas-bg { position: absolute; inset: 0; }
+.dx-iso { fill: none; stroke: var(--basemap-line); stroke-width: 1; }
+.dx-canvas.is-imagery .dx-iso { stroke: rgba(255,255,255,.12); }
+.dx-grat { stroke: var(--basemap-line); stroke-width: 1; stroke-dasharray: 2 4; opacity: .7; }
+.dx-attrib { position: absolute; right: 0; bottom: 0; font-size: 10px; line-height: 14px; padding: 2px 6px; background: var(--surface); color: var(--ink-muted); opacity: .9; border-top-left-radius: var(--radius-sm); }
+.dx-scale { position: absolute; left: var(--space-4); bottom: var(--space-3); font-family: var(--font-mono); font-size: 10px; color: var(--ink); }
+.dx-scale i { display: block; width: 80px; height: 5px; border: 1.5px solid var(--ink); border-top: 0; margin-top: 2px; }

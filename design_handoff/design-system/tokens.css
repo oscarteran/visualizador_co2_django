@@ -1,0 +1,89 @@
+/* DIFUSCO₂ — tokens.css, generado desde tokens.json. No editar a mano: cambia tokens.json y regenera. */
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+:root, [data-theme="light"] {
+  --paper: #F7F6F2;
+  --surface: #FFFFFF;
+  --surface-sunken: #EFEDE6;
+  --ink: #14213D;
+  --ink-muted: #4F5869;
+  --line: #DDD9CE;
+  --line-strong: #8C8572;
+  --unam-blue: #0B2D5B;
+  --unam-blue-hover: #12407D;
+  --on-unam-blue: #FFFFFF;
+  --unam-blue-tint: #E6ECF5;
+  --gold: #B8892B;
+  --gold-ink: #8A6414;
+  --gold-tint: #F5ECD6;
+  --focus: #1F5FBF;
+  --success: #2E7D4F;
+  --danger: #B42318;
+  --flux-1: #F4E08A;
+  --flux-2: #E9A23F;
+  --flux-3: #D2662A;
+  --flux-4: #A8321F;
+  --flux-5: #6E1A25;
+  --map-stroke: #14213D;
+  --map-stroke-imagery: #FFFFFF;
+  --marker-selected: #B8892B;
+  --basemap-land: #F1EFE9;
+  --basemap-relief: #E9E4D8;
+  --basemap-line: #D3CEC1;
+  --shadow-card: 0 1px 2px rgba(20,33,61,0.06), 0 1px 1px rgba(20,33,61,0.04);
+  --shadow-pop: 0 8px 24px rgba(20,33,61,0.14);
+}
+
+[data-theme="dark"] {
+  --paper: #0C1424;
+  --surface: #121C30;
+  --surface-sunken: #0A101D;
+  --ink: #ECE8DF;
+  --ink-muted: #A9B0BE;
+  --line: #26324A;
+  --line-strong: #5A6A88;
+  --unam-blue: #7FA6E0;
+  --unam-blue-hover: #9DBBE8;
+  --on-unam-blue: #0C1424;
+  --unam-blue-tint: #1A2A47;
+  --gold: #D9AE52;
+  --gold-ink: #E2BC67;
+  --gold-tint: #2B2615;
+  --focus: #9DBBE8;
+  --success: #6CC08F;
+  --danger: #F08A7E;
+  --map-stroke: #ECE8DF;
+  --marker-selected: #E2BC67;
+  --basemap-land: #151E31;
+  --basemap-relief: #1B2234;
+  --basemap-line: #2A3550;
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-pop: 0 8px 24px rgba(0,0,0,0.55);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --sidebar-width: 264px;
+  --content-max: 1200px;
+  --measure: 72ch;
+  --marker-r-1: 5px;
+  --marker-r-2: 6px;
+  --marker-r-3: 7px;
+  --marker-r-4: 9px;
+  --marker-r-5: 11px;
+  --map-control-size: 36px;
+  --map-inset: 16px;
+  --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
