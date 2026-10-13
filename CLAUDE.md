@@ -24,11 +24,11 @@ Single Django app (`mapviewer`) with `config/` holding project settings. **There
 
 **Data flow:**
 - Raw geospatial CO2 data lives in `data/raw/` and `data/processed/` (CSVs and JSON)
-- `mapviewer/utils/mapas.py` reads these files directly from disk (relative paths) and renders interactive Folium maps as HTML strings returned to templates
+- `mapviewer/utils/mapas.py` reads these files from `data/processed/` and builds the Folium maps (`mapa_nacional()`, `mapa_zona()`)
 - `mapviewer/utils/tablas.py` generates the data for the data sources table
-- Views inject the rendered HTML into templates — maps are never saved to disk
+- Maps are embedded inline (no iframe): `mapas.py` splits the Folium figure into `header` (goes in `{% block head_extra %}`), `html` and `script`, plus a `config` dict rendered with `json_script` — maps are never saved to disk
 
-**Map tile options** (used in `generar_mapa_html` and `generar_mapas_individuales`): OpenStreetMap, Esri.WorldImagery (satellite), OpenTopoMap (relief). CO2 marker color in `ficha_tecnica` is determined by `asignar_color_emision()` thresholds in `mapas.py`.
+**Maps:** base layers are Esri World Light/Dark Gray Canvas («Mapa», follows the theme; CARTO now requires an API key), Esri.WorldImagery («Satélite») and Esri.WorldShadedRelief («Relieve»). Measurement points are `CircleMarker`s colored/sized by `design.flux_class()` (log classes 1–5); zones are `DivIcon` ZoneMarkers in a `MarkerCluster`. `static/mapviewer/js/map_controls.js` turns the LayerSwitcher/MapControls/FluxLegend partials into Leaflet controls, switches layers without reloading (keeps `?tipo_mapa=`), and handles theme, hover and selection states; `static/mapviewer/css/map.css` restyles Leaflet with tokens.
 
 **Static files:** Served via WhiteNoise middleware. During development, static files are sourced from `mapviewer/static/mapviewer/`. Run `collectstatic` before deploying.
 

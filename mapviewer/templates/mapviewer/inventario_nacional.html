@@ -1,71 +1,30 @@
 {% extends 'mapviewer/base.html' %}
-{% load static %}
+{% load static difusco %}
 
 {% block title %}Inventario Nacional{% endblock %}
+
+{% block head_extra %}{{ mapa.header|safe }}{% endblock %}
 
 {% block content %}
 <div class="map-view-container">
 
     {% include "mapviewer/components/page_header.html" with eyebrow="Inventario Nacional" title="Zonas de medición de CO₂ difuso" lead="Siete sistemas geotérmicos y volcánicos con mediciones de flujo de CO₂ del suelo. Selecciona una zona para ver su ficha técnica." rule=False %}
 
-    <!-- 1. BARRA DE CONTROLES (provisional: la Fase 3 la sustituye por LayerSwitcher) -->
-    <div class="map-control-bar">
-
-        <!-- FILTROS: Envuelta en un formulario para envío de parámetros GET -->
-        <form id="map-filter-form" method="GET" class="filter-toolbelt">
-            
-            <!-- Campo oculto para mantener la consistencia de la URL si se requiere -->
-            <!-- <input type="hidden" name="ubicacion" value="{{ ubicacion_seleccionada }}"> -->
-
-            <!-- Filtro de Capas/Tipo de Mapa -->
-            <div class="map-filter-group me-4">
-                <label for="tipo_mapa" class="form-label small-label">Capas de Visualización</label>
-                <select name="tipo_mapa" id="tipo_mapa" class="form-select custom-select">
-                    {% for opcion in opciones_mapa %}
-                        <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <!-- Ejemplo de Filtro de Ubicación Adicional (Se puede integrar en la vista) -->
-            <div class="map-filter-group">
-                <label for="ubicacion_filtro" class="form-label small-label">Ubicación Específica</label>
-                <select id="ubicacion_filtro" class="form-select custom-select">
-                    <option value="">Todas las ubicaciones</option>
-                    <!-- Aquí iría un bucle si tuvieras una lista de ubicaciones para el filtro -->
-                    <!-- {% for ubicacion in ubicaciones %} ... {% endfor %} -->
-                </select>
-            </div>
-            
-        </form>
-    </div>
-    
-    <!-- 2. CONTENEDOR DEL MAPA (Tarjeta Flotante Grande) -->
     <div class="map-container-wrapper">
-        <!-- El mapa se renderiza aquí -->
         <div class="map-content-area">
-            {{ mapa|safe }}
+            {{ mapa.html|safe }}
         </div>
-        
-        <!-- Tarjeta de Leyenda (Ejemplo de elemento flotante sobre el mapa) -->
-        <div class="map-legend-box">
-            <h5 class="legend-title">Leyenda:</h5>
-            <div class="legend-item">
-                <span class="dx-dot dx-flux-1" aria-hidden="true"></span> Bajo
-            </div>
-            <div class="legend-item">
-                <span class="dx-dot dx-flux-3" aria-hidden="true"></span> Medio
-            </div>
-            <div class="legend-item">
-                <span class="dx-dot dx-flux-5" aria-hidden="true"></span> Alto
-            </div>
+
+        <!-- Controles del mapa: map_controls.js los coloca como controles de Leaflet -->
+        <div class="dx-map-controls-src" hidden>
+            <div data-map-control="topright">{% include "mapviewer/components/layer_switcher.html" with layers=capas value=capa_inicial %}</div>
+            <div data-map-control="topright">{% include "mapviewer/components/map_controls.html" with fit_label="Ver todo el país" extra=False %}</div>
+            <div data-map-control="bottomright">{% flux_legend title="Flujo mediano por zona" nodata=False %}</div>
         </div>
-        
     </div>
 
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'mapviewer/js/map_controls.js' %}"></script>
+{{ mapa.script|safe }}
+{{ mapa.config|json_script:"map-config" }}
 {% endblock %}

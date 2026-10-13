@@ -1,0 +1,211 @@
+/* =============================================
+   DIFUSCO₂ — map.css
+   Restyle de Leaflet/Folium con los tokens y componentes dx-* (Mapas.md).
+   Se inyecta al final del header de Folium (mapviewer/utils/mapas.py) para
+   ganar sobre leaflet.css y los CSS de los plugins. Sin hex: solo var(--token).
+   ============================================= */
+
+/* ---------- contenedor ---------- */
+
+.leaflet-container {
+    background: var(--basemap-land);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--ink);
+}
+
+.leaflet-container:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+}
+
+.leaflet-container a {
+    color: var(--unam-blue);
+}
+
+/* ---------- controles flotantes: a map-inset del borde ---------- */
+
+.leaflet-top .leaflet-control {
+    margin-top: var(--map-inset);
+}
+
+.leaflet-bottom .leaflet-control {
+    margin-bottom: var(--map-inset);
+}
+
+.leaflet-right .leaflet-control {
+    margin-right: var(--map-inset);
+}
+
+.leaflet-left .leaflet-control {
+    margin-left: var(--map-inset);
+}
+
+/* Controles propios de los plugins: los sustituye MapControls */
+.dx-native-hidden,
+.leaflet-control-measure {
+    display: none !important;
+}
+
+/* Barras nativas de Leaflet con el aspecto de MapControls (.dx-mapctl-group) */
+.leaflet-bar {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pop);
+    overflow: hidden;
+}
+
+.leaflet-bar a {
+    width: var(--map-control-size);
+    height: var(--map-control-size);
+    line-height: var(--map-control-size);
+    background: var(--surface);
+    color: var(--ink);
+    border-bottom: 1px solid var(--line);
+}
+
+.leaflet-bar a:last-child {
+    border-bottom: 0;
+}
+
+.leaflet-bar a:hover {
+    background: var(--unam-blue-tint);
+    color: var(--unam-blue);
+}
+
+.leaflet-bar a:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* ---------- atribución y escala (como .dx-attrib y .dx-scale) ---------- */
+
+.leaflet-container .leaflet-control-attribution {
+    margin: 0;
+    font-size: 10px;
+    line-height: 14px;
+    padding: 2px 6px;
+    background: var(--surface);
+    color: var(--ink-muted);
+    opacity: 0.9;
+    border-top-left-radius: var(--radius-sm);
+}
+
+.leaflet-control-scale-line {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--ink);
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    border-top: 0;
+    padding: 0 var(--space-1);
+    text-shadow: none;
+}
+
+.is-imagery .leaflet-control-scale-line {
+    color: var(--map-stroke-imagery);
+    border-color: var(--map-stroke-imagery);
+}
+
+/* ---------- marcadores HTML (ZoneMarker, ClusterMarker) ---------- */
+
+.dx-divicon {
+    background: none;
+    border: 0;
+}
+
+/* ---------- popups ---------- */
+
+/* Genérico (p. ej. resultado de «Medir distancia") */
+.leaflet-popup-content-wrapper {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pop);
+}
+
+.leaflet-popup-tip {
+    background: var(--surface);
+    box-shadow: none;
+}
+
+.leaflet-popup-content {
+    font-size: 13px;
+    line-height: 18px;
+}
+
+/* MapPopup: la tarjeta .dx-pop trae fondo, borde, sombra y flecha propios */
+.dx-leaflet-popup .leaflet-popup-content-wrapper {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+.dx-leaflet-popup .leaflet-popup-content {
+    margin: 0;
+    width: auto !important;
+}
+
+.dx-leaflet-popup .leaflet-popup-tip-container {
+    display: none;
+}
+
+/* Resultado del plugin de medición */
+.leaflet-measure-resultpopup h3 {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 var(--space-1);
+}
+
+.leaflet-measure-resultpopup p {
+    margin: 0;
+    font-family: var(--font-mono);
+    color: var(--ink);
+}
+
+.leaflet-measure-resultpopup ul.tasks {
+    margin: var(--space-2) 0 0;
+    padding: var(--space-2) 0 0;
+    border-top: 1px solid var(--line);
+}
+
+/* ---------- tooltip (valor + unidad) ---------- */
+
+.leaflet-tooltip.dx-leaflet-tooltip {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pop);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 18px;
+    padding: var(--space-1) var(--space-2);
+    white-space: nowrap;
+}
+
+.dx-leaflet-tooltip.leaflet-tooltip-top::before {
+    border-top-color: var(--line-strong);
+}
+
+.dx-leaflet-tooltip.leaflet-tooltip-bottom::before {
+    border-bottom-color: var(--line-strong);
+}
+
+.dx-leaflet-tooltip.leaflet-tooltip-left::before {
+    border-left-color: var(--line-strong);
+}
+
+.dx-leaflet-tooltip.leaflet-tooltip-right::before {
+    border-right-color: var(--line-strong);
+}

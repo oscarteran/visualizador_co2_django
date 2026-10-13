@@ -1,0 +1,6 @@
+{% comment %}
+LayerSwitcher — control segmentado del mapa base (Mapa · Satélite · Relieve).
+Uso: {% include "mapviewer/components/layer_switcher.html" with layers=capas value="mapa" %}
+layers: {clave: etiqueta}. map_controls.js cambia la capa sin recargar y
+navega con las flechas (role="radiogroup").
+{% endcomment %}<div class="dx-seg{% if class %} {{ class }}{% endif %}" role="radiogroup" aria-label="{{ label|default:'Mapa base' }}">{% for key, text in layers.items %}<button type="button" role="radio" class="dx-seg-item{% if key == value %} is-on{% endif %}" aria-checked="{% if key == value %}true{% else %}false{% endif %}" tabindex="{% if key == value %}0{% else %}-1{% endif %}" data-layer="{{ key }}">{{ text }}</button>{% endfor %}</div>

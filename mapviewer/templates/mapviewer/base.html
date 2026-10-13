@@ -29,8 +29,8 @@
     <link rel="stylesheet" href="{% static 'mapviewer/css/tokens.css' %}">
     <link rel="stylesheet" href="{% static 'mapviewer/css/components.css' %}">
     <link rel="stylesheet" href="{% static 'mapviewer/css/style.css' %}">
-    <!-- Font Awesome: solo para iconos de contenido de Acerca de / Ayuda (se sustituyen en la Fase 4) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Dependencias propias de la página (Leaflet/Folium + map.css en las páginas de mapa) -->
+    {% block head_extra %}{% endblock %}
 
     <!-- Aplica el tema guardado antes de pintar la página (evita el destello claro) -->
     <script src="{% static 'mapviewer/js/theme_toggle.js' %}"></script>

@@ -1,31 +1,14 @@
 // mapviewer/static/mapviewer/js/ficha_tecnica_controls.js
+// Al elegir otra zona recarga la ficha con ?ubicacion= y la capa base actual
+// (el campo oculto tipo_mapa lo mantiene al día map_controls.js).
 
-document.addEventListener('DOMContentLoaded', function() {
-    const tipoMapaSelect = document.getElementById('tipo_mapa_ficha');
-    const ubicacionSelect = document.getElementById('ubicacion_ficha');
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('map-filter-form-ficha');
+    const ubicacionSelect = document.getElementById('ubicacion_ficha');
 
-    // Función que maneja el envío
-    function actualizarMapa() {
-        // Obtenemos los valores de ambos selectores
-        const tipoMapa = tipoMapaSelect.value;
-        const ubicacion = ubicacionSelect.value;
-        
-        // Construimos la URL con los nuevos parámetros GET
-        // Usamos la propiedad action del formulario y añadimos los query params
-        form.action = form.action.split('?')[0] + 
-                     '?tipo_mapa=' + encodeURIComponent(tipoMapa) + 
-                     '&ubicacion=' + encodeURIComponent(ubicacion);
-        
-        form.submit();
-    }
-    
-    // Asignamos la función de actualización a ambos eventos 'change'
-    if (tipoMapaSelect) {
-        tipoMapaSelect.addEventListener('change', actualizarMapa);
-    }
-    
-    if (ubicacionSelect) {
-        ubicacionSelect.addEventListener('change', actualizarMapa);
+    if (form && ubicacionSelect) {
+        ubicacionSelect.addEventListener('change', function () {
+            form.submit();
+        });
     }
 });

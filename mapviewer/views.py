@@ -1,7 +1,7 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render
-from .utils.mapas import generar_mapa_html, generar_mapas_individuales
+from .utils import mapas
 from .utils.tablas import tabla_resumen_info
 import logging
 
@@ -15,52 +15,29 @@ def inicio(request):
     return render(request, 'mapviewer/inicio.html')
 
 def inventario_nacional(request):
-    # Obtener el tipo de mapa seleccionado del parámetro GET
-    tipo_mapa = request.GET.get('tipo_mapa', 'División Política')
-    
-    # Ruta del archivo JSON (ajusta según tu estructura de proyecto)
-    json_path = 'data/processed/grafico_nacional.json'
-    
-    # Generar el mapa con el tipo seleccionado
-    mapa_html = generar_mapa_html(json_path, tipo_mapa)
-    
-    if not mapa_html:
-        return render(request, 'mapviewer/error.html', {'error': 'No se pudo generar el mapa.'})
-    
-    # Obtener las opciones de mapa para el dropdown
-    opciones_mapa = ["División Política", "Satelital", "Relieve"]
-    
+    # Capa base inicial desde ?tipo_mapa= (el LayerSwitcher la cambia sin recargar)
+    capa = mapas.capa_desde_get(request.GET.get('tipo_mapa'))
+
     context = {
-        'mapa': mapa_html,
-        'tipo_mapa_seleccionado': tipo_mapa,
-        'opciones_mapa': opciones_mapa
+        'mapa': mapas.mapa_nacional(capa),
+        'capas': mapas.CAPAS,
+        'capa_inicial': capa,
     }
-    
     return render(request, 'mapviewer/inventario_nacional.html', context)
 
 def ficha_tecnica(request):
-    # Obtener el tipo de mapa seleccionado del parámetro GET
-    tipo_mapa = request.GET.get('tipo_mapa', 'División Política')
-    ubicacion = request.GET.get('ubicacion', 'Alcaparrosa')
-    
-    # Generar el mapa con el tipo seleccionado
-    mapa_html = generar_mapas_individuales(ubicacion, tipo_mapa)
-    
-    if not mapa_html:
-        return render(request, 'mapviewer/error.html', {'error': 'No se pudo generar el mapa.'})
-    
-    # Obtener las opciones de mapa para el dropdown
-    opciones_mapa = ["División Política", "Satelital", "Relieve"]
-    opciones_ubicacion = ["Acoculco", "Alcaparrosa", "Azufres", "Chichinautzin", "Escalera", "Michoa", "Puruandiro"]
-    
+    capa = mapas.capa_desde_get(request.GET.get('tipo_mapa'))
+    ubicacion = request.GET.get('ubicacion', mapas.ZONA_POR_DEFECTO)
+    if ubicacion not in mapas.ARCHIVOS_ZONA:
+        ubicacion = mapas.ZONA_POR_DEFECTO
+
     context = {
-        'mapa': mapa_html,
-        'tipo_mapa_seleccionado': tipo_mapa,
+        'mapa': mapas.mapa_zona(ubicacion, capa),
+        'capas': mapas.CAPAS,
+        'capa_inicial': capa,
         'ubicacion_seleccionada': ubicacion,
-        'opciones_mapa': opciones_mapa,
-        'opciones_ubicacion': opciones_ubicacion,
+        'opciones_ubicacion': list(mapas.ARCHIVOS_ZONA),
     }
-    
     return render(request, 'mapviewer/ficha_tecnica.html', context)
 
 def fuentes_info(request):

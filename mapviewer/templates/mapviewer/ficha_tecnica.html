@@ -1,31 +1,19 @@
 {% extends 'mapviewer/base.html' %}
-{% load static %}
+{% load static difusco %}
 
 {% block title %}Ficha técnica · {{ ubicacion_seleccionada }}{% endblock %}
+
+{% block head_extra %}{{ mapa.header|safe }}{% endblock %}
 
 {% block content %}
 <div class="map-view-container">
 
     {% include "mapviewer/components/page_header.html" with eyebrow="Ficha técnica" title=ubicacion_seleccionada lead="Este mapa despliega la localización de las muestras tomadas, así como el valor medido." rule=False %}
 
-    <!-- 1. BARRA DE CONTROLES (provisional: la Fase 3 la sustituye por LayerSwitcher) -->
+    <!-- Selector de zona (recarga con ?ubicacion=; conserva la capa base actual) -->
     <div class="map-control-bar">
-
-        <!-- FILTROS: Envuelta en un formulario para envío de parámetros GET -->
-        <!-- La acción se maneja mediante JavaScript en este caso, al tener dos filtros -->
         <form id="map-filter-form-ficha" method="GET" class="filter-toolbelt">
-            
-            <!-- Filtro 1: Localizaciones/Tipo de Mapa -->
-            <div class="map-filter-group me-4">
-                <label for="tipo_mapa_ficha" class="form-label small-label">Mapa base</label>
-                <select name="tipo_mapa" id="tipo_mapa_ficha" class="form-select custom-select">
-                    {% for opcion in opciones_mapa %}
-                        <option value="{{ opcion }}" {% if opcion == tipo_mapa_seleccionado %}selected{% endif %}>{{ opcion }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Filtro 2: Ubicación Específica -->
+            <input type="hidden" name="tipo_mapa" value="{{ capa_inicial }}" data-map-layer-input>
             <div class="map-filter-group">
                 <label for="ubicacion_ficha" class="form-label small-label">Zona</label>
                 <select name="ubicacion" id="ubicacion_ficha" class="form-select custom-select">
@@ -34,25 +22,24 @@
                     {% endfor %}
                 </select>
             </div>
-            
         </form>
     </div>
-    
-    <!-- 2. CONTENEDOR DEL MAPA (Tarjeta Flotante Grande) -->
+
     <div class="map-container-wrapper">
-        <!-- El mapa se renderiza aquí -->
         <div class="map-content-area">
-            {{ mapa|safe }}
+            {{ mapa.html|safe }}
         </div>
-        
-        <!-- Aquí iría una Leyenda o Tarjeta de Detalle si es necesario -->
-        
+
+        <!-- Controles del mapa: map_controls.js los coloca como controles de Leaflet -->
+        <div class="dx-map-controls-src" hidden>
+            <div data-map-control="topright">{% include "mapviewer/components/layer_switcher.html" with layers=capas value=capa_inicial %}</div>
+            <div data-map-control="topright">{% include "mapviewer/components/map_controls.html" with fit_label="Encuadrar zona" extra=True %}</div>
+            <div data-map-control="bottomleft">{% flux_legend nodata=False %}</div>
+        </div>
     </div>
 
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<!-- Importamos el JS específico para esta vista -->
-<script src="{% static 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
+{{ mapa.script|safe }}
+{{ mapa.config|json_script:"map-config" }}
 {% endblock %}

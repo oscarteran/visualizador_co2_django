@@ -140,3 +140,61 @@ class PageTests(SimpleTestCase):
                 self.assertIn('class="dx-footer"', html)
                 self.assertNotIn("Catalogo", html)
                 self.assertNotIn("var(--accent)", html)
+
+
+class MapTests(SimpleTestCase):
+    """Criterios de aceptación de la Fase 3 que se pueden comprobar sin navegador."""
+
+    def test_capa_desde_get(self):
+        from .utils import mapas
+        self.assertEqual(mapas.capa_desde_get("Satelital"), "satelite")      # valor antiguo
+        self.assertEqual(mapas.capa_desde_get("relieve"), "relieve")
+        self.assertEqual(mapas.capa_desde_get("otra"), "mapa")
+        self.assertEqual(mapas.capa_desde_get(None), "mapa")
+
+    def test_ficha_alcaparrosa(self):
+        from .utils import mapas
+        m = mapas.mapa_zona("Alcaparrosa")
+        page = m["header"] + m["html"] + m["script"]
+        self.assertEqual(page.count("L.circleMarker("), 23)
+        fills = [design.FLUX_COLORS[c] for c in range(1, 6)]
+        self.assertEqual([page.count(f'"fillColor": "{h}"') for h in fills], [1, 11, 6, 3, 2])
+        self.assertIn(design.FLUX_UNIT, page)                       # tooltips y popups con unidad
+        self.assertIn("leaflet-measure", m["header"])
+        self.assertIn("fitBounds", page)
+        self.assertEqual(m["config"]["kind"], "zona")
+
+    def test_sin_residuos_de_folium(self):
+        from .utils import mapas
+        for m in (mapas.mapa_nacional(), mapas.mapa_zona("Escalera")):
+            page = m["header"] + m["html"] + m["script"]
+            for residuo in ("Make this Notebook", "awesome-markers", "AwesomeMarkers", "bootstrap",
+                            "font-awesome", "fa-fire", "user-scalable", "openstreetmap.org/{z}"):
+                self.assertNotIn(residuo, page)
+            self.assertIn("mapviewer/css/map.css", m["header"])
+
+    def test_inventario_zonas(self):
+        from .utils import mapas
+        m = mapas.mapa_nacional()
+        nombres = [z["name"] for z in m["zonas"]]
+        self.assertEqual(len(nombres), 7)
+        alc = next(z for z in m["zonas"] if z["name"] == "Alcaparrosa")
+        self.assertEqual((alc["n"], alc["cls"]), (23, 2))               # mediana 8.54 → clase 2
+        self.assertEqual(m["html"].count("dx-zm"), 0)                   # las etiquetas van en el script
+        self.assertEqual(m["script"].count("dx-zm-chip"), 7)
+        self.assertIn("markerClusterGroup", m["script"])
+
+    def test_paginas_de_mapa(self):
+        for url in ("/inventario_nacional/?tipo_mapa=Satelital", "/ficha_tecnica/?ubicacion=Michoa&tipo_mapa=relieve"):
+            with self.subTest(url=url):
+                html = self.client.get(url).content.decode()
+                self.assertIn('role="radiogroup"', html)
+                self.assertIn('id="map-config"', html)
+                self.assertIn('dx-legend', html)
+                self.assertNotIn("<iframe", html)
+                self.assertNotIn('name="tipo_mapa" id=', html)            # el <select> de capa ya no existe
+        ficha = self.client.get("/ficha_tecnica/?ubicacion=Michoa&tipo_mapa=relieve").content.decode()
+        self.assertIn('class="dx-seg-item is-on" aria-checked="true" tabindex="0" data-layer="relieve"', ficha)
+        self.assertIn('data-action="measure"', ficha)
+        inventario = self.client.get("/inventario_nacional/").content.decode()
+        self.assertNotIn('data-action="measure"', inventario)

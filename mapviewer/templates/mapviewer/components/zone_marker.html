@@ -1,0 +1,4 @@
+{% comment %}
+ZoneMarker — etiqueta de zona (punto de clase mediana + nombre + nº de puntos) con tallo y ancla.
+Se usa como HTML de folium.DivIcon; z = {"name", "cls", "n"}.
+{% endcomment %}<div class="dx-zm{% if selected %} is-selected{% endif %}"><span class="dx-zm-chip"><span class="dx-dot dx-flux-{{ z.cls|default:3 }}" aria-hidden="true"></span><span class="dx-zm-name">{{ z.name }}</span>{% if z.n is not None %}<span class="dx-zm-n">{{ z.n }}</span>{% endif %}</span><span class="dx-zm-stem" aria-hidden="true"></span><span class="dx-zm-anchor" aria-hidden="true"></span></div>
