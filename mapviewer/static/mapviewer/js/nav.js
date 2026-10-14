@@ -5,12 +5,30 @@
 //   Sin JS, «Zonas» es un enlace al mapa nacional.
 // - ☰ (< 900px) abre el panel #menu-movil con las mismas secciones.
 // - «Cómo citar» abre el <dialog> de la cita, con botones para copiarla.
+// - Los enlaces a zonas ([data-conserva-capa]) llevan la capa base actual.
 
 document.addEventListener('DOMContentLoaded', function () {
     initZoneMenu();
     initMobileMenu();
     initCiteDialog();
+    initKeepLayer();
 });
+
+// Al pasar de una zona a otra (menú, panel móvil o paginador) se conserva la capa
+// base: map_controls.js guarda la elegida en ?tipo_mapa= de la URL actual.
+function initKeepLayer() {
+    function keepLayer(e) {
+        const link = e.target.closest && e.target.closest('a[data-conserva-capa]');
+        const layer = new URLSearchParams(window.location.search).get('tipo_mapa');
+        if (!link || !layer) return;
+        const url = new URL(link.href);
+        url.searchParams.set('tipo_mapa', layer);
+        link.href = url.toString();
+    }
+    // auxclick: clic central (abrir en otra pestaña)
+    document.addEventListener('click', keepLayer, true);
+    document.addEventListener('auxclick', keepLayer, true);
+}
 
 function initZoneMenu() {
     const trigger = document.getElementById('zonas-trigger');

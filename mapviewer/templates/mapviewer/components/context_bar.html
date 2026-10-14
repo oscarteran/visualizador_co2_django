@@ -15,8 +15,8 @@ El orden es cíclico: la anterior de la primera es la última.
     <div class="dx-ctxbar-tools">
         <span class="dx-caption">Zona {{ indice }} de {{ total }}</span>
         <nav class="dx-pager" aria-label="Recorrer zonas">
-            <a class="dx-pager-btn" href="{{ zona_anterior.url }}" rel="prev" title="Anterior: {{ zona_anterior.nombre }}" aria-label="Zona anterior: {{ zona_anterior.nombre }}">{% icon "chevron-left" 16 %}<span>{{ zona_anterior.nombre }}</span></a>
-            <a class="dx-pager-btn" href="{{ zona_siguiente.url }}" rel="next" title="Siguiente: {{ zona_siguiente.nombre }}" aria-label="Zona siguiente: {{ zona_siguiente.nombre }}"><span>{{ zona_siguiente.nombre }}</span>{% icon "chevron-right" 16 %}</a>
+            <a class="dx-pager-btn" href="{{ zona_anterior.url }}" rel="prev" data-conserva-capa title="Anterior: {{ zona_anterior.nombre }}" aria-label="Zona anterior: {{ zona_anterior.nombre }}">{% icon "chevron-left" 16 %}<span>{{ zona_anterior.nombre }}</span></a>
+            <a class="dx-pager-btn" href="{{ zona_siguiente.url }}" rel="next" data-conserva-capa title="Siguiente: {{ zona_siguiente.nombre }}" aria-label="Zona siguiente: {{ zona_siguiente.nombre }}"><span>{{ zona_siguiente.nombre }}</span>{% icon "chevron-right" 16 %}</a>
         </nav>
     </div>
 </div>

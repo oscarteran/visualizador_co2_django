@@ -251,6 +251,17 @@ textarea:focus-visible {
     margin-top: var(--space-3);
 }
 
+/* Barra de contexto (ficha): la ruta se recorta antes que el paginador */
+.dx-crumbs {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.dx-ctxbar-tools {
+    flex: none;
+}
+
 /* «Cómo citar»: <dialog> con el aspecto de .dx-card */
 .cite-dialog {
     width: min(560px, calc(100vw - 2 * var(--space-4)));
@@ -674,6 +685,17 @@ a.dx-btn-primary:hover {
 
     .page-main {
         padding: var(--space-6) var(--space-4) var(--space-12);
+    }
+
+    /* Barra de contexto: sin «Zona n de N» y paginador solo con flechas
+       (el nombre de la zona vecina sigue en aria-label y title) */
+    .dx-ctxbar {
+        padding: 0 var(--space-4);
+    }
+
+    .dx-ctxbar-tools .dx-caption,
+    .dx-pager-btn span {
+        display: none;
     }
 
     .dx-header.is-display .dx-h1 {

@@ -5,23 +5,16 @@
 
 {% block head_extra %}{{ mapa.header|safe }}{% endblock %}
 
+{% block context_bar %}{% include "mapviewer/components/context_bar.html" %}{% endblock %}
+
 {% block content %}
-<!-- Encabezado con acciones: selector de zona y descarga -->
+<!-- Encabezado con la descarga. Para cambiar de zona: menú «Zonas» y paginador de la barra de contexto -->
 <div class="page-head-actions">
     {% include "mapviewer/components/page_header.html" with eyebrow=eyebrow title=ubicacion_seleccionada lead=lead rule=False %}
 
-    <form id="map-filter-form-ficha" method="GET" class="page-actions">
-        <input type="hidden" name="tipo_mapa" value="{{ capa_inicial }}" data-map-layer-input>
-        <div class="dx-field">
-            <label for="ubicacion_ficha" class="dx-label">Zona</label>
-            <select name="ubicacion" id="ubicacion_ficha" class="dx-select">
-                {% for sitio in opciones_ubicacion %}
-                    <option value="{{ sitio }}" {% if sitio == ubicacion_seleccionada %}selected{% endif %}>{{ sitio }}</option>
-                {% endfor %}
-            </select>
-        </div>
+    <div class="page-actions">
         <a class="dx-btn dx-btn-secondary" href="{{ url_descarga }}" download>{% icon "download" 16 %}Descargar CSV</a>
-    </form>
+    </div>
 </div>
 
 <!-- Mapa (1fr) + panel de datos (380px) -->

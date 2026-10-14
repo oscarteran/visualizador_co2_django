@@ -383,3 +383,29 @@ class NavegacionTests(SimpleTestCase):
         self.assertIn("Zona 2 de 7", html)
         self.assertIn('href="/ficha_tecnica/?ubicacion=Acoculco" rel="prev"', html)
         self.assertIn('href="/ficha_tecnica/?ubicacion=Azufres" rel="next"', html)
+
+    def test_ficha_context_bar(self):
+        html = self.client.get("/ficha_tecnica/?ubicacion=Alcaparrosa").content.decode()
+        self.assertIn('<div class="dx-ctxbar">', html)
+        self.assertIn("<span>Puebla</span>", html)
+        self.assertIn('<span class="dx-crumbs-cur" aria-current="page">Alcaparrosa</span>', html)
+        self.assertIn("Zona 2 de 7", html)
+        self.assertIn('href="/ficha_tecnica/?ubicacion=Acoculco" rel="prev"', html)
+        self.assertIn('href="/ficha_tecnica/?ubicacion=Azufres" rel="next"', html)
+        self.assertIn("Ficha técnica · Puebla", html)                       # eyebrow con la entidad legible
+        self.assertNotIn('id="ubicacion_ficha"', html)                     # sin el <select> de zona
+        self.assertIn('href="/ficha_tecnica/descargar/?ubicacion=Alcaparrosa" download', html)
+        self.assertNotIn("dx-ctxbar", self.client.get("/inventario_nacional/").content.decode())
+
+    def test_recorrido_ciclico(self):
+        from .views import _recorrido
+        from .context_processors import zonas_menu
+        nombres = [z["nombre"] for z in zonas_menu()]
+        for i, nombre in enumerate(nombres):
+            with self.subTest(zona=nombre):
+                r = _recorrido(nombre)
+                self.assertEqual((r["indice"], r["total"]), (i + 1, 7))
+                self.assertEqual(r["zona_anterior"]["nombre"], nombres[i - 1])
+                self.assertEqual(r["zona_siguiente"]["nombre"], nombres[(i + 1) % 7])
+        self.assertEqual(_recorrido("Acoculco")["zona_anterior"]["nombre"], "Puruandiro")
+        self.assertEqual(_recorrido("Puruandiro")["zona_siguiente"]["nombre"], "Acoculco")

@@ -3,8 +3,9 @@ from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from . import design
+from .context_processors import zonas_menu
 from .utils import mapas
-from .utils.tablas import fuentes_por_zona, tabla_resumen_info
+from .utils.tablas import fuentes_por_zona
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,8 +16,18 @@ def _zona_desde_get(request):
     return zona if zona in mapas.ARCHIVOS_ZONA else mapas.ZONA_POR_DEFECTO
 
 
-def _entidades():
-    return {fila['Nombre']: fila['Estado'] for fila in tabla_resumen_info()}
+def _recorrido(ubicacion):
+    """Zona actual, anterior y siguiente en el orden del menú de zonas (cíclico),
+    para la barra de contexto de la ficha."""
+    zonas = zonas_menu()
+    i = next(k for k, z in enumerate(zonas) if z['nombre'] == ubicacion)
+    return {
+        'zona_actual': zonas[i],
+        'zona_anterior': zonas[i - 1],                    # de la primera, la última
+        'zona_siguiente': zonas[(i + 1) % len(zonas)],    # de la última, la primera
+        'indice': i + 1,
+        'total': len(zonas),
+    }
 
 
 # =============================================
@@ -67,13 +78,14 @@ def ficha_tecnica(request):
         {'key': 'clase', 'label': 'Clase', 'kind': 'flux_class'},
     ]
 
-    entidad = _entidades().get(ubicacion, '')
+    recorrido = _recorrido(ubicacion)
+    entidad = recorrido['zona_actual']['entidad']
     context = {
+        **recorrido,
         'mapa': mapa,
         'capas': mapas.CAPAS,
         'capa_inicial': capa,
         'ubicacion_seleccionada': ubicacion,
-        'opciones_ubicacion': list(mapas.ARCHIVOS_ZONA),
         'entidad': entidad,
         'eyebrow': f'Ficha técnica · {entidad}' if entidad else 'Ficha técnica',
         'lead': f'Flujo de CO₂ del suelo en {stats["n"]} puntos de medición.',

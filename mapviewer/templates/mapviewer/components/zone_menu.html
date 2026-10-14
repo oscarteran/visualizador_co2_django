@@ -9,7 +9,7 @@ ficha abierta (ubicacion_seleccionada) lleva .is-on. nav.js lo abre y lo cierra.
         <div class="dx-zmenu-col" role="group" aria-labelledby="zmenu-entidad-{{ forloop.counter }}">
             <div class="dx-eyebrow dx-muted" id="zmenu-entidad-{{ forloop.counter }}">{{ grupo.grouper }}</div>
             {% for z in grupo.list %}
-            <a class="dx-zmenu-item{% if z.nombre == ubicacion_seleccionada %} is-on" aria-current="page{% endif %}" role="menuitem" href="{{ z.url }}">
+            <a class="dx-zmenu-item{% if z.nombre == ubicacion_seleccionada %} is-on" aria-current="page{% endif %}" role="menuitem" href="{{ z.url }}" data-conserva-capa>
                 <span class="dx-zmenu-name">{{ z.nombre }}</span><span class="dx-zmenu-n">{{ z.n_puntos }}</span>
             </a>
             {% endfor %}
