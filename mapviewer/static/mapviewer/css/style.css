@@ -658,6 +658,64 @@ a.dx-btn-primary:hover {
     background: var(--unam-blue-tint);
 }
 
+/* Paginación de DataTable (data_table.js): estado a la izquierda; filas por
+   página y ‹ › (el .dx-pager de la barra de contexto) a la derecha */
+.dx-table tbody tr.is-last-visible td {
+    border-bottom: 0;
+}
+
+/* Al cambiar de página la tabla sube a la vista: debajo de la barra superior (64px) */
+.dx-table-wrap[data-page-size] {
+    scroll-margin-top: calc(64px + var(--space-4));
+}
+
+.dx-table-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.dx-table-pager[hidden] {
+    display: none;
+}
+
+.dx-table-pager-tools,
+.dx-table-pager-size {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.dx-table-pager-tools {
+    gap: var(--space-4);
+}
+
+/* Selector compacto: a la altura del paginador (32px) */
+.dx-table-pager .dx-select {
+    min-height: 32px;
+    padding: 0 var(--space-2);
+    font-size: 13px;
+}
+
+/* .dx-pager-btn como <button> (en la barra de contexto son enlaces) */
+button.dx-pager-btn {
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.dx-pager-btn:disabled {
+    background: transparent;
+    color: var(--ink-muted);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Portada: mapa testigo (estático) */
 .testigo-map {
     min-height: 0;

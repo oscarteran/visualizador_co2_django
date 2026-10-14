@@ -409,3 +409,21 @@ class NavegacionTests(SimpleTestCase):
                 self.assertEqual(r["zona_siguiente"]["nombre"], nombres[(i + 1) % 7])
         self.assertEqual(_recorrido("Acoculco")["zona_anterior"]["nombre"], "Puruandiro")
         self.assertEqual(_recorrido("Puruandiro")["zona_siguiente"]["nombre"], "Acoculco")
+
+
+class TablaPaginadaTests(SimpleTestCase):
+    """La tabla de mediciones de la ficha se pagina en el navegador (data_table.js)."""
+
+    def test_ficha_paginada(self):
+        html = self.client.get("/ficha_tecnica/?ubicacion=Acoculco").content.decode()
+        self.assertIn('class="dx-table-wrap" data-page-size="15"', html)
+        self.assertEqual(html.count("<tr data-point="), 180)          # sin JS se ven todas las filas
+        self.assertIn('<div class="dx-table-pager" data-table-pager hidden>', html)
+        for valor in ('value="15" selected', 'value="30"', 'value="60"', 'value="0">Todas'):
+            self.assertIn(valor, html)
+        self.assertRegex(html, r"data_table\.js\?v=\d+")
+
+    def test_tabla_corta_sin_paginador(self):
+        html = self.client.get("/fuentes_info/").content.decode()
+        self.assertNotIn("data-page-size", html)
+        self.assertNotIn("data-table-pager", html)

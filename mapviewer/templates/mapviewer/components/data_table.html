@@ -1,12 +1,14 @@
 {% comment %}
 DataTable — encabezado hundido y columnas numéricas en mono alineadas a la derecha.
-Uso: {% include "mapviewer/components/data_table.html" with columns=cols rows=filas caption="Fuente: …" %}
+Uso: {% include "mapviewer/components/data_table.html" with columns=cols rows=filas caption="Fuente: …" page_size=15 %}
 columns: [{"key", "label", "numeric": bool, "kind": None | "flux" | "flux_class" | "coord"}]
   flux       → valor con format_flux (5 190, 90.7, 8.54)
   flux_class → Badge con el punto de la clase del valor
   coord      → 5 decimales y signo menos tipográfico
 Si una fila trae "id", el <tr> lleva data-point (enlace fila ↔ marcador del mapa).
-{% endcomment %}{% load difusco %}<div class="dx-table-wrap{% if class %} {{ class }}{% endif %}">
+page_size (opcional): con más filas que eso, data_table.js pagina la tabla con el
+paginador de abajo; sin JS se ven todas las filas y el paginador queda oculto.
+{% endcomment %}{% load difusco %}{% with paginar=page_size|default:0 %}<div class="dx-table-wrap{% if class %} {{ class }}{% endif %}"{% if paginar and rows|length > paginar %} data-page-size="{{ paginar }}"{% endif %}>
     <table class="dx-table">
         {% if caption %}<caption>{{ caption }}</caption>{% endif %}
         <thead><tr>{% for c in columns %}<th{% if c.numeric %} class="is-num"{% endif %} scope="col">{{ c.label }}</th>{% endfor %}</tr></thead>
@@ -14,4 +16,21 @@ Si una fila trae "id", el <tr> lleva data-point (enlace fila ↔ marcador del ma
             {% for r in rows %}<tr{% if r.id %} data-point="{{ r.id }}"{% endif %}>{% for c in columns %}{% with v=r|get_item:c.key %}<td{% if c.numeric %} class="is-num"{% endif %}>{% if c.kind == "flux" %}{{ v|format_flux }}{% elif c.kind == "flux_class" %}{% with fc=v|flux_class %}{% include "mapviewer/components/badge.html" with flux=fc text=fc|flux_name tone=None class=None %}{% endwith %}{% elif c.kind == "coord" %}{{ v|format_coord }}{% else %}{{ v }}{% endif %}</td>{% endwith %}{% endfor %}</tr>{% endfor %}
         </tbody>
     </table>
-</div>
+</div>{% if paginar and rows|length > paginar %}
+<div class="dx-table-pager" data-table-pager hidden>
+    <span class="dx-caption" aria-live="polite" data-pager-status></span>
+    <div class="dx-table-pager-tools">
+        <label class="dx-caption dx-table-pager-size">Filas por página
+            <select class="dx-select" data-pager-size>
+                <option value="{{ paginar }}" selected>{{ paginar }}</option>
+                <option value="{% widthratio paginar 1 2 %}">{% widthratio paginar 1 2 %}</option>
+                <option value="{% widthratio paginar 1 4 %}">{% widthratio paginar 1 4 %}</option>
+                <option value="0">Todas</option>
+            </select>
+        </label>
+        <div class="dx-pager" role="group" aria-label="Páginas de la tabla">
+            <button type="button" class="dx-pager-btn" data-pager-prev aria-label="Página anterior">{% icon "chevron-left" 16 %}<span>Anterior</span></button>
+            <button type="button" class="dx-pager-btn" data-pager-next aria-label="Página siguiente"><span>Siguiente</span>{% icon "chevron-right" 16 %}</button>
+        </div>
+    </div>
+</div>{% endif %}{% endwith %}

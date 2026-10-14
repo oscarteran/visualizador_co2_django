@@ -56,7 +56,7 @@
 
 <!-- Mediciones de la zona -->
 <section class="page-section" aria-label="Mediciones de {{ ubicacion_seleccionada }}">
-    {% include "mapviewer/components/data_table.html" with columns=columnas rows=filas caption=tabla_caption %}
+    {% include "mapviewer/components/data_table.html" with columns=columnas rows=filas caption=tabla_caption page_size=15 %}
 </section>
 
 {{ mapa.script|safe }}
