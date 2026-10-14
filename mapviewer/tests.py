@@ -324,8 +324,10 @@ class NavegacionTests(SimpleTestCase):
     def test_zonas_menu(self):
         from .context_processors import zonas_menu, total_puntos
         zonas = zonas_menu()
-        self.assertEqual([z["nombre"] for z in zonas],
+        self.assertEqual([z["clave"] for z in zonas],
                          ["Acoculco", "Alcaparrosa", "Azufres", "Chichinautzin", "Escalera", "Michoa", "Puruandiro"])
+        self.assertEqual(zonas[5]["nombre"], "Michoacán")                      # nombre legible
+        self.assertEqual(zonas[5]["url"], "/ficha_tecnica/?ubicacion=Michoa")  # la clave no cambia
         self.assertEqual([z["n_puntos"] for z in zonas], [180, 23, 42, 98, 246, 53, 108])
         self.assertEqual(total_puntos(), 750)
         self.assertEqual([z["entidad"] for z in zonas],
@@ -400,13 +402,13 @@ class NavegacionTests(SimpleTestCase):
     def test_recorrido_ciclico(self):
         from .views import _recorrido
         from .context_processors import zonas_menu
-        nombres = [z["nombre"] for z in zonas_menu()]
-        for i, nombre in enumerate(nombres):
-            with self.subTest(zona=nombre):
-                r = _recorrido(nombre)
+        claves = [z["clave"] for z in zonas_menu()]
+        for i, clave in enumerate(claves):
+            with self.subTest(zona=clave):
+                r = _recorrido(clave)
                 self.assertEqual((r["indice"], r["total"]), (i + 1, 7))
-                self.assertEqual(r["zona_anterior"]["nombre"], nombres[i - 1])
-                self.assertEqual(r["zona_siguiente"]["nombre"], nombres[(i + 1) % 7])
+                self.assertEqual(r["zona_anterior"]["clave"], claves[i - 1])
+                self.assertEqual(r["zona_siguiente"]["clave"], claves[(i + 1) % 7])
         self.assertEqual(_recorrido("Acoculco")["zona_anterior"]["nombre"], "Puruandiro")
         self.assertEqual(_recorrido("Puruandiro")["zona_siguiente"]["nombre"], "Acoculco")
 
@@ -427,3 +429,41 @@ class TablaPaginadaTests(SimpleTestCase):
         html = self.client.get("/fuentes_info/").content.decode()
         self.assertNotIn("data-page-size", html)
         self.assertNotIn("data-table-pager", html)
+
+
+class MichoacanTests(SimpleTestCase):
+    """Zona «Michoa»: coordenadas en UTM 13N (Michoacán) y nombre completo en la vista."""
+
+    def test_coordenadas_en_michoacan(self):
+        from pyproj import Transformer
+        from .utils import mapas
+        utm13 = Transformer.from_crs("EPSG:32613", "EPSG:4326", always_xy=True)
+        with open(mapas.DATA_DIR / "P_MichoaLatLon.csv", encoding="utf-8") as f:
+            filas = list(csv.DictReader(f))
+        self.assertEqual(len(filas), 53)
+        for r in filas:
+            lon, lat = utm13.transform(float(r["UTM X"]), float(r["UTM Y"]))
+            self.assertAlmostEqual(float(r["Lon"]), lon, places=9)
+            self.assertAlmostEqual(float(r["Lat"]), lat, places=9)
+            self.assertTrue(-103.8 < lon < -100.0 and 17.9 < lat < 20.5)   # dentro de Michoacán
+        michoa = next(z for z in mapas.leer_zonas() if z["clave"] == "Michoa")
+        self.assertAlmostEqual(michoa["lon"], -102.3025, places=4)          # centro en el mapa nacional
+
+    def test_nombre_completo_en_la_vista(self):
+        ficha = self.client.get("/ficha_tecnica/?ubicacion=Michoa").content.decode()
+        self.assertIn('<h1 class="dx-h1">Michoacán</h1>', ficha)
+        self.assertIn("<title>Ficha técnica · Michoacán · DIFUSCO₂</title>", ficha)
+        self.assertIn('<span class="dx-crumbs-cur" aria-current="page">Michoacán</span>', ficha)
+        for url in ("/", "/inventario_nacional/", "/ficha_tecnica/?ubicacion=Michoa", "/fuentes_info/", "/acerca_de/"):
+            with self.subTest(url=url):
+                html = self.client.get(url).content.decode()
+                self.assertNotRegex(html, r">\s*Michoa\s*<")                 # ninguna etiqueta truncada
+                self.assertNotIn('"Michoa ', html)
+        inventario = self.client.get("/inventario_nacional/").content.decode()
+        self.assertIn('<option value="Michoacán">Michoacán · 53 pts</option>', inventario)
+        self.assertIn('href="/ficha_tecnica/?ubicacion=Michoa"', inventario)
+
+    def test_descarga_con_nombre_completo(self):
+        r = self.client.get("/ficha_tecnica/descargar/?ubicacion=Michoa")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("difusco2_Michoac%C3%A1n.csv", r["Content-Disposition"])

@@ -139,7 +139,8 @@ def leer_zonas():
         valores = [p["valor"] for p in leer_puntos(nombre)]
         mediana = statistics.median(valores)
         zonas.append({
-            "name": nombre, "state": entidades.get(nombre, ""), "lat": float(lat), "lon": float(lon),
+            "name": design.nombre_zona(nombre), "clave": nombre,
+            "state": entidades.get(nombre, ""), "lat": float(lat), "lon": float(lon),
             "n": len(valores), "median": mediana, "cls": design.flux_class(mediana),
             "href": reverse("ficha_tecnica") + "?ubicacion=" + nombre,
         })
@@ -265,7 +266,7 @@ def mapa_zona(zona, capa_inicial=CAPA_POR_DEFECTO):
         c = design.flux_class(p["valor"])
         coords = f"{design.format_coord(p['lat'])}, {design.format_coord(p['lon'])}"
         popup = render_to_string("mapviewer/components/map_popup.html", {
-            "zone": zona, "id": p["id"], "value": p["valor"], "coords": coords,
+            "zone": design.nombre_zona(zona), "id": p["id"], "value": p["valor"], "coords": coords,
             "method": design.MEASUREMENT_METHOD,
         })
         folium.CircleMarker(

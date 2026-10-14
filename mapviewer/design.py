@@ -82,6 +82,20 @@ def entidad(valor):
     return ENTIDADES.get(valor, valor)
 
 
+# Nombre de zona tal como se muestra (solo presentación). La clave es el nombre
+# interno de la zona (mapas.ARCHIVOS_ZONA), que sigue siendo el valor de
+# ?ubicacion= y el nombre del archivo; en el catálogo original la zona se llama
+# «Michoacan».
+NOMBRES_ZONA = {
+    "Michoa": "Michoacán",
+}
+
+
+def nombre_zona(clave):
+    """Nombre legible de una zona; si no está en NOMBRES_ZONA, la clave tal cual."""
+    return NOMBRES_ZONA.get(clave, clave)
+
+
 NBSP = " "
 MINUS = "−"
 

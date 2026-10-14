@@ -1,7 +1,7 @@
 {% extends 'mapviewer/base.html' %}
 {% load static difusco %}
 
-{% block title %}Ficha técnica · {{ ubicacion_seleccionada }}{% endblock %}
+{% block title %}Ficha técnica · {{ zona_nombre }}{% endblock %}
 
 {% block head_extra %}{{ mapa.header|safe }}{% endblock %}
 
@@ -10,7 +10,7 @@
 {% block content %}
 <!-- Encabezado con la descarga. Para cambiar de zona: menú «Zonas» y paginador de la barra de contexto -->
 <div class="page-head-actions">
-    {% include "mapviewer/components/page_header.html" with eyebrow=eyebrow title=ubicacion_seleccionada lead=lead rule=False %}
+    {% include "mapviewer/components/page_header.html" with eyebrow=eyebrow title=zona_nombre lead=lead rule=False %}
 
     <div class="page-actions">
         <a class="dx-btn dx-btn-secondary" href="{{ url_descarga }}" download>{% icon "download" 16 %}Descargar CSV</a>
@@ -55,7 +55,7 @@
 </div>
 
 <!-- Mediciones de la zona -->
-<section class="page-section" aria-label="Mediciones de {{ ubicacion_seleccionada }}">
+<section class="page-section" aria-label="Mediciones de {{ zona_nombre }}">
     {% include "mapviewer/components/data_table.html" with columns=columnas rows=filas caption=tabla_caption page_size=15 %}
 </section>
 

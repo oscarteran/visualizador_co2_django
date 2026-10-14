@@ -49,12 +49,12 @@ def site_info(request):
 
 
 def zonas_menu():
-    """Zonas en el orden del catálogo (el de leer_zonas): nombre, entidad legible,
-    nº de puntos y URL de su ficha. El nombre es el valor que espera ?ubicacion=."""
+    """Zonas en el orden del catálogo (el de leer_zonas): clave (el valor que espera
+    ?ubicacion=), nombre y entidad legibles, nº de puntos y URL de su ficha."""
     zonas = cache.get(ZONAS_NAV_CACHE)
     if zonas is None:
         zonas = [
-            {"nombre": z["name"], "entidad": design.entidad(z["state"]),
+            {"clave": z["clave"], "nombre": z["name"], "entidad": design.entidad(z["state"]),
              "n_puntos": z["n"], "url": z["href"]}
             for z in mapas.leer_zonas()
         ]

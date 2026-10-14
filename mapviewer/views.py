@@ -20,7 +20,7 @@ def _recorrido(ubicacion):
     """Zona actual, anterior y siguiente en el orden del menú de zonas (cíclico),
     para la barra de contexto de la ficha."""
     zonas = zonas_menu()
-    i = next(k for k, z in enumerate(zonas) if z['nombre'] == ubicacion)
+    i = next(k for k, z in enumerate(zonas) if z['clave'] == ubicacion)
     return {
         'zona_actual': zonas[i],
         'zona_anterior': zonas[i - 1],                    # de la primera, la última
@@ -85,7 +85,8 @@ def ficha_tecnica(request):
         'mapa': mapa,
         'capas': mapas.CAPAS,
         'capa_inicial': capa,
-        'ubicacion_seleccionada': ubicacion,
+        'ubicacion_seleccionada': ubicacion,                     # clave (?ubicacion=)
+        'zona_nombre': recorrido['zona_actual']['nombre'],       # nombre legible
         'entidad': entidad,
         'eyebrow': f'Ficha técnica · {entidad}' if entidad else 'Ficha técnica',
         'lead': f'Flujo de CO₂ del suelo en {stats["n"]} puntos de medición.',
@@ -109,7 +110,7 @@ def descargar_csv(request):
     zona = _zona_desde_get(request)
     archivo = mapas.DATA_DIR / mapas.ARCHIVOS_ZONA[zona]
     return FileResponse(open(archivo, 'rb'), as_attachment=True,
-                        filename=f'difusco2_{zona}.csv', content_type='text/csv')
+                        filename=f'difusco2_{design.nombre_zona(zona)}.csv', content_type='text/csv')
 
 def fuentes_info(request):
     zonas = mapas.leer_zonas()
@@ -130,7 +131,7 @@ def fuentes_info(request):
             {'key': 'fecha', 'label': 'Fecha de medición'},
             {'key': 'puntos', 'label': 'Puntos', 'numeric': True},
         ],
-        'fuentes_filas': [fuentes[z['name']] for z in zonas],
+        'fuentes_filas': [{**fuentes[z['clave']], 'zona': z['name']} for z in zonas],
     }
     return render(request, 'mapviewer/fuentes_info.html', context)
 
