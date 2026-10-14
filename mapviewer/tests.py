@@ -293,3 +293,29 @@ class CacheYMapaBaseTests(SimpleTestCase):
             añadidas = [url for var, url in tile_vars if f"{var}.addTo(" in script]
             self.assertEqual(len(añadidas), 1, capa)
             self.assertIn(servicio, añadidas[0])
+
+
+class NavegacionTests(SimpleTestCase):
+    """Fase 6: datos de la barra superior (menú de zonas y paginador de la ficha)."""
+
+    def test_zonas_menu(self):
+        from .context_processors import zonas_menu, total_puntos
+        zonas = zonas_menu()
+        self.assertEqual([z["nombre"] for z in zonas],
+                         ["Acoculco", "Alcaparrosa", "Azufres", "Chichinautzin", "Escalera", "Michoa", "Puruandiro"])
+        self.assertEqual([z["n_puntos"] for z in zonas], [180, 23, 42, 98, 246, 53, 108])
+        self.assertEqual(total_puntos(), 750)
+        self.assertEqual([z["entidad"] for z in zonas],
+                         ["Puebla"] * 3 + ["CDMX–Morelos"] + ["Michoacán"] * 3)
+        self.assertEqual(zonas[0]["url"], "/ficha_tecnica/?ubicacion=Acoculco")
+
+    def test_entidad_sin_modificar_datos(self):
+        from .utils.tablas import tabla_resumen_info
+        self.assertIn("Michoacan", [f["Estado"] for f in tabla_resumen_info()])   # el dato queda igual
+        self.assertEqual(design.entidad("Michoacan"), "Michoacán")
+        self.assertEqual(design.entidad("Otra"), "Otra")
+
+    def test_context_processor_registrado(self):
+        context = self.client.get("/acerca_de/").context
+        self.assertEqual(len(context["nav_zonas"]()), 7)
+        self.assertEqual(context["nav_total_puntos"](), 750)

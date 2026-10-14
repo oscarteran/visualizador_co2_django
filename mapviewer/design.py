@@ -42,6 +42,24 @@ MAP_STROKE_IMAGERY = "#FFFFFF"
 # Anillo del punto seleccionado (token marker-selected).
 MARKER_SELECTED = {"light": "#B8892B", "dark": "#E2BC67"}
 
+# Entidad federativa tal como se muestra en la navegación (solo presentación).
+# Las claves son los valores de la columna «Estado» de utils/tablas.py, que no se
+# modifica: ahí Alcaparrosa y Azufres llevan el nombre de la zona en lugar de la
+# entidad; sus coordenadas caen en la caldera de Acoculco, en Puebla, como las
+# agrupa el diseño aprobado (design_handoff/reference/screens/navegacion/).
+ENTIDADES = {
+    "Puebla": "Puebla",
+    "Alcaparrosa": "Puebla",
+    "Los Azufres": "Puebla",
+    "CDMX-Morelos": "CDMX–Morelos",
+    "Michoacan": "Michoacán",
+}
+
+
+def entidad(valor):
+    """Entidad legible (con acento y raya); si no está en ENTIDADES, el valor tal cual."""
+    return ENTIDADES.get(valor, valor)
+
 
 NBSP = " "
 MINUS = "−"

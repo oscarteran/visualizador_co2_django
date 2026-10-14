@@ -1,10 +1,17 @@
 """
-Datos institucionales del pie de página (cita sugerida, licencia y fecha).
+Datos comunes a todas las páginas:
 
-Se editan aquí; los textos marcados «por completar» esperan confirmación
-(autoría, tutoría y licencia definitiva del catálogo).
+- site_info: datos institucionales del pie de página (cita sugerida, licencia y
+  fecha). Se editan aquí; los textos marcados «por completar» esperan
+  confirmación (autoría, tutoría y licencia definitiva del catálogo).
+- zonas_nav: zonas del menú «Zonas» de la barra superior y del paginador de la ficha.
 """
 import datetime
+
+from django.core.cache import cache
+
+from . import design
+from .utils import mapas
 
 SITE_NAME = "DIFUSCO₂: Catálogo de emisiones naturales difusas de CO₂"
 SITE_INSTITUTION = "Instituto de Geofísica, Departamento de Recursos Naturales, UNAM"
@@ -16,6 +23,10 @@ DATA_UPDATED = datetime.date(2024, 11, 26)
 
 MESES = ("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
          "agosto", "septiembre", "octubre", "noviembre", "diciembre")
+
+# leer_zonas() abre los 7 CSV de data/processed/: el resultado se guarda 10 minutos.
+ZONAS_NAV_CACHE = "difusco2:zonas_nav"
+ZONAS_NAV_SEGUNDOS = 10 * 60
 
 
 def fecha_larga(fecha):
@@ -34,3 +45,27 @@ def site_info(request):
             "data_updated_iso": DATA_UPDATED.isoformat(),
         }
     }
+
+
+def zonas_menu():
+    """Zonas en el orden del catálogo (el de leer_zonas): nombre, entidad legible,
+    nº de puntos y URL de su ficha. El nombre es el valor que espera ?ubicacion=."""
+    zonas = cache.get(ZONAS_NAV_CACHE)
+    if zonas is None:
+        zonas = [
+            {"nombre": z["name"], "entidad": design.entidad(z["state"]),
+             "n_puntos": z["n"], "url": z["href"]}
+            for z in mapas.leer_zonas()
+        ]
+        cache.set(ZONAS_NAV_CACHE, zonas, ZONAS_NAV_SEGUNDOS)
+    return zonas
+
+
+def total_puntos():
+    return sum(z["n_puntos"] for z in zonas_menu())
+
+
+def zonas_nav(request):
+    # Se pasan las funciones, no sus resultados: la plantilla las llama solo si las
+    # usa, así las páginas de error (que no llevan la barra) no leen los CSV.
+    return {"nav_zonas": zonas_menu, "nav_total_puntos": total_puntos}

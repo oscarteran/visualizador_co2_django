@@ -95,6 +95,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.request",
                 "mapviewer.context_processors.site_info",
+                "mapviewer.context_processors.zonas_nav",
             ],
         },
     },
