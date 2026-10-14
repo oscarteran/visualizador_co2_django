@@ -23,6 +23,17 @@
         Object.keys(cfg.layers).forEach(function (key) { layers[key] = window[cfg.layers[key]]; });
         const padding = [cfg.padding, cfg.padding];
         let current = cfg.initial;
+
+        // Encuadre con margen; si el panel ZoneList está a la vista (Inventario
+        // Nacional en escritorio), su ancho se suma a la izquierda para que no
+        // tape la zona más al oeste.
+        function fitOptions(animate) {
+            const panel = document.querySelector('.zl-panel');
+            const left = panel && panel.offsetWidth
+                ? panel.getBoundingClientRect().right - map.getContainer().getBoundingClientRect().left
+                : 0;
+            return { paddingTopLeft: [cfg.padding + left, cfg.padding], paddingBottomRight: padding, animate: animate };
+        }
         let activeTile = null;
 
         function theme() {
@@ -242,7 +253,7 @@
         const actions = {
             'zoom-in': function () { map.zoomIn(); },
             'zoom-out': function () { map.zoomOut(); },
-            'fit': function () { map.fitBounds(cfg.bounds, { padding: padding }); },
+            'fit': function () { map.fitBounds(cfg.bounds, fitOptions(true)); },
             'fullscreen': function () {
                 if (map.fullscreenControl) map.fullscreenControl.toggleFullScreen();
             },
@@ -277,6 +288,11 @@
         // ---------- inicio ----------
         setBase(current, false);
         map.invalidateSize();
-        map.fitBounds(cfg.bounds, { padding: padding });
+        // Encuadre inicial, sin animación. El fitBounds de Folium deja en curso una
+        // animación de zoom; al terminar, Leaflet restablece su centro y deshacía este
+        // encuadre. Si sigue animando (_animatingZoom), se encuadra al terminar.
+        function initialFit() { map.fitBounds(cfg.bounds, fitOptions(false)); }
+        if (map._animatingZoom) map.once('zoomend', initialFit);
+        else initialFit();
     });
 })();
