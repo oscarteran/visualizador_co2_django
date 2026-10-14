@@ -269,6 +269,20 @@ class ResponsivoTests(SimpleTestCase):
         html = self.client.get("/fuentes_info/").content.decode()
         self.assertIn('dx-appbar-burger" id="menu-movil-btn" aria-label="Abrir menú" '
                       'aria-expanded="false" aria-controls="menu-movil"', html)
+        panel = html[html.index('id="menu-movil"'):html.index("</header>")]
+        self.assertIn("hidden", panel[:40])
+        self.assertEqual(panel.count('class="dx-zmenu-item'), 7)              # zonas desplegadas
+        self.assertIn('href="/fuentes_info/" class="dx-nav is-active" aria-current="page"', panel)
+        self.assertIn("data-citar", panel)                                    # «Cómo citar» también en móvil
+
+    def test_dialogo_cita(self):
+        html = self.client.get("/acerca_de/").content.decode()
+        self.assertIn('<dialog class="dx-card cite-dialog" id="citar-dialog"', html)
+        self.assertEqual(html.count("data-citar aria-haspopup"), 2)                       # barra y panel móvil
+        self.assertEqual(html.count('data-copiar="'), 2)                      # texto y BibTeX
+        self.assertIn("@misc{difusco2,", html)
+        self.assertIn("[Autoría por completar]", html)                       # placeholder, sin autores
+        self.assertNotIn("doi.org", html.lower())                             # ni DOI inventado
 
     def test_inventario_select_movil(self):
         html = self.client.get("/inventario_nacional/").content.decode()
@@ -289,7 +303,7 @@ class CacheYMapaBaseTests(SimpleTestCase):
     def test_estaticos_versionados(self):
         import re
         html = self.client.get("/inventario_nacional/").content.decode()
-        for archivo in ("map_controls.js", "theme_toggle.js", "style.css", "tokens.css", "map.css"):
+        for archivo in ("map_controls.js", "nav.js", "theme_toggle.js", "style.css", "tokens.css", "map.css"):
             self.assertRegex(html, re.escape(archivo) + r"\?v=\d+", archivo)
 
     def test_capa_base_inicial_desde_el_servidor(self):

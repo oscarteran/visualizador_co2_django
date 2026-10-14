@@ -4,6 +4,7 @@ Uso: {% include "mapviewer/components/app_header.html" %} (en base.html).
 La pestaña activa sale de request.resolver_match.url_name; en la ficha técnica es «Zonas»
 y en Ayuda y contacto no hay ninguna. «Zonas» es un enlace al mapa nacional que nav.js
 convierte en el botón del menú de zonas (sin JS, sigue siendo un enlace).
+Bajo 900px las pestañas pasan al panel #menu-movil, que abre el botón ☰ (nav.js).
 {% endcomment %}{% load difusco %}{% with actual=request.resolver_match.url_name %}<header class="dx-appbar">
     <div class="dx-appbar-inner">
         <a class="dx-appbar-brand" href="{% url 'inicio' %}">
@@ -20,10 +21,31 @@ convierte en el botón del menú de zonas (sin JS, sigue siendo un enlace).
             <a class="dx-tab{% if actual == 'acerca_de' %} is-on" aria-current="page{% endif %}" href="{% url 'acerca_de' %}">Acerca de</a>
         </nav>
         <div class="dx-appbar-tools">
-            <button type="button" class="dx-btn dx-btn-quiet dx-btn-sm" id="citar-btn" aria-haspopup="dialog" aria-controls="citar-dialog">{% icon "quote" 16 %}Cómo citar</button>
+            <button type="button" class="dx-btn dx-btn-quiet dx-btn-sm" id="citar-btn" data-citar aria-haspopup="dialog" aria-controls="citar-dialog">{% icon "quote" 16 %}Cómo citar</button>
             <button type="button" class="dx-mapbtn dx-toolbtn" id="theme-toggle-btn" aria-label="Cambiar a tema oscuro" title="Tema oscuro">{% icon "moon" 18 "theme-icon-moon" %}{% icon "sun" 18 "theme-icon-sun" %}</button>
-            <button type="button" class="dx-mapbtn dx-toolbtn dx-appbar-burger" id="menu-movil-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-movil">{% icon "menu" 20 %}</button>
+            <button type="button" class="dx-mapbtn dx-toolbtn dx-appbar-burger" id="menu-movil-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-movil">{% icon "menu" 20 "menu-movil-abrir" %}{% icon "x" 20 "menu-movil-cerrar" %}</button>
         </div>
     </div>
     {% include "mapviewer/components/zone_menu.html" %}
+
+    <!-- Móvil (< 900px): las mismas secciones, con las zonas desplegadas por entidad -->
+    <div class="menu-movil" id="menu-movil" hidden>
+        <nav class="menu-movil-nav" aria-label="Principal">
+            {% url 'inicio' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Inicio" %}
+            {% url 'inventario_nacional' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Mapa nacional" %}
+            <div class="menu-movil-zonas">
+                <div class="dx-eyebrow dx-muted">Zonas</div>
+                {% regroup nav_zonas by entidad as grupos %}{% for grupo in grupos %}
+                <div class="dx-caption menu-movil-entidad">{{ grupo.grouper }}</div>
+                {% for z in grupo.list %}
+                <a class="dx-zmenu-item{% if z.nombre == ubicacion_seleccionada %} is-on{% endif %}" href="{{ z.url }}">
+                    <span class="dx-zmenu-name">{{ z.nombre }}</span><span class="dx-zmenu-n">{{ z.n_puntos }}</span>
+                </a>
+                {% endfor %}{% endfor %}
+            </div>
+            {% url 'fuentes_info' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Datos y fuentes" %}
+            {% url 'acerca_de' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Acerca de" %}
+        </nav>
+        <button type="button" class="dx-btn dx-btn-secondary dx-btn-sm menu-movil-citar" data-citar aria-haspopup="dialog" aria-controls="citar-dialog">{% icon "quote" 16 %}Cómo citar</button>
+    </div>
 </header>{% endwith %}

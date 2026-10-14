@@ -178,6 +178,7 @@ textarea:focus-visible {
 
 /* Enlaces de la navegación: sin el subrayado ni el color de a:hover */
 .dx-appbar-brand:hover,
+.dx-nav:hover,
 .dx-tab:hover,
 .dx-zmenu-item:hover,
 .dx-pager-btn:hover {
@@ -201,6 +202,91 @@ textarea:focus-visible {
 
 [data-theme="dark"] .theme-icon-sun {
     display: block;
+}
+
+/* Botón ☰: icono de menú cerrado, ✕ abierto */
+.menu-movil-cerrar,
+[aria-expanded="true"] > .menu-movil-abrir {
+    display: none;
+}
+
+[aria-expanded="true"] > .menu-movil-cerrar {
+    display: block;
+}
+
+/* Panel móvil (< 900px): cuelga bajo la barra, a todo el ancho. Enlaces .dx-nav
+   (NavItem) y zonas .dx-zmenu-item, como en el menú de escritorio. */
+.menu-movil {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-pop);
+}
+
+.menu-movil-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.menu-movil-zonas {
+    padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.menu-movil-zonas .dx-eyebrow {
+    margin: 0;
+}
+
+.menu-movil-entidad {
+    margin: var(--space-3) var(--space-2) var(--space-1);
+}
+
+.menu-movil-citar {
+    margin-top: var(--space-3);
+}
+
+/* «Cómo citar»: <dialog> con el aspecto de .dx-card */
+.cite-dialog {
+    width: min(560px, calc(100vw - 2 * var(--space-4)));
+    max-height: calc(100vh - 2 * var(--space-4));
+    color: var(--ink);
+    box-shadow: var(--shadow-pop);
+}
+
+.cite-dialog::backdrop {
+    background: color-mix(in srgb, var(--paper) 70%, transparent);
+}
+
+.cite-dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.cite-dialog-head h2,
+.cite-dialog-head form {
+    margin: 0;
+}
+
+.cite-block {
+    margin-top: var(--space-4);
+}
+
+.cite-text {
+    margin: 0 0 var(--space-2);
+    padding: var(--space-3);
+    white-space: pre-wrap;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
 }
 
 /* =============================================

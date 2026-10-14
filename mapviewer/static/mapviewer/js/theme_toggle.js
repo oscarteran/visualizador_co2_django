@@ -1,6 +1,7 @@
 // mapviewer/static/mapviewer/js/theme_toggle.js
 // Se carga en <head>: aplica el tema guardado antes de pintar la página.
-// Los iconos luna/sol se muestran por CSS según [data-theme].
+// El botón de la barra superior es solo un icono: luna en claro y sol en oscuro
+// (por CSS según [data-theme]); aria-label y title dicen a qué tema cambia.
 
 (function() {
     'use strict';
@@ -34,12 +35,10 @@
         const btn = document.getElementById('theme-toggle-btn');
         if (!btn) return;
 
-        const label = btn.querySelector('.theme-label');
-
         function updateButton(theme) {
-            if (label) {
-                label.textContent = theme === DARK ? 'Tema claro' : 'Tema oscuro';
-            }
+            const next = theme === DARK ? 'claro' : 'oscuro';
+            btn.setAttribute('aria-label', 'Cambiar a tema ' + next);
+            btn.setAttribute('title', 'Tema ' + next);
         }
 
         updateButton(document.documentElement.getAttribute('data-theme') || LIGHT);

@@ -56,6 +56,27 @@ ENTIDADES = {
 }
 
 
+# Cita sugerida del catálogo (diálogo «Cómo citar»). Es un placeholder editable:
+# autoría, año e identificador (URL o DOI) están por confirmar; no se inventan.
+CITA_SUGERIDA = {
+    "texto": (
+        "[Autoría por completar] ([año por completar]). DIFUSCO₂: Catálogo de emisiones "
+        "naturales difusas de CO₂ [conjunto de datos]. Instituto de Geofísica, "
+        "Departamento de Recursos Naturales, UNAM. [URL o DOI por completar]"
+    ),
+    "bibtex": (
+        "@misc{difusco2,\n"
+        "  author    = {{Autoría por completar}},\n"
+        "  title     = {DIFUSCO₂: Catálogo de emisiones naturales difusas de CO₂},\n"
+        "  publisher = {Instituto de Geofísica, Departamento de Recursos Naturales, UNAM},\n"
+        "  year      = {Año por completar},\n"
+        "  note      = {Conjunto de datos},\n"
+        "  url       = {URL o DOI por completar}\n"
+        "}"
+    ),
+}
+
+
 def entidad(valor):
     """Entidad legible (con acento y raya); si no está en ENTIDADES, el valor tal cual."""
     return ENTIDADES.get(valor, valor)

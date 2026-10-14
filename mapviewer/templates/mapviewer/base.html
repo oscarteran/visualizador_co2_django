@@ -58,7 +58,31 @@
         </div>
     </footer>
 
+    <!-- «Cómo citar»: lo abren los botones [data-citar] (nav.js). La cita es un
+         placeholder de design.CITA_SUGERIDA: autoría, año y DOI por confirmar. -->
+    <dialog class="dx-card cite-dialog" id="citar-dialog" aria-labelledby="citar-titulo">
+        <div class="cite-dialog-head">
+            <h2 id="citar-titulo">Cómo citar</h2>
+            <form method="dialog">
+                <button class="dx-mapbtn dx-toolbtn" aria-label="Cerrar" title="Cerrar">{% icon "x" 18 %}</button>
+            </form>
+        </div>
+        <p class="dx-caption">Cita sugerida del catálogo. Datos actualizados el <time datetime="{{ site.data_updated_iso }}">{{ site.data_updated }}</time>.</p>
+
+        <div class="cite-block">
+            <div class="dx-eyebrow dx-muted" id="cita-texto-titulo">Texto</div>
+            <pre class="dx-data cite-text" id="cita-texto" aria-labelledby="cita-texto-titulo">{{ site.cita.texto }}</pre>
+            <button type="button" class="dx-btn dx-btn-secondary dx-btn-sm" data-copiar="cita-texto">Copiar</button>
+        </div>
+        <div class="cite-block">
+            <div class="dx-eyebrow dx-muted" id="cita-bibtex-titulo">BibTeX</div>
+            <pre class="dx-data cite-text" id="cita-bibtex" aria-labelledby="cita-bibtex-titulo">{{ site.cita.bibtex }}</pre>
+            <button type="button" class="dx-btn dx-btn-secondary dx-btn-sm" data-copiar="cita-bibtex">Copiar</button>
+        </div>
+    </dialog>
+
     <!-- Scripts -->
+    <script src="{% asset 'mapviewer/js/nav.js' %}"></script>
     <script src="{% asset 'mapviewer/js/map_controls.js' %}"></script>
     <script src="{% asset 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
 </body>

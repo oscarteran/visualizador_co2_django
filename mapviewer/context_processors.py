@@ -43,6 +43,7 @@ def site_info(request):
             "license": SITE_LICENSE,
             "data_updated": fecha_larga(DATA_UPDATED),
             "data_updated_iso": DATA_UPDATED.isoformat(),
+            "cita": design.CITA_SUGERIDA,
         }
     }
 
