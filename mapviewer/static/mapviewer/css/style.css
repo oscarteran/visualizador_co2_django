@@ -17,16 +17,15 @@
 
 html,
 body {
-    height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
 }
 
+/* La página se desplaza completa; el pie queda abajo en páginas cortas */
 body {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     background-color: var(--paper);
     color: var(--ink);
     font-family: var(--font-sans);
@@ -132,181 +131,23 @@ textarea:focus-visible {
 
 /* =============================================
    ESTRUCTURA GENERAL
+   body → header.dx-appbar → .dx-ctxbar (solo ficha) → main.page-main → footer
    ============================================= */
 
-.page-wrapper {
-    display: flex;
-    flex: 1;
-    height: 100vh;
-    overflow: hidden;
-}
-
-/* =============================================
-   BARRA LATERAL (SIDEBAR) — NavItem
-   ============================================= */
-
-.sidebar {
-    width: var(--sidebar-width);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-    background-color: var(--surface);
-    border-right: 1px solid var(--line);
-    padding: var(--space-6) var(--space-4);
-    height: 100%;
-    flex-shrink: 0;
-    overflow-y: auto;
-    position: relative;
-    transition: width 0.3s ease-in-out;
-}
-
-.sidebar-brand {
-    padding: 0 var(--space-3);
-}
-
-/* Wordmark tipográfico: Source Serif 4 600, unam-blue, con el ₂ en gold-ink */
-.dx-wordmark {
-    display: inline-block;
-    font-family: var(--font-serif);
-    font-size: 32px;
-    line-height: 40px;
-    font-weight: 600;
-    color: var(--unam-blue);
-    text-decoration: none;
-}
-
-.dx-wordmark:hover {
-    color: var(--unam-blue);
-    text-decoration: none;
-}
-
-.dx-wordmark-sub {
-    color: var(--gold-ink);
-}
-
-.sidebar-tagline {
-    margin: var(--space-2) 0 0;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.sidebar-nav-secondary {
-    margin-top: auto;
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--line);
-}
-
-.dx-nav .dx-icon {
-    display: inline-block;
-    margin-right: var(--space-2);
-    vertical-align: -4px;
-}
-
-/* =============================================
-   BOTÓN TOGGLE DE SIDEBAR
-   ============================================= */
-
-.toggle-sidebar {
-    position: fixed;
-    top: 50%;
-    left: calc(var(--sidebar-width) - var(--space-4));
-    transform: translateY(-50%);
-    z-index: 1000;
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 40px;
-    padding: 0;
-    background-color: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    cursor: pointer;
-    color: var(--ink-muted);
-    transition: left 0.3s ease-in-out;
-}
-
-.toggle-sidebar:hover {
-    background-color: var(--unam-blue-tint);
-    color: var(--unam-blue);
-}
-
-.toggle-sidebar .dx-icon {
-    transition: transform 0.3s;
-}
-
-.toggle-sidebar.sidebar-collapsed {
-    left: 0;
-}
-
-.toggle-sidebar.sidebar-collapsed .dx-icon {
-    transform: rotate(180deg);
-}
-
-.sidebar.collapsed {
-    width: 0;
-    padding: 0;
-    border-right: 0;
-    overflow: hidden;
-}
-
-.sidebar.collapsed > * {
-    display: none;
-}
-
-/* =============================================
-   BOTÓN TOGGLE DE TEMA (LUNA/SOL)
-   ============================================= */
-
-.theme-toggle-wrapper {
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--line);
-}
-
-.theme-toggle-btn {
-    width: 100%;
-}
-
-.theme-toggle-btn .dx-icon {
-    color: var(--unam-blue);
-}
-
-.theme-icon-sun,
-[data-theme="dark"] .theme-icon-moon {
-    display: none;
-}
-
-[data-theme="dark"] .theme-icon-sun {
-    display: block;
-}
-
-/* =============================================
-   ÁREA PRINCIPAL
-   ============================================= */
-
-/* El área principal se desplaza completa: contenido + pie de página */
-.main-area-wrapper {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    overflow-y: auto;
-    background-color: var(--paper);
-}
-
-.main-content {
+/* Contenido a todo el ancho de la pantalla, hasta 1232px más el margen lateral
+   (a 1280px queda a 24px del borde, alineado con el wordmark, como en la captura) */
+.page-main {
     flex: 1 0 auto;
-    padding: var(--space-12) var(--space-8);
+    width: 100%;
+    max-width: calc(1232px + 2 * var(--space-6));
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-6) var(--space-12);
     color: var(--ink);
 }
 
-.dx-page {
-    width: 100%;
-    max-width: var(--content-max);
-    margin: 0 auto;
+/* Mapa nacional: sin tope de ancho, a ras de la barra superior */
+.page-main.is-wide {
+    max-width: none;
 }
 
 /* PageHeader: separación respecto al contenido de la página */
@@ -320,6 +161,46 @@ textarea:focus-visible {
 
 .reading-container p {
     max-width: var(--measure);
+}
+
+/* =============================================
+   BARRA SUPERIOR — AppHeader y ZoneMenu
+   El aspecto está en components.css («NAVEGACIÓN v3»); aquí van la posición
+   del menú y los ajustes frente a las reglas base de este archivo.
+   ============================================= */
+
+/* El menú cuelga bajo la pestaña «Zonas» (nav.js lo alinea con el botón) */
+.dx-zmenu {
+    position: absolute;
+    top: 60px;
+    z-index: 30;
+}
+
+/* Enlaces de la navegación: sin el subrayado ni el color de a:hover */
+.dx-appbar-brand:hover,
+.dx-tab:hover,
+.dx-zmenu-item:hover,
+.dx-pager-btn:hover {
+    text-decoration: none;
+}
+
+.dx-zmenu-item:not(.is-on):hover {
+    color: var(--ink);
+}
+
+/* Botones de icono contiguos (tema y ☰): sin el filete de .dx-mapbtn + .dx-mapbtn */
+.dx-toolbtn + .dx-toolbtn:not(:hover) {
+    border-top-color: transparent;
+}
+
+/* Botón de tema: luna en claro, sol en oscuro */
+.theme-icon-sun,
+[data-theme="dark"] .theme-icon-moon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+    display: block;
 }
 
 /* =============================================
@@ -591,11 +472,13 @@ a.dx-btn-primary:hover {
    VISTA DE MAPAS
    ============================================= */
 
-/* Inventario: encabezado compacto + mapa que llena la pantalla (mín. 520px) */
+/* Inventario: encabezado compacto + mapa que llena la pantalla (mín. 520px).
+   El mapa ocupa 100vh − 64px (alto de .dx-appbar) − el encabezado de página,
+   dejando el margen superior e inferior de .page-main. */
 .map-view-container {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - var(--space-12) - var(--space-8));
+    min-height: calc(100vh - 64px - 2 * var(--space-6));
     width: 100%;
     gap: var(--space-6);
 }
@@ -605,8 +488,11 @@ a.dx-btn-primary:hover {
 }
 
 /* Tarjeta del mapa. El mapa Folium va incrustado (sin iframe); sus controles los
-   coloca map_controls.js como controles de Leaflet. */
+   coloca map_controls.js como controles de Leaflet. isolation: las capas de
+   Leaflet (z-index 400–1000) quedan dentro de la tarjeta y no tapan la barra
+   superior ni el menú de zonas al desplazarse. */
 .map-container-wrapper {
+    isolation: isolate;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
     overflow: hidden;
@@ -679,30 +565,9 @@ a.dx-btn-primary:hover {
    RESPONSIVE — MEDIA QUERIES
    ============================================= */
 
-/* Barra superior y fondo del menú: solo en móvil */
-.mobile-bar,
+/* Selector de zona: solo en móvil */
 .zone-select-mobile {
     display: none;
-}
-
-.sidebar-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: transparent;
-}
-
-.sidebar-backdrop[hidden] {
-    display: none;
-}
-
-.mobile-menu-close,
-.menu-open .mobile-menu-open {
-    display: none;
-}
-
-.menu-open .mobile-menu-close {
-    display: block;
 }
 
 /* Tabletas: retículas a una columna */
@@ -713,57 +578,16 @@ a.dx-btn-primary:hover {
     }
 }
 
-/* Móvil (< 768px): menú colapsable, contenido apilado
-   (encabezado → mapa 60vh → panel → tabla) y ZoneList como <select> */
+/* Móvil (< 768px): contenido apilado (encabezado → mapa 60vh → panel → tabla)
+   y ZoneList como <select>. Las pestañas pasan al botón ☰ desde 900px
+   (components.css). */
 @media (max-width: 768px) {
-    /* La barra lateral pasa a ser un menú que se abre desde la barra superior;
-       cerrada queda fuera del orden de tabulación (visibility: hidden). */
-    .sidebar,
-    .sidebar.collapsed {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1001;
-        width: var(--sidebar-width);
-        height: 100%;
-        padding: var(--space-6) var(--space-4);
-        box-shadow: var(--shadow-pop);
-        transform: translateX(-100%);
-        visibility: hidden;
-        transition: transform 0.25s ease, visibility 0.25s;
+    .dx-appbar-inner {
+        padding: 0 var(--space-4);
     }
 
-    /* Al abrir, visibility cambia de inmediato (si no, focus() llega antes de que
-       los enlaces sean enfocables); al cerrar espera a que termine el desplazamiento. */
-    .sidebar.is-open {
-        transform: none;
-        visibility: visible;
-        transition: transform 0.25s ease;
-    }
-
-    .toggle-sidebar {
-        display: none;
-    }
-
-    .mobile-bar {
-        position: sticky;
-        top: 0;
-        z-index: 900;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: var(--space-2) var(--space-4);
-        background: var(--surface);
-        border-bottom: 1px solid var(--line);
-    }
-
-    .mobile-bar .dx-wordmark {
-        font-size: 24px;
-        line-height: 32px;
-    }
-
-    .main-content {
-        padding: var(--space-6) var(--space-4);
+    .page-main {
+        padding: var(--space-6) var(--space-4) var(--space-12);
     }
 
     .dx-header.is-display .dx-h1 {

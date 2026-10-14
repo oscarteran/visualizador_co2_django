@@ -1,5 +1,6 @@
 import csv
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -130,14 +131,24 @@ class PageTests(SimpleTestCase):
         "fuentes_info": "/fuentes_info/", "acerca_de": "/acerca_de/", "ayuda_y_contacto": "/ayuda_y_contacto/",
     }
 
+    # Pestaña activa de la barra superior; en Ayuda y contacto no hay ninguna
+    PESTANAS = {
+        "inicio": "Inicio", "inventario_nacional": "Mapa nacional", "ficha_tecnica": "Zonas",
+        "fuentes_info": "Datos y fuentes", "acerca_de": "Acerca de", "ayuda_y_contacto": None,
+    }
+
     def test_pages_render_with_layout(self):
         for name, url in self.PAGES.items():
             with self.subTest(page=name):
                 html = self.client.get(url).content.decode()
                 self.assertIn('class="dx-header', html)
-                self.assertEqual(html.count('aria-current="page"'), 1)
-                self.assertIn(f'href="{url}" class="dx-nav is-active" aria-current="page"', html)
+                self.assertIn('<header class="dx-appbar">', html)
+                self.assertIn('<main class="page-main', html)
+                activas = re.findall(r'class="dx-tab is-on"[^>]*>\s*([^<]+?)\s*<', html)
+                self.assertEqual(activas, [self.PESTANAS[name]] if self.PESTANAS[name] else [])
                 self.assertIn('class="dx-footer"', html)
+                self.assertIn('href="/ayuda_y_contacto/">Ayuda y contacto</a>', html)   # en el pie
+                self.assertNotIn("sidebar", html)
                 self.assertNotIn("Catalogo ", html)  # etiqueta sin acento; el archivo fuente es «Catalogo_…»
                 self.assertNotIn("var(--accent)", html)
 
@@ -256,10 +267,8 @@ class ResponsivoTests(SimpleTestCase):
 
     def test_menu_movil(self):
         html = self.client.get("/fuentes_info/").content.decode()
-        self.assertIn('class="mobile-bar"', html)
-        self.assertIn('id="mobile-menu-btn"', html)
-        self.assertIn('aria-controls="app-sidebar" aria-expanded="false"', html)
-        self.assertIn('id="sidebar-backdrop" hidden', html)
+        self.assertIn('dx-appbar-burger" id="menu-movil-btn" aria-label="Abrir menú" '
+                      'aria-expanded="false" aria-controls="menu-movil"', html)
 
     def test_inventario_select_movil(self):
         html = self.client.get("/inventario_nacional/").content.decode()
@@ -280,7 +289,7 @@ class CacheYMapaBaseTests(SimpleTestCase):
     def test_estaticos_versionados(self):
         import re
         html = self.client.get("/inventario_nacional/").content.decode()
-        for archivo in ("map_controls.js", "sidebar_toggle.js", "theme_toggle.js", "style.css", "tokens.css", "map.css"):
+        for archivo in ("map_controls.js", "theme_toggle.js", "style.css", "tokens.css", "map.css"):
             self.assertRegex(html, re.escape(archivo) + r"\?v=\d+", archivo)
 
     def test_capa_base_inicial_desde_el_servidor(self):

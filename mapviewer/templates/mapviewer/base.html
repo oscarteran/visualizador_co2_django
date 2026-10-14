@@ -37,79 +37,28 @@
 </head>
 
 <body>
-    <div class="page-wrapper">
+    <!-- Barra superior institucional (fija arriba) con el menú de zonas -->
+    {% include "mapviewer/components/app_header.html" %}
 
-        <!-- Barra lateral (fija y colapsable) -->
-        <aside class="sidebar" id="app-sidebar">
-            <div class="sidebar-brand">
-                <a class="dx-wordmark" href="{% url 'inicio' %}" aria-label="DIFUSCO₂, inicio">DIFUSCO<span class="dx-wordmark-sub">₂</span></a>
-                <p class="dx-caption sidebar-tagline">Catálogo de emisiones naturales difusas de CO₂ · Instituto de Geofísica, UNAM</p>
-            </div>
+    <!-- Barra de contexto: solo en la ficha técnica -->
+    {% block context_bar %}{% endblock %}
 
-            <nav class="sidebar-nav" aria-label="Principal">
-                {% url 'inicio' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Catálogo" %}
-                {% url 'inventario_nacional' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Inventario Nacional" %}
-                {% url 'ficha_tecnica' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Ficha técnica" %}
-                {% url 'fuentes_info' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Fuentes de información" %}
-            </nav>
+    <main class="page-main{% block main_class %}{% endblock %}" id="contenido">
+        {% block content %}{% endblock %}
+    </main>
 
-            <nav class="sidebar-nav sidebar-nav-secondary" aria-label="Información">
-                {% url 'acerca_de' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Acerca de" %}
-                {% url 'ayuda_y_contacto' as u %}{% include "mapviewer/components/nav_item.html" with href=u label="Ayuda y contacto" %}
-            </nav>
-
-            <!-- Toggle de tema claro/oscuro: conserva [data-theme="dark"] -->
-            <div class="theme-toggle-wrapper">
-                <button id="theme-toggle-btn" class="dx-btn dx-btn-secondary theme-toggle-btn" type="button">
-                    {% icon "moon" 18 "theme-icon-moon" %}{% icon "sun" 18 "theme-icon-sun" %}
-                    <span class="theme-label">Tema oscuro</span>
-                </button>
-            </div>
-        </aside>
-
-        <!-- Botón para colapsar la barra lateral (escritorio) -->
-        <button id="sidebar-toggle" class="toggle-sidebar" type="button" aria-controls="app-sidebar"
-            aria-expanded="true" aria-label="Ocultar barra lateral" title="Ocultar barra lateral">
-            {% icon "chevron-left" 18 %}
-        </button>
-
-        <!-- Fondo del menú móvil: un clic fuera lo cierra -->
-        <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
-
-        <!-- Área principal: contenido + pie de página (se desplazan juntos) -->
-        <div class="main-area-wrapper" id="main-content-area">
-            <!-- Barra superior móvil (< 768px): wordmark + menú colapsable -->
-            <div class="mobile-bar">
-                <a class="dx-wordmark" href="{% url 'inicio' %}" aria-label="DIFUSCO₂, inicio">DIFUSCO<span class="dx-wordmark-sub">₂</span></a>
-                <button id="mobile-menu-btn" class="dx-btn dx-btn-quiet mobile-menu-btn" type="button"
-                    aria-controls="app-sidebar" aria-expanded="false">
-                    {% icon "menu" 20 "mobile-menu-open" %}{% icon "x" 20 "mobile-menu-close" %}
-                    <span>Menú</span>
-                </button>
-            </div>
-
-            <main class="main-content" id="contenido">
-                <div class="dx-page">
-                    {% block content %}{% endblock %}
-                </div>
-            </main>
-
-            <footer class="dx-footer">
-                <div class="dx-logos">
-                    <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo de la UNAM" class="dx-logo">
-                    <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logotipo del Instituto de Geofísica, UNAM" class="dx-logo">
-                </div>
-                <div class="dx-footer-text dx-caption">
-                    <p><strong>Cómo citar:</strong> {{ site.authorship }}. {{ site.name }}. {{ site.institution }}.</p>
-                    <p>© {% now "Y" %} Universidad Nacional Autónoma de México. {{ site.license }} · Datos actualizados el <time datetime="{{ site.data_updated_iso }}">{{ site.data_updated }}</time>.</p>
-                </div>
-            </footer>
+    <footer class="dx-footer">
+        <div class="dx-logos">
+            <img src="{% static 'mapviewer/img/UNAM.png' %}" alt="Escudo de la UNAM" class="dx-logo">
+            <img src="{% static 'mapviewer/img/geofisica.png' %}" alt="Logotipo del Instituto de Geofísica, UNAM" class="dx-logo">
         </div>
-
-    </div>
+        <div class="dx-footer-text dx-caption">
+            <p><strong>Cómo citar:</strong> {{ site.authorship }}. {{ site.name }}. {{ site.institution }}.</p>
+            <p>© {% now "Y" %} Universidad Nacional Autónoma de México. {{ site.license }} · Datos actualizados el <time datetime="{{ site.data_updated_iso }}">{{ site.data_updated }}</time> · <a href="{% url 'ayuda_y_contacto' %}">Ayuda y contacto</a></p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
-    <script src="{% asset 'mapviewer/js/sidebar_toggle.js' %}"></script>
     <script src="{% asset 'mapviewer/js/map_controls.js' %}"></script>
     <script src="{% asset 'mapviewer/js/ficha_tecnica_controls.js' %}"></script>
 </body>
