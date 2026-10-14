@@ -1,0 +1,22 @@
+{% comment %}
+ContextBar — ruta y paginador de la ficha técnica (traducción de ContextBar() en components-reference.js).
+Uso: {% block context_bar %}{% include "mapviewer/components/context_bar.html" %}{% endblock %}
+Espera en el contexto (los calcula la vista ficha_tecnica en el orden de nav_zonas):
+zona_actual, zona_anterior y zona_siguiente ({"nombre", "entidad", "url"}), indice (1…total) y total.
+El orden es cíclico: la anterior de la primera es la última.
+{% endcomment %}{% load difusco %}<div class="dx-ctxbar">
+    <nav class="dx-crumbs" aria-label="Ruta">
+        <a href="{% url 'inventario_nacional' %}">Zonas</a>
+        <span aria-hidden="true">/</span>
+        <span>{{ zona_actual.entidad }}</span>
+        <span aria-hidden="true">/</span>
+        <span class="dx-crumbs-cur" aria-current="page">{{ zona_actual.nombre }}</span>
+    </nav>
+    <div class="dx-ctxbar-tools">
+        <span class="dx-caption">Zona {{ indice }} de {{ total }}</span>
+        <nav class="dx-pager" aria-label="Recorrer zonas">
+            <a class="dx-pager-btn" href="{{ zona_anterior.url }}" rel="prev" title="Anterior: {{ zona_anterior.nombre }}" aria-label="Zona anterior: {{ zona_anterior.nombre }}">{% icon "chevron-left" 16 %}<span>{{ zona_anterior.nombre }}</span></a>
+            <a class="dx-pager-btn" href="{{ zona_siguiente.url }}" rel="next" title="Siguiente: {{ zona_siguiente.nombre }}" aria-label="Zona siguiente: {{ zona_siguiente.nombre }}"><span>{{ zona_siguiente.nombre }}</span>{% icon "chevron-right" 16 %}</a>
+        </nav>
+    </div>
+</div>

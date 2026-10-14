@@ -1,0 +1,29 @@
+{% comment %}
+AppHeader — barra superior institucional (traducción de AppHeader() en components-reference.js).
+Uso: {% include "mapviewer/components/app_header.html" %} (en base.html).
+La pestaña activa sale de request.resolver_match.url_name; en la ficha técnica es «Zonas»
+y en Ayuda y contacto no hay ninguna. «Zonas» es un enlace al mapa nacional que nav.js
+convierte en el botón del menú de zonas (sin JS, sigue siendo un enlace).
+{% endcomment %}{% load difusco %}{% with actual=request.resolver_match.url_name %}<header class="dx-appbar">
+    <div class="dx-appbar-inner">
+        <a class="dx-appbar-brand" href="{% url 'inicio' %}">
+            <span class="dx-wordmark">DIFUSCO<span class="dx-wordmark-sub">₂</span></span>
+            <span class="dx-appbar-inst">Instituto de Geofísica<br>UNAM</span>
+        </a>
+        <nav class="dx-tabs" aria-label="Principal">
+            <a class="dx-tab{% if actual == 'inicio' %} is-on" aria-current="page{% endif %}" href="{% url 'inicio' %}">Inicio</a>
+            <a class="dx-tab{% if actual == 'inventario_nacional' %} is-on" aria-current="page{% endif %}" href="{% url 'inventario_nacional' %}">Mapa nacional</a>
+            <a class="dx-tab{% if actual == 'ficha_tecnica' %} is-on{% endif %}" id="zonas-trigger" href="{% url 'inventario_nacional' %}" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="zonas-menu">
+                Zonas {% icon "chevron-down" 14 %}
+            </a>
+            <a class="dx-tab{% if actual == 'fuentes_info' %} is-on" aria-current="page{% endif %}" href="{% url 'fuentes_info' %}">Datos y fuentes</a>
+            <a class="dx-tab{% if actual == 'acerca_de' %} is-on" aria-current="page{% endif %}" href="{% url 'acerca_de' %}">Acerca de</a>
+        </nav>
+        <div class="dx-appbar-tools">
+            <button type="button" class="dx-btn dx-btn-quiet dx-btn-sm" id="citar-btn" aria-haspopup="dialog" aria-controls="citar-dialog">{% icon "quote" 16 %}Cómo citar</button>
+            <button type="button" class="dx-mapbtn dx-toolbtn" id="theme-toggle-btn" aria-label="Cambiar a tema oscuro" title="Tema oscuro">{% icon "moon" 18 "theme-icon-moon" %}{% icon "sun" 18 "theme-icon-sun" %}</button>
+            <button type="button" class="dx-mapbtn dx-toolbtn dx-appbar-burger" id="menu-movil-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-movil">{% icon "menu" 20 %}</button>
+        </div>
+    </div>
+    {% include "mapviewer/components/zone_menu.html" %}
+</header>{% endwith %}

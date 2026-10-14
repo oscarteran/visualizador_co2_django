@@ -1,0 +1,23 @@
+{% comment %}
+ZoneMenu — mega-menú de zonas (traducción de ZoneMenu() en components-reference.js).
+Se incluye dentro de app_header.html. Datos: nav_zonas y nav_total_puntos (context
+processor zonas_nav), agrupados por entidad en el orden del catálogo. La zona de la
+ficha abierta (ubicacion_seleccionada) lleva .is-on. nav.js lo abre y lo cierra.
+{% endcomment %}{% load difusco %}<div class="dx-zmenu" id="zonas-menu" role="menu" aria-label="Zonas de medición" hidden>
+    <div class="dx-zmenu-cols">
+        {% regroup nav_zonas by entidad as grupos %}{% for grupo in grupos %}
+        <div class="dx-zmenu-col" role="group" aria-labelledby="zmenu-entidad-{{ forloop.counter }}">
+            <div class="dx-eyebrow dx-muted" id="zmenu-entidad-{{ forloop.counter }}">{{ grupo.grouper }}</div>
+            {% for z in grupo.list %}
+            <a class="dx-zmenu-item{% if z.nombre == ubicacion_seleccionada %} is-on" aria-current="page{% endif %}" role="menuitem" href="{{ z.url }}">
+                <span class="dx-zmenu-name">{{ z.nombre }}</span><span class="dx-zmenu-n">{{ z.n_puntos }}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="dx-zmenu-foot">
+        <span class="dx-caption">{{ nav_zonas|length }} zonas · {{ nav_total_puntos }} puntos de medición</span>
+        <a class="dx-pop-link" role="menuitem" href="{% url 'inventario_nacional' %}">Ver todas en el mapa{% icon "arrow" 14 %}</a>
+    </div>
+</div>

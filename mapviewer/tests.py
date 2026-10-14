@@ -319,3 +319,44 @@ class NavegacionTests(SimpleTestCase):
         context = self.client.get("/acerca_de/").context
         self.assertEqual(len(context["nav_zonas"]()), 7)
         self.assertEqual(context["nav_total_puntos"](), 750)
+
+    def _render(self, plantilla, url, **contexto):
+        from django.template.loader import render_to_string
+        from django.test import RequestFactory
+        from django.urls import resolve
+        request = RequestFactory().get(url)
+        request.resolver_match = resolve(request.path)
+        return render_to_string(f"mapviewer/components/{plantilla}", contexto, request=request)
+
+    def test_app_header_pestana_activa(self):
+        activas = {"/": "Inicio", "/inventario_nacional/": "Mapa nacional",
+                   "/fuentes_info/": "Datos y fuentes", "/acerca_de/": "Acerca de"}
+        for url, etiqueta in activas.items():
+            with self.subTest(url=url):
+                html = self._render("app_header.html", url)
+                self.assertEqual(html.count("is-on"), 1)
+                self.assertIn(f'is-on" aria-current="page" href="{url}">{etiqueta}</a>', html)
+        ficha = self._render("app_header.html", "/ficha_tecnica/", ubicacion_seleccionada="Escalera")
+        self.assertIn('class="dx-tab is-on" id="zonas-trigger"', ficha)          # «Zonas» activa en la ficha
+        self.assertIn('class="dx-zmenu-item is-on" aria-current="page"', ficha)
+        ayuda = self._render("app_header.html", "/ayuda_y_contacto/")
+        self.assertNotIn("is-on", ayuda)                                           # ninguna pestaña activa
+
+    def test_zone_menu(self):
+        html = self._render("zone_menu.html", "/")
+        self.assertIn('id="zonas-menu" role="menu"', html)
+        self.assertEqual(html.count('class="dx-zmenu-col"'), 3)
+        self.assertEqual(html.count('role="menuitem" href="/ficha_tecnica/?ubicacion='), 7)
+        for entidad in ("Puebla", "CDMX–Morelos", "Michoacán"):
+            self.assertIn(f">{entidad}</div>", html)
+        self.assertIn("7 zonas · 750 puntos de medición", html)
+
+    def test_context_bar(self):
+        zona = lambda n, e: {"nombre": n, "entidad": e, "url": f"/ficha_tecnica/?ubicacion={n}"}
+        html = self._render("context_bar.html", "/ficha_tecnica/", indice=2, total=7,
+                            zona_actual=zona("Alcaparrosa", "Puebla"), zona_anterior=zona("Acoculco", "Puebla"),
+                            zona_siguiente=zona("Azufres", "Puebla"))
+        self.assertIn('<span class="dx-crumbs-cur" aria-current="page">Alcaparrosa</span>', html)
+        self.assertIn("Zona 2 de 7", html)
+        self.assertIn('href="/ficha_tecnica/?ubicacion=Acoculco" rel="prev"', html)
+        self.assertIn('href="/ficha_tecnica/?ubicacion=Azufres" rel="next"', html)

@@ -50,6 +50,8 @@ ICONS = {
            "M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41",
     "chevron-left": "M15 18l-6-6 6-6",
     "chevron-right": "M9 18l6-6-6-6",
+    "chevron-down": "M6 9l6 6 6-6",
+    "quote": "M7 7h4v4c0 3-2 5-4 5M14 7h4v4c0 3-2 5-4 5",
     "menu": "M4 6h16M4 12h16M4 18h16",
     "x": "M18 6 6 18M6 6l12 12",
     # Lucide: contacto (Ayuda y contacto)
