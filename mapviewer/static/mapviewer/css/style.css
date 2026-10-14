@@ -170,6 +170,29 @@ textarea:focus-visible {
     max-width: var(--measure);
 }
 
+/* Portada: el texto de presentación ocupa el ancho del contenido, como el mapa y
+   las cifras de arriba, en dos columnas de lectura cómoda; una sola en pantallas
+   angostas */
+.reading-intro {
+    column-count: 2;
+    column-gap: var(--space-12);
+}
+
+.reading-intro p {
+    max-width: none;
+    break-inside: avoid;   /* cada párrafo completo en una columna */
+}
+
+@media (max-width: 1024px) {
+    .reading-intro {
+        column-count: 1;
+    }
+
+    .reading-intro p {
+        max-width: var(--measure);
+    }
+}
+
 /* =============================================
    BARRA SUPERIOR — AppHeader y ZoneMenu
    El aspecto está en components.css («NAVEGACIÓN v3»); aquí van la posición
