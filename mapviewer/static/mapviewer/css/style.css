@@ -134,6 +134,13 @@ textarea:focus-visible {
    body → header.dx-appbar → .dx-ctxbar (solo ficha) → main.page-main → footer
    ============================================= */
 
+/* Barras de alto fijo (64px y 44px): en el flex de body no se encogen cuando la
+   página es más alta que la pantalla */
+.dx-appbar,
+.dx-ctxbar {
+    flex: none;
+}
+
 /* Contenido a todo el ancho de la pantalla, hasta 1232px más el margen lateral
    (a 1280px queda a 24px del borde, alineado con el wordmark, como en la captura) */
 .page-main {
