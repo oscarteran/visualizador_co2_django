@@ -55,8 +55,10 @@ Single Django app (`mapviewer`) with `config/` holding project settings. **There
 
 ## Diseño (DIFUSCO₂)
 
-- La fuente de verdad visual es `design_handoff/design-system/` (README.md, Mapas.md, tokens.json). El plan de implementación está en `design_handoff/HANDOFF.md`.
+- La fuente de verdad visual es `design_handoff/design-system/` (README.md, Mapas.md, Navegacion.md, tokens.json). Los planes de implementación son `design_handoff/HANDOFF.md` (fases 1–5) y `design_handoff/HANDOFF_NAVEGACION.md` (fase 6).
 - Colores, espacios y radios siempre con `var(--token)` de `static/mapviewer/css/tokens.css`. En Python/Folium, importa `mapviewer/design.py`; nunca escribas hex sueltos.
 - Fuentes: Source Serif 4 (títulos), IBM Plex Sans (texto), IBM Plex Mono (datos). CO₂ con subíndice Unicode; no usar MathJax.
 - Clases de flujo por décadas (<1, 1–10, 10–100, 100–1000, ≥1000 g m⁻² d⁻¹) → `flux-1…5`. El color se reserva para los datos.
+- La navegación es una **barra superior** (`dx-appbar`) con menú de zonas (`dx-zmenu`) y barra de contexto en fichas (`dx-ctxbar`). No hay barra lateral.
 - Los componentes usan clases `dx-*` (`static/mapviewer/css/components.css`) y partials en `templates/mapviewer/components/`.
+

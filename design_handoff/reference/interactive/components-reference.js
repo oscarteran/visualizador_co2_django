@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"Difusco","components":[{"name":"PageHeader"},{"name":"NavItem"},{"name":"Button"},{"name":"Badge"},{"name":"StatTile"},{"name":"LayerSwitcher"},{"name":"MapControls"},{"name":"FluxMarker"},{"name":"ZoneMarker"},{"name":"ClusterMarker"},{"name":"MapPopup"},{"name":"FluxLegend"},{"name":"ZoneList"},{"name":"Histogram"},{"name":"MapCanvas"},{"name":"DataTable"}]} */
+/* @ds-bundle: {"format":4,"namespace":"Difusco","components":[{"name":"PageHeader"},{"name":"NavItem"},{"name":"Button"},{"name":"Badge"},{"name":"StatTile"},{"name":"LayerSwitcher"},{"name":"MapControls"},{"name":"FluxMarker"},{"name":"ZoneMarker"},{"name":"ClusterMarker"},{"name":"MapPopup"},{"name":"FluxLegend"},{"name":"ZoneList"},{"name":"Histogram"},{"name":"MapCanvas"},{"name":"DataTable"},{"name":"AppHeader"},{"name":"ZoneMenu"},{"name":"ContextBar"},{"name":"ExplorerSidebar"}]} */
 (function () {
   var R = window.React, h = R.createElement;
   function cx() { return Array.prototype.filter.call(arguments, Boolean).join(" "); }
@@ -19,7 +19,11 @@
     layers: "M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5",
     download: "M12 4v11M7 10l5 5 5-5M5 20h14",
     ruler: "M3 17l14-14 4 4-14 14zM7 13l2 2M10 10l2 2M13 7l2 2",
-    arrow: "M5 12h14M13 6l6 6-6 6"
+    arrow: "M5 12h14M13 6l6 6-6 6",
+    chevDown: "M6 9l6 6 6-6", chevLeft: "M15 6l-6 6 6 6", chevRight: "M9 6l6 6-6 6",
+    moon: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", quote: "M7 7h4v4c0 3-2 5-4 5M14 7h4v4c0 3-2 5-4 5",
+    menu: "M4 6h16M4 12h16M4 18h16", panel: "M3 4h18v16H3zM9 4v16", search: "M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14M20 20l-4-4",
+    home: "M3 11l9-7 9 7M5 10v10h14V10", map: "M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14", pin: "M12 21s-7-6-7-11a7 7 0 1 1 14 0c0 5-7 11-7 11zM12 8a2 2 0 1 0 0 4a2 2 0 1 0 0-4", book: "M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2zM4 5v16", info: "M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M12 11v5M12 8h.01"
   };
   function Icon(p) {
     return h("svg", { className: cx("dx-icon", p.className), width: p.size || 18, height: p.size || 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.75, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": "true" },
@@ -179,11 +183,107 @@
         }))));
   }
 
+
+  /* ---------- navegación v3 ---------- */
+  var ZONES_DEFAULT = [
+    { name: "Acoculco", state: "Puebla", n: 180 }, { name: "Alcaparrosa", state: "Puebla", n: 23 }, { name: "Los Azufres", state: "Puebla", n: 42 },
+    { name: "Chichinautzin", state: "CDMX–Morelos", n: 98 },
+    { name: "Escalera", state: "Michoacán", n: 246 }, { name: "Michoa", state: "Michoacán", n: 53 }, { name: "Puruándiro", state: "Michoacán", n: 108 }];
+  function groupByState(zs) { var g = [], idx = {}; zs.forEach(function (z) { if (!(z.state in idx)) { idx[z.state] = g.length; g.push({ state: z.state, zones: [] }); } g[idx[z.state]].zones.push(z); }); return g; }
+
+  function AppHeader(p) {
+    var items = p.items || [["Inicio", "/"], ["Mapa nacional", "/inventario_nacional/"], ["Zonas", "#zonas", true], ["Datos y fuentes", "/fuentes_info/"], ["Acerca de", "/acerca_de/"]];
+    return h("header", { className: cx("dx-appbar", p.className) },
+      h("div", { className: "dx-appbar-inner" },
+        h("a", { className: "dx-appbar-brand", href: "/" },
+          h("span", { className: "dx-wordmark" }, "DIFUSCO", h("span", { className: "dx-wordmark-sub" }, "₂")),
+          h("span", { className: "dx-appbar-inst" }, "Instituto de Geofísica", h("br"), "UNAM")),
+        h("nav", { className: "dx-tabs", "aria-label": "Principal" }, items.map(function (it) {
+          var on = it[0] === p.active, menu = it[2];
+          return h("a", { key: it[0], href: it[1], className: cx("dx-tab", on && "is-on", menu && p.menuOpen && "is-open"), "aria-current": on ? "page" : undefined, "aria-haspopup": menu ? "true" : undefined, "aria-expanded": menu ? !!p.menuOpen : undefined },
+            it[0], menu ? h(Icon, { name: "chevDown", size: 14 }) : null);
+        })),
+        h("div", { className: "dx-appbar-tools" },
+          h("button", { type: "button", className: "dx-btn dx-btn-quiet dx-btn-sm" }, h(Icon, { name: "quote", size: 16 }), "Cómo citar"),
+          h("button", { type: "button", className: "dx-mapbtn dx-toolbtn", "aria-label": "Cambiar a tema oscuro", title: "Tema oscuro" }, h(Icon, { name: "moon" })),
+          h("button", { type: "button", className: "dx-mapbtn dx-toolbtn dx-appbar-burger", "aria-label": "Abrir menú" }, h(Icon, { name: "menu" })))),
+      p.children);
+  }
+
+  function ZoneMenu(p) {
+    var zs = p.zones || ZONES_DEFAULT, total = zs.reduce(function (a, z) { return a + (z.n || 0); }, 0);
+    return h("div", { className: cx("dx-zmenu", p.className), style: p.style, role: "menu" },
+      h("div", { className: "dx-zmenu-cols" }, groupByState(zs).map(function (g) {
+        return h("div", { key: g.state, className: "dx-zmenu-col" },
+          h("div", { className: "dx-eyebrow dx-muted" }, g.state),
+          g.zones.map(function (z) {
+            return h("a", { key: z.name, href: "#", role: "menuitem", className: cx("dx-zmenu-item", z.name === p.active && "is-on") },
+              h("span", { className: "dx-zmenu-name" }, z.name), h("span", { className: "dx-zmenu-n" }, z.n));
+          }));
+      })),
+      h("div", { className: "dx-zmenu-foot" },
+        h("span", { className: "dx-caption" }, zs.length + " zonas · " + total.toLocaleString("en-US").replace(/,/g, "\u00a0") + " puntos de medición"),
+        h("a", { href: "/inventario_nacional/", className: "dx-pop-link" }, "Ver todas en el mapa", h(Icon, { name: "arrow", size: 14 }))));
+  }
+
+  function ContextBar(p) {
+    var zs = p.zones || ZONES_DEFAULT, i = 0;
+    zs.forEach(function (z, k) { if (z.name === p.zone) i = k; });
+    var prev = zs[(i - 1 + zs.length) % zs.length], next = zs[(i + 1) % zs.length], cur = zs[i];
+    return h("div", { className: cx("dx-ctxbar", p.className) },
+      h("nav", { className: "dx-crumbs", "aria-label": "Ruta" },
+        h("a", { href: "#" }, "Zonas"), h("span", { "aria-hidden": "true" }, "/"),
+        h("span", null, cur.state), h("span", { "aria-hidden": "true" }, "/"),
+        h("span", { "aria-current": "page", className: "dx-crumbs-cur" }, cur.name)),
+      h("div", { className: "dx-ctxbar-tools" },
+        h("span", { className: "dx-caption" }, "Zona " + (i + 1) + " de " + zs.length),
+        h("div", { className: "dx-pager" },
+          h("a", { href: "#", className: "dx-pager-btn", title: "Anterior: " + prev.name }, h(Icon, { name: "chevLeft", size: 16 }), h("span", null, prev.name)),
+          h("a", { href: "#", className: "dx-pager-btn", title: "Siguiente: " + next.name }, h("span", null, next.name), h(Icon, { name: "chevRight", size: 16 })))));
+  }
+
+  function ExplorerSidebar(p) {
+    var zs = p.zones || ZONES_DEFAULT, collapsed = !!p.collapsed;
+    function item(icon, label, active, extra) {
+      return h("a", { href: "#", className: cx("dx-xnav", active && "is-on"), "aria-current": active ? "page" : undefined, title: collapsed ? label : undefined },
+        h(Icon, { name: icon, size: 18 }), collapsed ? null : h("span", { className: "dx-xnav-label" }, label), collapsed ? null : extra);
+    }
+    return h("aside", { className: cx("dx-xside", collapsed && "is-collapsed", p.className), style: p.style },
+      h("div", { className: "dx-xside-top" },
+        collapsed ? h("span", { className: "dx-wordmark dx-wordmark-sm" }, "D", h("span", { className: "dx-wordmark-sub" }, "₂"))
+          : h("a", { href: "/", className: "dx-wordmark" }, "DIFUSCO", h("span", { className: "dx-wordmark-sub" }, "₂")),
+        h("button", { type: "button", className: "dx-mapbtn dx-toolbtn", "aria-label": collapsed ? "Expandir barra" : "Contraer barra" }, h(Icon, { name: "panel", size: 16 }))),
+      h("nav", { className: "dx-xside-nav", "aria-label": "Principal" },
+        collapsed ? null : h("div", { className: "dx-xhead" }, "Explorar"),
+        item("home", "Inicio", p.active === "Inicio"),
+        item("map", "Mapa nacional", p.active === "Mapa nacional"),
+        collapsed ? null : h("div", { className: "dx-xhead" }, "Zonas", h("span", { className: "dx-xhead-n" }, zs.length)),
+        collapsed ? item("pin", "Zonas", !!p.zone) : groupByState(zs).map(function (g) {
+          return h("div", { key: g.state, className: "dx-xgroup" },
+            h("div", { className: "dx-xgroup-state" }, g.state),
+            g.zones.map(function (z) {
+              var on = z.name === p.zone;
+              return h("a", { key: z.name, href: "#", className: cx("dx-xzone", on && "is-on"), "aria-current": on ? "page" : undefined },
+                h("span", { className: "dx-xzone-name" }, z.name), h("span", { className: "dx-xzone-n" }, z.n));
+            }));
+        }),
+        collapsed ? null : h("div", { className: "dx-xhead" }, "Referencia"),
+        item("book", "Datos y fuentes", p.active === "Datos y fuentes"),
+        item("info", "Acerca de", p.active === "Acerca de")),
+      collapsed ? h("div", { className: "dx-xside-foot" }, h("button", { type: "button", className: "dx-mapbtn dx-toolbtn", "aria-label": "Tema oscuro" }, h(Icon, { name: "moon" })))
+        : h("div", { className: "dx-xside-foot" },
+          h("dl", { className: "dx-xmeta" }, h("dt", null, "Versión de datos"), h("dd", null, "v1.0 · 2026-10"), h("dt", null, "Mediciones"), h("dd", null, "750")),
+          h("div", { className: "dx-row", style: { gap: 8 } },
+            h("button", { type: "button", className: "dx-btn dx-btn-secondary dx-btn-sm", style: { flex: 1 } }, h(Icon, { name: "quote", size: 16 }), "Cómo citar"),
+            h("button", { type: "button", className: "dx-mapbtn dx-toolbtn", "aria-label": "Tema oscuro", title: "Tema oscuro" }, h(Icon, { name: "moon" })))));
+  }
+
   window.Difusco = Object.assign(window.Difusco || {}, {
     PageHeader: PageHeader, NavItem: NavItem, Button: Button, Badge: Badge, StatTile: StatTile,
     LayerSwitcher: LayerSwitcher, MapControls: MapControls, IconButton: IconButton, Icon: Icon,
     FluxMarker: FluxMarker, ZoneMarker: ZoneMarker, ClusterMarker: ClusterMarker, MapPopup: MapPopup,
     FluxLegend: FluxLegend, ZoneList: ZoneList, Histogram: Histogram, MapCanvas: MapCanvas, DataTable: DataTable,
-    fluxClass: fluxClass, formatFlux: fmt, FLUX_THRESHOLDS: THRESHOLDS, FLUX_LABELS: CLASS_LABELS, FLUX_NAMES: CLASS_NAMES, FLUX_RADII: RADII
+    fluxClass: fluxClass, formatFlux: fmt, FLUX_THRESHOLDS: THRESHOLDS, FLUX_LABELS: CLASS_LABELS, FLUX_NAMES: CLASS_NAMES, FLUX_RADII: RADII,
+    AppHeader: AppHeader, ZoneMenu: ZoneMenu, ContextBar: ContextBar, ExplorerSidebar: ExplorerSidebar, ZONES: ZONES_DEFAULT
   });
 })();
